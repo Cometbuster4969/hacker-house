@@ -1,0 +1,126 @@
+{
+  "case_id": "HHG-018",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.8,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "D5527B5"
+    ],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0006029: $19.98, online channel, risk score 0.37",
+        "source": "graph",
+        "ref": "query:get_transaction(T0006029)",
+        "entity_ids": [
+          "T0006029"
+        ]
+      },
+      {
+        "claim": "Transaction came from device: Xiaomi Mi 9 (iOS 14.0, mobile safari, 1920x1080)",
+        "source": "graph",
+        "ref": "query:get_device(D5527B5)",
+        "entity_ids": [
+          "D5527B5"
+        ]
+      },
+      {
+        "claim": "Card C00350-K1 has 20 transactions in history, average amount $117.34",
+        "source": "graph",
+        "ref": "query:card_transactions(C00350-K1)",
+        "entity_ids": [
+          "C00350-K1"
+        ]
+      },
+      {
+        "claim": "Billing region 430 has 178 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(430)",
+        "entity_ids": [
+          "430"
+        ]
+      },
+      {
+        "claim": "Device D5527B5 used by 4 cards: C00189-K1, C00217-K1, C00209-K1, C00350-K1",
+        "source": "graph",
+        "ref": "query:device_cards(D5527B5)",
+        "entity_ids": [
+          "D5527B5",
+          "C00189-K1",
+          "C00217-K1",
+          "C00209-K1",
+          "C00350-K1"
+        ]
+      },
+      {
+        "claim": "Device D5527B5 is marked as NEW for card C00350-K1",
+        "source": "graph",
+        "ref": "query:new_device_check(C00350-K1, D5527B5)",
+        "entity_ids": [
+          "D5527B5"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0006029 for $19.98 (online) on card C00350-K1 was flagged via risk_score. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Key evidence: Flagged transaction T0006029: $19.98, online channel, risk score 0.37; Transaction came from device: Xiaomi Mi 9 (iOS 14.0, mobile safari, 1920x1080). Verdict: uncertain (probability 0.80).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-018"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 5,
+      "assumed_response": "Customer C00350 states they did not make this purchase"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.80, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.80 warrants a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.80, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Case warranted at probability 0.80"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: Medium confidence with exposure $617.86"
+      }
+    ],
+    "what_changed": "Added: ESCALATE_TO_ANALYST"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 12,
+  "tokens": 0,
+  "latency_s": 0.0
+}

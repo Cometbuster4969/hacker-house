@@ -1,0 +1,136 @@
+{
+  "case_id": "HHG-012",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.8,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "D55BA3C"
+    ],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0007730: $46.13, online channel, risk score 0.45",
+        "source": "graph",
+        "ref": "query:get_transaction(T0007730)",
+        "entity_ids": [
+          "T0007730"
+        ]
+      },
+      {
+        "claim": "Transaction came from device: LG-H870 (iOS 14.0, samsung browser 6.2, 2436x1125)",
+        "source": "graph",
+        "ref": "query:get_device(D55BA3C)",
+        "entity_ids": [
+          "D55BA3C"
+        ]
+      },
+      {
+        "claim": "Card C00256-K1 has 16 transactions in history, average amount $43.78",
+        "source": "graph",
+        "ref": "query:card_transactions(C00256-K1)",
+        "entity_ids": [
+          "C00256-K1"
+        ]
+      },
+      {
+        "claim": "Customer C00256 has 2 cards: C00256-K1, C00256-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C00256)",
+        "entity_ids": [
+          "C00256",
+          "C00256-K1",
+          "C00256-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 370 has 186 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(370)",
+        "entity_ids": [
+          "370"
+        ]
+      },
+      {
+        "claim": "Device D55BA3C used by 4 cards: C00067-K1, C00256-K2, C00322-K2, C00071-K2",
+        "source": "graph",
+        "ref": "query:device_cards(D55BA3C)",
+        "entity_ids": [
+          "D55BA3C",
+          "C00067-K1",
+          "C00256-K2",
+          "C00322-K2",
+          "C00071-K2"
+        ]
+      },
+      {
+        "claim": "Device D55BA3C is marked as NEW for card C00256-K1",
+        "source": "graph",
+        "ref": "query:new_device_check(C00256-K1, D55BA3C)",
+        "entity_ids": [
+          "D55BA3C"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0007730 for $46.13 (online) on card C00256-K1 was flagged via risk_score. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Key evidence: Flagged transaction T0007730: $46.13, online channel, risk score 0.45; Transaction came from device: LG-H870 (iOS 14.0, samsung browser 6.2, 2436x1125). Verdict: uncertain (probability 0.80).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-012"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 5,
+      "assumed_response": "Customer C00256 states they did not make this purchase"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.80, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.80 warrants a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.80, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Case warranted at probability 0.80"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: Medium confidence with exposure $2417.26"
+      }
+    ],
+    "what_changed": "Added: ESCALATE_TO_ANALYST"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 12,
+  "tokens": 0,
+  "latency_s": 0.0
+}

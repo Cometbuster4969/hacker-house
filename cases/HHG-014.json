@@ -1,0 +1,106 @@
+{
+  "case_id": "HHG-014",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.75,
+    "pattern": "undocumented",
+    "pattern_description": "Undocumented pattern: card used with 3 different recipient email domains, suggesting potential money movement or account manipulation.",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0008795: $10.79, in_person channel, risk score 0.18",
+        "source": "graph",
+        "ref": "query:get_transaction(T0008795)",
+        "entity_ids": [
+          "T0008795"
+        ]
+      },
+      {
+        "claim": "Card C00106-K1 has 12 transactions in history, average amount $230.84",
+        "source": "graph",
+        "ref": "query:card_transactions(C00106-K1)",
+        "entity_ids": [
+          "C00106-K1"
+        ]
+      },
+      {
+        "claim": "Customer C00106 has 2 cards: C00106-K1, C00106-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C00106)",
+        "entity_ids": [
+          "C00106",
+          "C00106-K1",
+          "C00106-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 570 has 172 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(570)",
+        "entity_ids": [
+          "570"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0008795 for $10.79 (in_person) on card C00106-K1 was flagged via customer_report. Undocumented pattern: card used with 3 different recipient email domains, suggesting potential money movement or account manipulation. Key evidence: Flagged transaction T0008795: $10.79, in_person channel, risk score 0.18; Card C00106-K1 has 12 transactions in history, average amount $230.84. Verdict: uncertain (probability 0.75).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-014"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 5,
+      "assumed_response": "Customer C00106 states they did not make this purchase and still has the card"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.75, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.75 warrants a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.75, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Case warranted at probability 0.75"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: Undocumented pattern needs analyst review"
+      }
+    ],
+    "what_changed": "Added: ESCALATE_TO_ANALYST"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.0
+}

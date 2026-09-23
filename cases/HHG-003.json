@@ -1,0 +1,159 @@
+{
+  "case_id": "HHG-003",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.9,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
+    "affected_txn_ids": [
+      "T0006040",
+      "T0005123",
+      "T0004688",
+      "T0009225",
+      "T0001492",
+      "T0007014",
+      "T0009752",
+      "T0006489",
+      "T0004364"
+    ],
+    "first_suspicious_txn_id": "T0006040",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "DA1F45A"
+    ],
+    "exposure_usd": 348.55000000000007,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0007014: $11.84, online channel, risk score 0.21",
+        "source": "graph",
+        "ref": "query:get_transaction(T0007014)",
+        "entity_ids": [
+          "T0007014"
+        ]
+      },
+      {
+        "claim": "Transaction came from device: Nokia 7 Plus (Android 7.0, mobile safari, 2220x1080)",
+        "source": "graph",
+        "ref": "query:get_device(DA1F45A)",
+        "entity_ids": [
+          "DA1F45A"
+        ]
+      },
+      {
+        "claim": "Card C00341-K1 has 8 transactions in history, average amount $43.57",
+        "source": "graph",
+        "ref": "query:card_transactions(C00341-K1)",
+        "entity_ids": [
+          "C00341-K1"
+        ]
+      },
+      {
+        "claim": "Customer C00341 has 3 cards: C00341-K1, C00341-K3, C00341-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C00341)",
+        "entity_ids": [
+          "C00341",
+          "C00341-K1",
+          "C00341-K3",
+          "C00341-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 570 has 172 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(570)",
+        "entity_ids": [
+          "570"
+        ]
+      },
+      {
+        "claim": "Device DA1F45A used by 4 cards: C00035-K2, C00297-K1, C00341-K3, C00445-K1",
+        "source": "graph",
+        "ref": "query:device_cards(DA1F45A)",
+        "entity_ids": [
+          "DA1F45A",
+          "C00035-K2",
+          "C00297-K1",
+          "C00341-K3",
+          "C00445-K1"
+        ]
+      },
+      {
+        "claim": "Device DA1F45A is marked as NEW for card C00341-K1",
+        "source": "graph",
+        "ref": "query:new_device_check(C00341-K1, DA1F45A)",
+        "entity_ids": [
+          "DA1F45A"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0007014 for $11.84 (online) on card C00341-K1 was flagged via customer_report. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Key evidence: Flagged transaction T0007014: $11.84, online channel, risk score 0.21; Transaction came from device: Nokia 7 Plus (Android 7.0, mobile safari, 2220x1080). Verdict: fraud (probability 0.90).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-003"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 5,
+      "assumed_response": "Customer C00341 states they did not make this purchase and still has the card"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: High confidence fraud with exposure $11.84"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: Confirmed fraud requires case"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "High confidence fraud, exposure $1337.84"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Confirmed fraud requires case creation"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "SAR required: exposure $1337.84 or shared connections"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "Shared device profile detected"
+      }
+    ],
+    "what_changed": "Added: MONITOR_CONNECTED_CARDS, FILE_REPORT"
+  },
+  "sar": {
+    "file": true,
+    "reason": "Shared device profile linking multiple cards",
+    "narrative": "On 2016-11-11, Customer C00341, card C00341-K1 was flagged for card not present new device, $11.84 online transaction. Location: online. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.. Activity linked to device shared across 4 cards. The activity is suspicious because: Flagged transaction T0007014: $11.84, online channel, risk score 0.21. Transaction came from device: Nokia 7 Plus (Android 7.0, mobile safari, 2220x1080). Card C00341-K1 has 8 transactions in history, average amount $43.57. Customer C00341 has 3 cards: C00341-K1, C00341-K3, C00341-K2. Billing region 570 has 172 cards transacting in it. Total exposure: $1337.84. Investigation pattern: card_not_present_new_device.",
+    "subjects": [
+      "C00341",
+      "C00341-K1",
+      "DA1F45A"
+    ],
+    "total_amount_usd": 1337.8400000000001,
+    "activity_dates": [
+      "2016-07-05",
+      "2016-11-12"
+    ]
+  },
+  "stop_reason": "Fraud probability 0.90 \u2265 0.85 supported by 7 independent pieces of evidence",
+  "tool_calls": 12,
+  "tokens": 0,
+  "latency_s": 0.0
+}

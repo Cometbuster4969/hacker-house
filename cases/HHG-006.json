@@ -1,0 +1,108 @@
+{
+  "case_id": "HHG-006",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_testing",
+    "pattern_description": "Card testing: 2 small online authorizations ($7.77 total) followed by a larger purchase. Consistent with testing a stolen card number before use.",
+    "affected_txn_ids": [
+      "T0005848",
+      "T0003972",
+      "T0000884",
+      "T0007461",
+      "T0003653",
+      "T0003535",
+      "T0004550",
+      "T0006683",
+      "T0008829",
+      "T0002936",
+      "T0004338"
+    ],
+    "first_suspicious_txn_id": "T0005848",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 1172.0300000000002,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0003535: $54.33, in_person channel, risk score 0.60",
+        "source": "graph",
+        "ref": "query:get_transaction(T0003535)",
+        "entity_ids": [
+          "T0003535"
+        ]
+      },
+      {
+        "claim": "Card C00153-K1 has 11 transactions in history, average amount $106.93",
+        "source": "graph",
+        "ref": "query:card_transactions(C00153-K1)",
+        "entity_ids": [
+          "C00153-K1"
+        ]
+      },
+      {
+        "claim": "Customer C00153 has 3 cards: C00153-K1, C00153-K2, C00153-K3",
+        "source": "graph",
+        "ref": "query:customer_cards(C00153)",
+        "entity_ids": [
+          "C00153",
+          "C00153-K1",
+          "C00153-K2",
+          "C00153-K3"
+        ]
+      },
+      {
+        "claim": "Billing region 530 has 186 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(530)",
+        "entity_ids": [
+          "530"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0003535 for $54.33 (in_person) on card C00153-K1 was flagged via risk_score. Card testing: 2 small online authorizations ($7.77 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Key evidence: Flagged transaction T0003535: $54.33, in_person channel, risk score 0.60; Card C00153-K1 has 11 transactions in history, average amount $106.93. Verdict: fraud (probability 0.85).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-006"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R5: Card testing with purchase over $100 already cleared"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R5: Card testing pattern requires case"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "High confidence fraud, exposure $54.33"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Confirmed fraud requires case creation"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No SAR triggers met: exposure below threshold and no shared connections",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 0.85 \u2265 0.85 supported by 4 independent pieces of evidence",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.0
+}

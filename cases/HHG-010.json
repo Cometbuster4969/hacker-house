@@ -1,0 +1,96 @@
+{
+  "case_id": "HHG-010",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.75,
+    "pattern": "undocumented",
+    "pattern_description": "Undocumented pattern: card used with 4 different recipient email domains, suggesting potential money movement or account manipulation.",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0006803: $19.21, in_person channel, risk score 0.12",
+        "source": "graph",
+        "ref": "query:get_transaction(T0006803)",
+        "entity_ids": [
+          "T0006803"
+        ]
+      },
+      {
+        "claim": "Card C00172-K1 has 15 transactions in history, average amount $82.59",
+        "source": "graph",
+        "ref": "query:card_transactions(C00172-K1)",
+        "entity_ids": [
+          "C00172-K1"
+        ]
+      },
+      {
+        "claim": "Billing region 290 has 188 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(290)",
+        "entity_ids": [
+          "290"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0006803 for $19.21 (in_person) on card C00172-K1 was flagged via customer_report. Undocumented pattern: card used with 4 different recipient email domains, suggesting potential money movement or account manipulation. Key evidence: Flagged transaction T0006803: $19.21, in_person channel, risk score 0.12; Card C00172-K1 has 15 transactions in history, average amount $82.59. Verdict: uncertain (probability 0.75).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-010"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 5,
+      "assumed_response": "Customer C00172 states they did not make this purchase and still has the card"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.75, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.75 warrants a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.75, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Case warranted at probability 0.75"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: Undocumented pattern needs analyst review"
+      }
+    ],
+    "what_changed": "Added: ESCALATE_TO_ANALYST"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.0
+}
