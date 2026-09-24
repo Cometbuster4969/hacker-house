@@ -1,6 +1,35 @@
 # LOCAL SETUP GUIDE
 # Everything you need to do that I can't do from the sandbox.
 # Follow these steps in order. Each one is necessary.
+#
+# QUICK REFERENCE — What you need:
+#
+#   1. Real dataset        → Download from Google Drive (~730MB)
+#   2. TigerGraph          → Free Savanna workspace OR Docker CE
+#   3. LLM API key         → Your OpenRouter or Grok key
+#   4. Python environment  → pip install -r requirements.txt
+#   5. Run                 → python main.py investigate
+#   6. Dashboard           → python main.py serve
+#
+# LLM PROVIDERS:
+#
+#   Provider     Key Env Var           Rate Limit       Best Model
+#   ─────────────────────────────────────────────────────────────────
+#   OpenRouter   OPENROUTER_API_KEY    18/min, 48/day   llama-3.3-70b
+#   Grok/xAI     GROK_API_KEY          18/min, 480/day  grok-3
+#   OpenAI       OPENAI_API_KEY        None             gpt-4o
+#   Anthropic    ANTHROPIC_API_KEY     None             claude-sonnet-4-20250514
+#
+# FILES I CREATED FOR YOU:
+#
+#   LOCAL_SETUP.sh          ← You are reading this
+#   main.py                 ← Entry point (investigate / serve)
+#   tigergraph/schema.gsql  ← Graph schema to deploy
+#   scripts/deploy_schema.py      ← Deploy schema to TigerGraph
+#   scripts/load_to_tigergraph.py ← Load real data into TigerGraph
+#   scripts/generate_demo_data.py ← Generate synthetic data (for testing)
+#   docs/BLOG_POST.md       ← Draft blog post
+#   docs/SOCIAL_POST.md     ← Draft social media posts
 
 ## ========================================
 ## STEP 1: DOWNLOAD THE REAL DATASET
@@ -142,7 +171,7 @@ export LLM_MODEL="llama-3.3-70b"
 # free models if one hits the limit.
 
 # ──────────────────────────────────────────────────────────────
-# Option B: Grok/xAI (NO rate limiting)
+# Option B: Grok/xAI (rate limited: 18/min, 480/day)
 # ──────────────────────────────────────────────────────────────
 # 1. Go to https://console.x.ai/ → API Keys
 # 2. Create a key
@@ -153,6 +182,8 @@ export LLM_MODEL="llama-3.3-70b"
 # export LLM_MODEL="grok-3"
 #
 # Models: grok-3 (best), grok-3-mini (faster), grok-2
+# Free tier: 20 RPM, 500 RPD — agent uses 18/480 for headroom
+# 20 cases (80 calls) finishes in ~5 minutes
 
 # ──────────────────────────────────────────────────────────────
 # Option C: OpenAI (NO rate limiting — for evaluators)
