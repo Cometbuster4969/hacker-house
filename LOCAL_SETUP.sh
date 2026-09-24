@@ -27,7 +27,6 @@
 #   tigergraph/schema.gsql  ← Graph schema to deploy
 #   scripts/deploy_schema.py      ← Deploy schema to TigerGraph
 #   scripts/load_to_tigergraph.py ← Load real data into TigerGraph
-#   scripts/generate_demo_data.py ← Generate synthetic data (for testing)
 #   docs/BLOG_POST.md       ← Draft blog post
 #   docs/SOCIAL_POST.md     ← Draft social media posts
 

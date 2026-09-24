@@ -125,10 +125,7 @@ The bank's fraud policy has 10 rules (R1-R10) that govern when to block, verify,
 
 ```bash
 # Get the dataset: download the HHGOA_IEEE files into data/HHGOA_IEEE/
-# (see the repo README). If you only want a quick smoke test without the
-# 708 MB download, generate synthetic stand-in data instead:
-#   python scripts/generate_demo_data.py
-# (it refuses to overwrite real dataset files)
+# (see the repo README)
 
 # Run all 20 investigations
 python main.py investigate
