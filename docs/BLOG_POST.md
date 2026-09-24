@@ -10,16 +10,18 @@ We built an **AI-powered Fraud Investigation Agent** that automates this entire 
 
 ### What We Built
 
-Our agent takes a fraud alert — triggered by a risk score, customer report, or analyst request — and runs a complete 8-step investigation:
+Our agent takes a fraud alert — triggered by a risk score, customer report, or analyst request — and runs a complete 10-step investigation:
 
 1. **Trigger**: Accept the alert and identify the flagged transaction
 2. **Investigate**: Query the knowledge graph for transaction history, device connections, billing regions, and email domains
 3. **Gather Evidence**: Collect structured evidence from graph traversals — card velocity, shared devices, connected cards, region patterns
-4. **Assess Uncertainty**: Detect fraud patterns (5 known + undocumented) and calculate calibrated probability
-5. **Gather More Evidence**: Request customer verification or step-up authentication when signals are ambiguous
-6. **Take Actions**: Recommend next-best-actions with proper approval routing (auto/L1/L2)
-7. **Explain**: Generate evidence-based reasoning with policy rule citations
-8. **Update Memory**: Write the completed case back to the graph for future investigations
+4. **Assess Uncertainty**: Detect fraud patterns (5 known + undocumented) and get a calibrated probability from the GraphRAG-grounded LLM judge
+5. **Identify Evidence Needs**: Decide what additional evidence would reduce uncertainty
+6. **Gather More Evidence**: Request customer verification or step-up authentication when signals are ambiguous
+7. **Reassess (bounded moves)**: Incorporate new evidence while keeping the LLM probability as the anchor (max ±0.15 move — rule scores can never ratchet a case to 1.0)
+8. **Take Actions**: Recommend next-best-actions with proper approval routing (auto/L1/L2)
+9. **Explain**: Generate evidence-based reasoning with policy rule citations
+10. **Update Memory**: Write the completed case back to the graph for future investigations
 
 ### Architecture
 
@@ -30,11 +32,16 @@ Our agent takes a fraud alert — triggered by a risk score, customer report, or
 │  Trigger → Orchestrator → Policy Engine      │
 │                ↓                              │
 │  Evidence Gatherer + Pattern Detector         │
+│  + GraphRAG (vector-retrieved precedents)     │
 │                ↓                              │
-│  TigerGraph (In-Memory / Savanna)            │
-│  8 vertex types, 20 edge types               │
+│  TigerGraph (Savanna live / in-memory dev)   │
+│  8 vertex types, 20 edge types,              │
+│  11 installed GSQL queries                   │
 │                ↓                              │
-│  MCP Server (15 tools)                       │
+│  Official tigergraph-mcp (69 tools)          │
+│  + 15 in-process investigation tools         │
+│                ↓                              │
+│  LLM judge (GraphRAG-grounded, bounded moves)│
 │                ↓                              │
 │  Web Dashboard (FastAPI + HTML)              │
 └─────────────────────────────────────────────┘
@@ -50,27 +57,50 @@ We designed a schema with 8 vertex types modeling the financial entity graph:
 - **Transaction** → PURCHASER_EMAIL / RECIPIENT_EMAIL → **EmailDomain**
 - **ClosedCase** → INVOLVES → **Transaction** / ON_CARD → **Card**
 
+#### Live Savanna Deployment & GSQL
+The schema is deployed on **TigerGraph Savanna** with **11 installed GSQL queries**
+(all smoke-run live — evidence in `cases/tigergraph_query_results.json`):
+`graph_stats`, `card_activity`, `card_txns`, `customer_cards`, `card_case_history`,
+`txn_devices`, `txn_emails`, `device_txns`, `region_txns`, `email_domain_activity`,
+plus **`fraud_pagerank`** — a hand-written GDS-style PageRank over the
+Card–Transaction–Device topology. For local development, an in-memory engine
+holds the full 590K-transaction graph.
+
 #### Graph Algorithms
+- **PageRank (GSQL)**: `fraud_pagerank` over card/device topology
 - **Breadth-first traversal**: From a flagged transaction → card → all card transactions → devices → other cards on same devices
 - **Pattern matching**: Card testing detection (small authorizations → large purchase), out-of-region use, new device detection
 - **Community detection**: Finding shared device profiles across multiple cards (fraud ring indicators)
-- **Similarity search**: Matching current investigation signals to closed cases in the graph
+- **Vector similarity**: All 5,565 closed-case narratives embedded (deterministic hashed TF-IDF, 128-dim, cosine top-k) so semantically similar precedents surface even with zero entity overlap
 
 #### TigerGraph MCP
-We built an MCP server exposing 15 graph operations as tools:
+We use the **official [`tigergraph-mcp`](https://github.com/tigergraph/tigergraph-mcp) server,
+verified live against Savanna**: 69 tools over stdio, 5/5 smoke checks passed
+(connections, global schema, vertex counts, installed queries, raw GSQL) — evidence in
+`cases/mcp_tool_verification.json`. Through it we also exercised TigerVector: created a
+vector attribute on `ClosedCase` and upserted 200 case embeddings.
+
+Alongside it, an in-process tool server exposes 15 investigation-specific tools in
+OpenAI function-calling format:
 - `get_card_transactions`, `get_customer_cards`, `get_device_profile`
 - `detect_card_testing`, `detect_out_of_region`, `get_card_velocity`
 - `find_shared_devices`, `find_similar_closed_cases`
 - `write_investigation_case` (for case memory)
 
-These tools can be called by any LLM agent framework through the Model Context Protocol.
+#### GraphRAG + LLM Reasoning
+Graph evidence, policy rules, and **vector-retrieved precedent cases** are synthesized
+into structured context and passed to the LLM judge
+(nvidia/nemotron-3-super-120b-a12b via OpenRouter, temperature 0, responses cached for
+reproducibility) — the model reasons over grounded evidence, it never sees raw tables.
+A **bounded-move reassessment** keeps the LLM's probability as the anchor after new
+evidence arrives (max ±0.15 move), preventing rule scores from ratcheting every case to 1.0.
 
 #### Case Memory
-Each completed investigation is written back to the graph as an `InvestigationCase` vertex with edges to all relevant entities. When a new investigation starts, the agent queries for similar past cases through graph traversal. This creates a feedback loop where investigations improve over time.
+Each completed investigation is written back to the graph as an `InvestigationCase` vertex with edges to all relevant entities. When a new investigation starts, the agent retrieves similar past cases through graph traversal *and* vector similarity. This creates a feedback loop where investigations improve over time.
 
 ### Agentic Capabilities
 
-1. **Multi-step investigation workflow**: The agent follows an 8-step cycle, not a single-shot classification
+1. **Multi-step investigation workflow**: The agent follows a 10-step cycle, not a single-shot classification
 2. **Tool use via MCP**: 15 graph operation tools, callable through the Model Context Protocol
 3. **Policy compliance engine**: Rules R1-R10 enforced programmatically, with approval routing
 4. **Uncertainty-aware reasoning**: Calibrated probability with explicit stopping rules
@@ -105,17 +135,17 @@ The bank's fraud policy has 10 rules (R1-R10) that govern when to block, verify,
 
 ### What We'd Improve With More Time
 
-- **Real TigerGraph Savanna integration**: Our current implementation uses an in-memory graph engine. Connecting to TigerGraph Savanna with GSQL queries would unlock more sophisticated graph algorithms.
-- **LLM-powered reasoning**: Currently using rule-based assessment. Adding an LLM with GraphRAG context would enable more nuanced reasoning about ambiguous cases.
+- **Complete the TigerVector top-k roundtrip**: attribute creation + upsert + fetch are proven via the official MCP server; parsing the similarity-ranking response is pending, so retrieval would run fully inside TigerGraph.
+- **Load the full 590K-transaction corpus into Savanna**: currently a 10K live subset plus the full graph in-memory.
 - **Interactive evidence gathering**: Real customer/analyst responses instead of simulated ones.
 - **Streaming investigation visualization**: Real-time updates as the investigation progresses.
 - **Multi-agent collaboration**: Separate agents for different investigation phases, coordinated through a supervisor.
-- **Vector similarity search**: Using TigerGraph's vector store for semantic search over case narratives and policy documents.
 
 ### Tech Stack
 
-- **Graph Database**: TigerGraph (in-memory engine, compatible with Savanna/CE)
-- **Graph Query**: GSQL-compatible operations via MCP
+- **Graph Database**: TigerGraph Savanna (11 installed GSQL queries) + in-memory engine for the full 590K-transaction local graph
+- **MCP**: Official `tigergraph-mcp` (69 tools, verified live) + 15 in-process investigation tools
+- **LLM**: nvidia/nemotron-3-super-120b-a12b via OpenRouter, temperature 0, cached responses
 - **Agent Framework**: Custom Python orchestrator
 - **Web Dashboard**: FastAPI + vanilla HTML/JS
 - **Data Models**: Pydantic for type-safe investigation state
@@ -124,8 +154,8 @@ The bank's fraud policy has 10 rules (R1-R10) that govern when to block, verify,
 ### Try It
 
 ```bash
-# Generate demo data
-python scripts/generate_demo_data.py
+# Get the dataset: download the HHGOA_IEEE files into data/HHGOA_IEEE/
+# (see the repo README)
 
 # Run all 20 investigations
 python main.py investigate

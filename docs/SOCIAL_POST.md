@@ -13,7 +13,7 @@ The agent:
 
 Graph-native fraud investigation is the future. TigerGraph makes tracing money through shared devices, regions, and connected cards trivial.
 
-Try it: github.com/[repo]
+Try it: github.com/Cometbuster4969/hacker-house
 
 #TigerGraph #FraudDetection #AI #GraphDatabase #HHGOA
 
@@ -26,9 +26,10 @@ Try it: github.com/[repo]
 The challenge: Build an AI agent that investigates fraud alerts, creates and progresses cases, and recommends next-best actions — under uncertainty.
 
 Our solution:
-🔹 8-step investigation cycle from trigger to case memory
-🔹 TigerGraph knowledge graph with 8 vertex types and 20 edge types
-🔹 15 MCP tools exposing graph operations to the agent
+🔹 10-step investigation cycle from trigger to case memory
+🔹 TigerGraph Savanna knowledge graph: 8 vertex types, 20 edge types, 11 installed GSQL queries (incl. a hand-written PageRank)
+🔹 Official tigergraph-mcp (69 tools, verified live) + 15 in-process investigation tools
+🔹 GraphRAG with vector-retrieved precedents over 5,565 closed cases grounding the LLM judge
 🔹 Policy engine enforcing 10 fraud rules (R1-R10) with approval routing
 🔹 Pattern detection for card testing, CNP fraud, account takeover, and more
 🔹 Case memory through graph writes — each investigation becomes evidence for the next

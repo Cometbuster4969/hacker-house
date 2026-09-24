@@ -335,7 +335,7 @@ class TestCaseAnswerFormat:
         if not cases_dir.exists():
             pytest.skip("No answer files generated yet")
 
-        for f in cases_dir.glob("*.json"):
+        for f in cases_dir.glob("HHG-*.json"):
             with open(f) as fh:
                 data = json.load(fh)
             assert data["case"]["verdict"] in ("fraud", "legitimate", "uncertain")
@@ -351,7 +351,7 @@ class TestCaseAnswerFormat:
             "card_not_present_new_device", "out_of_region_use",
             "account_takeover", "undocumented", "none",
         }
-        for f in cases_dir.glob("*.json"):
+        for f in cases_dir.glob("HHG-*.json"):
             with open(f) as fh:
                 data = json.load(fh)
             assert data["case"]["pattern"] in valid_patterns, \
