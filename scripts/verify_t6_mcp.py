@@ -23,10 +23,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TG_HOST = os.getenv("TIGERGRAPH_HOST", "https://tg-0d7f3ac1-7c8e-4b37-b81d-9f15452c48e0.tg-2635877100.i.tgcloud.io")
+TG_HOST = os.getenv("TIGERGRAPH_HOST", "")
 TG_GRAPH = os.getenv("TIGERGRAPH_GRAPH", "FraudInvestigation")
-TG_USER = os.getenv("TIGERGRAPH_USER", "ayush")
+TG_USER = os.getenv("TIGERGRAPH_USER", "")
 TG_SECRET = os.getenv("TIGERGRAPH_SECRET", "")
+
+if not TG_HOST or not TG_USER:
+    sys.exit("Set TIGERGRAPH_HOST and TIGERGRAPH_USER in .env (see .env.example)")
 
 EVIDENCE_PATH = Path(__file__).parent.parent / "cases" / "mcp_tool_verification.json"
 
