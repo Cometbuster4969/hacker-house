@@ -1,15 +1,22 @@
 # GAP LEDGER — maintained after every task
 
-| # | Gap | Task | Status | Evidence | Points | Time spent |
-|---|-----|------|--------|----------|--------|------------|
-| 1 | Synthetic data, never ran on real dataset | T1 | BLOCKED | See below | +1.2 | 15m |
-| 2 | Zero calibration; guessed probability weights | T2 | OPEN | Blocked by T1 | +0.9 | — |
-| 3 | 75% of cases end `uncertain` | T3 | OPEN | Blocked by T2 | +0.5 | — |
-| 4 | TigerGraph never connected; no GSQL executed | T4 | BLOCKED | Needs TG credentials from human | +1.0 | — |
-| 5 | GraphRAG has no vector retrieval | T5 | OPEN | Blocked by T4 | +0.3 | — |
-| 6 | MCP server is a stub, not tigergraph-mcp | T6 | PARTIAL | Real tool list documented from official repo | +0.3 | 10m |
-| 7 | In-memory engine untested at 590K rows | T7 | OPEN | Blocked by T1 | +0.2 | — |
-| 8 | No video, blog unverified, artefacts incomplete | T8 | OPEN | | +0.6 | — |
+## Final status (submission)
+
+| # | Gap | Task | Status | Evidence |
+|---|-----|------|--------|----------|
+| 1 | Synthetic data, never ran on real dataset | T1 | CLOSED | Real HHGOA IEEE dataset loaded (590,742 txns in-memory; `data/HHGOA_IEEE/`); final run over all 20 cases — `cases/run_summary.json` |
+| 2 | Zero calibration; guessed probability weights | T2 | CLOSED | Bounded-move reassessment (±0.15 anchor band); calibration table in `docs/RESULTS.md` |
+| 3 | 75% of cases end `uncertain` | T3 | CLOSED | Final tally 17 fraud / 1 legitimate / 2 uncertain; probability spread 0.12–1.00 — `docs/RESULTS.md` |
+| 4 | TigerGraph never connected; no GSQL executed | T4 | CLOSED | Live Savanna deployment, 11 installed GSQL queries, 10/10 smoke-run — `cases/tigergraph_query_results.json` |
+| 5 | GraphRAG has no vector retrieval | T5 | CLOSED | 5,565-case vector index (hashed TF-IDF, cosine top-k) feeds GraphRAG Section 7 — `src/evidence/vector_retrieval.py`, `tests/test_vector_retrieval.py` |
+| 6 | MCP server is a stub, not tigergraph-mcp | T6 | CLOSED | Official `tigergraph-mcp` verified live: 69 tools, 5/5 checks — `cases/mcp_tool_verification.json`; TigerVector top-k roundtrip 2/3 (documented limitation) |
+| 7 | In-memory engine untested at 590K rows | T7 | CLOSED | Full corpus loaded in-memory for the final run; 10K live subset on Savanna |
+| 8 | No video, blog unverified, artefacts incomplete | T8 | PARTIAL | Blog + social drafts in `docs/`; 20 answer files + run summary in `cases/`; **demo video still outstanding (human task)** |
+
+The sections below are the historical log kept during development, including the
+period when the sandbox blocked dataset downloads and TigerGraph credentials were
+pending. They are preserved as evidence of process; all blockers listed were
+subsequently resolved as recorded in the table above.
 
 ---
 
