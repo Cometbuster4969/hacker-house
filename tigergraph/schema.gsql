@@ -1,0 +1,199 @@
+-- TigerGraph Schema for Fraud Investigation
+-- Supports: Customers, Cards, Transactions, Device Profiles,
+-- Email Domains, Billing Regions, Closed Cases, Investigation Cases
+
+-- Drop existing graph if needed
+DROP GRAPH FraudInvestigation IF EXISTS;
+
+CREATE GRAPH FraudInvestigation (
+
+  -- Vertices
+  Customer (
+    customer_id STRING PRIMARY KEY,
+    num_cards INT DEFAULT 0,
+    first_seen STRING DEFAULT "",
+    last_seen STRING DEFAULT ""
+  ),
+
+  Card (
+    card_id STRING PRIMARY KEY,
+    customer_id STRING,
+    network STRING DEFAULT "",
+    card_type STRING DEFAULT "",
+    card1 STRING DEFAULT "",
+    first_seen STRING DEFAULT "",
+    last_seen STRING DEFAULT "",
+    num_transactions INT DEFAULT 0,
+    total_amount DOUBLE DEFAULT 0.0
+  ),
+
+  Transaction (
+    transaction_id STRING PRIMARY KEY,
+    customer_id STRING,
+    card_id STRING,
+    amount DOUBLE,
+    ts STRING,
+    channel STRING,
+    risk_score DOUBLE,
+    product_cd STRING DEFAULT "",
+    addr1 DOUBLE DEFAULT 0.0,
+    addr2 DOUBLE DEFAULT 0.0,
+    p_emaildomain STRING DEFAULT "",
+    r_emaildomain STRING DEFAULT "",
+    is_flagged BOOL DEFAULT FALSE,
+    is_fraud_episode BOOL DEFAULT FALSE
+  ),
+
+  DeviceProfile (
+    device_id STRING PRIMARY KEY,
+    device_info STRING DEFAULT "",
+    device_type STRING DEFAULT "",
+    os STRING DEFAULT "",
+    browser STRING DEFAULT "",
+    screen STRING DEFAULT "",
+    num_cards_seen INT DEFAULT 0,
+    first_seen STRING DEFAULT "",
+    last_seen STRING DEFAULT ""
+  ),
+
+  EmailDomain (
+    domain STRING PRIMARY KEY,
+    domain_type STRING DEFAULT "",  -- purchaser or recipient
+    num_customers INT DEFAULT 0
+  ),
+
+  BillingRegion (
+    region_id STRING PRIMARY KEY,
+    country_code DOUBLE DEFAULT 0.0,
+    num_customers INT DEFAULT 0
+  ),
+
+  ClosedCase (
+    case_id STRING PRIMARY KEY,
+    customer_id STRING,
+    card_id STRING,
+    opened_at STRING,
+    closed_at STRING,
+    outcome STRING,
+    pattern STRING,
+    exposure_usd DOUBLE DEFAULT 0.0,
+    n_txns INT DEFAULT 0,
+    analyst_notes STRING DEFAULT ""
+  ),
+
+  InvestigationCase (
+    case_id STRING PRIMARY KEY,
+    customer_id STRING,
+    card_id STRING,
+    opened_at STRING,
+    status STRING DEFAULT "open",
+    verdict STRING DEFAULT "uncertain",
+    fraud_probability DOUBLE DEFAULT 0.5,
+    pattern STRING DEFAULT "none",
+    exposure_usd DOUBLE DEFAULT 0.0,
+    summary STRING DEFAULT ""
+  ),
+
+  -- Edges
+  OWNS (
+    FROM Customer,
+    TO Card,
+    since STRING DEFAULT ""
+  ),
+
+  MADE (
+    FROM Card,
+    TO Transaction,
+    is_primary BOOL DEFAULT TRUE
+  ),
+
+  FROM_DEVICE (
+    FROM Transaction,
+    TO DeviceProfile,
+    is_new_device BOOL DEFAULT FALSE,
+    proxy_type STRING DEFAULT ""
+  ),
+
+  PURCHASER_EMAIL (
+    FROM Transaction,
+    TO EmailDomain
+  ),
+
+  RECIPIENT_EMAIL (
+    FROM Transaction,
+    TO EmailDomain
+  ),
+
+  BILLED_IN (
+    FROM Transaction,
+    TO BillingRegion
+  ),
+
+  NEXT_TXN (
+    FROM Transaction,
+    TO Transaction,
+    delta_seconds DOUBLE DEFAULT 0.0
+  ),
+
+  INVOLVES_TXN (
+    FROM ClosedCase,
+    TO Transaction
+  ),
+
+  ON_CARD (
+    FROM ClosedCase,
+    TO Card
+  ),
+
+  CONNECTED_CARD (
+    FROM ClosedCase,
+    TO Card
+  ),
+
+  SHARES_DEVICE (
+    FROM Card,
+    TO DeviceProfile,
+    first_seen STRING DEFAULT "",
+    last_seen STRING DEFAULT ""
+  ),
+
+  SAME_REGION (
+    FROM Card,
+    TO BillingRegion,
+    txn_count INT DEFAULT 0
+  ),
+
+  CASE_INVOLVES_TXN (
+    FROM InvestigationCase,
+    TO Transaction
+  ),
+
+  CASE_ON_CARD (
+    FROM InvestigationCase,
+    TO Card
+  ),
+
+  CASE_CONNECTED_CARD (
+    FROM InvestigationCase,
+    TO Card
+  ),
+
+  CASE_INVOLVES_DEVICE (
+    FROM InvestigationCase,
+    TO DeviceProfile
+  ),
+
+  CASE_SIMILAR_TO (
+    FROM InvestigationCase,
+    TO ClosedCase,
+    similarity_score DOUBLE DEFAULT 0.0
+  ),
+
+  -- Customer to Customer via shared device or region
+  LINKED_CUSTOMER (
+    FROM Customer,
+    TO Customer,
+    link_type STRING DEFAULT "",  -- shared_device | shared_region | shared_ring
+    link_value STRING DEFAULT ""
+  )
+)

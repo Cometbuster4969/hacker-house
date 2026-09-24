@@ -1,0 +1,134 @@
+{
+  "case_id": "HHG-001",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.75,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [
+      "D6A9532"
+    ],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction T0000674: $20.65, online channel, risk score 0.58",
+        "source": "graph",
+        "ref": "query:get_transaction(T0000674)",
+        "entity_ids": [
+          "T0000674"
+        ]
+      },
+      {
+        "claim": "Transaction came from device: Apple iPhone 11 (Android 9.0, chrome for android, 1334x750)",
+        "source": "graph",
+        "ref": "query:get_device(D6A9532)",
+        "entity_ids": [
+          "D6A9532"
+        ]
+      },
+      {
+        "claim": "Card C00220-K1 has 9 transactions in history, average amount $91.31",
+        "source": "graph",
+        "ref": "query:card_transactions(C00220-K1)",
+        "entity_ids": [
+          "C00220-K1"
+        ]
+      },
+      {
+        "claim": "Customer C00220 has 2 cards: C00220-K1, C00220-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C00220)",
+        "entity_ids": [
+          "C00220",
+          "C00220-K1",
+          "C00220-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 500 has 188 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(500)",
+        "entity_ids": [
+          "500"
+        ]
+      },
+      {
+        "claim": "Device D6A9532 used by 2 cards: C00291-K1, C00220-K1",
+        "source": "graph",
+        "ref": "query:device_cards(D6A9532)",
+        "entity_ids": [
+          "D6A9532",
+          "C00291-K1",
+          "C00220-K1"
+        ]
+      },
+      {
+        "claim": "Device D6A9532 is marked as NEW for card C00220-K1",
+        "source": "graph",
+        "ref": "query:new_device_check(C00220-K1, D6A9532)",
+        "entity_ids": [
+          "D6A9532"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction T0000674 for $20.65 (online) on card C00220-K1 was flagged via risk_score. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Evidence: Flagged transaction T0000674: $20.65, online channel, risk score 0.58; Transaction came from device: Apple iPhone 11 (Android 9.0, chrome for android, 1334x750). Verdict: uncertain (0.75).",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-001"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Customer C00220 states they did not make this purchase"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.75, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.75 warrants a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.75, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Case warranted at probability 0.75"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: Medium confidence with exposure $919.87"
+      }
+    ],
+    "what_changed": "Added: ESCALATE_TO_ANALYST"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 12,
+  "tokens": 0,
+  "latency_s": 0.0
+}
