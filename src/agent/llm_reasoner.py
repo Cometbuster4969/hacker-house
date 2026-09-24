@@ -5,7 +5,7 @@ assess risk, and generate explanations.
 Supports:
 - OpenAI (direct) — no rate limiting (used by evaluators)
 - Anthropic (direct) — no rate limiting (used by evaluators)
-- Grok/xAI (direct) — no rate limiting
+- Grok/xAI (direct) — rate limited for free tier (18 RPM, 480 RPD)
 - OpenRouter (free tier) — rate limited: 20 req/min, 50 req/day
 - Mock (rule-based fallback) — no LLM, rules only
 """
@@ -31,13 +31,13 @@ logger = logging.getLogger(__name__)
 # Rate limiter for OpenRouter free tier
 # ──────────────────────────────────────────────────────────────
 
-class OpenRouterRateLimiter:
+class FreeTierRateLimiter:
     """
-    Rate limiter for OpenRouter free tier.
+    Rate limiter for free-tier LLM providers (OpenRouter, Grok).
     
     Limits:
-    - 20 requests per minute (hard cap, always)
-    - 50 requests per day (no credits) or 1000/day ($10+ lifetime credits)
+    - OpenRouter free: 20 RPM, 50 RPD (or 1000/day with $10 credits)
+    - Grok free: 20 RPM, 500 RPD
     
     When limit is hit, sleeps until the window resets.
     """
@@ -195,7 +195,7 @@ class LLMReasoner:
             logger.info("LLM provider: mock (rule-based only)")
 
     def _setup_grok(self):
-        """Setup Grok/xAI client — NO rate limiting."""
+        """Setup Grok/xAI client — rate limited for free tier."""
         api_key = os.getenv("GROK_API_KEY", "")
         if not api_key:
             logger.warning("GROK_API_KEY not set, falling back to mock")
@@ -209,7 +209,17 @@ class LLMReasoner:
                 api_key=api_key,
             )
             self.model = self.model or "grok-3"
-            logger.info("Grok/xAI direct: %s (no rate limiting)", self.model)
+
+            # Grok free tier: 20 RPM, 500 RPD
+            # We use 18 RPM and 480 RPD to leave headroom
+            self._rate_limiter = FreeTierRateLimiter(
+                requests_per_minute=18,
+                requests_per_day=480,
+            )
+            logger.info(
+                "Grok/xAI: %s (rate limited: 18 req/min, 480 req/day)",
+                self.model
+            )
         except Exception as e:
             logger.warning("Grok setup failed: %s, falling back to mock", e)
             self.provider = "mock"
@@ -241,7 +251,7 @@ class LLMReasoner:
 
             # Rate limiter ONLY for free tier models
             if ":free" in self.model:
-                self._rate_limiter = OpenRouterRateLimiter(
+                self._rate_limiter = FreeTierRateLimiter(
                     requests_per_minute=18,
                     requests_per_day=48,
                 )
