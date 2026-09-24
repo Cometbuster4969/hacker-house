@@ -146,8 +146,6 @@ Download from [HHGOA_IEEE Google Drive](https://drive.google.com/drive/folders/1
 ```
 ├── main.py                          # CLI entry point
 ├── requirements.txt                 # Python dependencies
-├── LOCAL_SETUP.sh                   # End-to-end local setup
-├── GAP_LEDGER.md                    # Task-by-task gap log with evidence
 ├── tigergraph/
 │   ├── schema.gsql                  # TigerGraph GSQL schema
 │   └── install_schema.gsql          # Savanna-compatible installer
@@ -178,8 +176,7 @@ Download from [HHGOA_IEEE Google Drive](https://drive.google.com/drive/folders/1
 │   ├── final_queries.py             # GSQL install + live smoke evidence
 │   ├── verify_t6_mcp.py             # Official tigergraph-mcp verification
 │   ├── check_llm.py                 # LLM preflight (10 s)
-│   ├── summarize_run.py             # Post-run tally + integrity flags
-│   └── patch_*.py                   # Idempotent updaters for local files
+│   └── summarize_run.py             # Post-run tally + integrity flags
 ├── cases/                           # Output: 20 answer JSONs + evidence
 ├── data/
 │   └── HHGOA_IEEE/                  # Dataset files
