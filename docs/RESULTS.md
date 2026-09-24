@@ -61,9 +61,9 @@ action sets per policy R1 rather than immediate blocks.
    GraphRAG context.
 4. **Partial exposures (0.00) on non-fraud cases** reflect that `exposure_usd` is
    computed over connected fraudulent transactions only.
-5. **Cosmetic:** on 4 cases the explanation sub-call hit an upstream null-content
-   response; template fallback explanations were used. Verdicts/probabilities were
-   unaffected.
+5. **Cosmetic:** on 4 cases (HHG-005, HHG-006, HHG-016, HHG-020) the explanation
+   sub-call hit an upstream null-content response; template fallback explanations
+   were used. Verdicts/probabilities were unaffected.
 ## Provenance
 - Dataset: HHGOA IEEE-CIS benchmark (590,742 transactions, 13,553 customers, 14,893 cards,
   5,565 closed cases) loaded in-memory and 10K-subset live in TigerGraph Savanna.

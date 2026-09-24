@@ -124,8 +124,7 @@ The bank's fraud policy has 10 rules (R1-R10) that govern when to block, verify,
 ### Try It
 
 ```bash
-# Generate demo data
-python scripts/generate_demo_data.py
+# Place the HHGOA_IEEE dataset files in data/HHGOA_IEEE/ (see README — Dataset)
 
 # Run all 20 investigations
 python main.py investigate
