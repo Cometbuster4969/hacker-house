@@ -10,6 +10,7 @@ Flow:
 from __future__ import annotations
 import json
 import logging
+import os
 import time
 from pathlib import Path
 from typing import Optional
@@ -30,6 +31,8 @@ from ..utils.models import (
 logger = logging.getLogger(__name__)
 
 
+from ..utils.config import OPENROUTER_API_KEY
+
 class FraudInvestigationAgent:
     """
     Hybrid fraud investigation agent.
@@ -43,12 +46,25 @@ class FraudInvestigationAgent:
         self.pattern_detector = PatternDetector()
         self.policy_engine = PolicyEngine()
         self.graphrag = GraphRAGSynthesizer(graph)
+
+        # Auto-detect provider if not specified
+        if not llm_provider:
+            if os.getenv("OPENAI_API_KEY"):
+                llm_provider = "openai"
+            elif os.getenv("ANTHROPIC_API_KEY"):
+                llm_provider = "anthropic"
+            elif OPENROUTER_API_KEY:
+                llm_provider = "openrouter"
+
         self.llm = LLMReasoner(provider=llm_provider, model=llm_model)
 
         if self.llm.is_llm_available:
-            logger.info("Hybrid mode: LLM reasoning enabled (%s)", llm_provider)
+            remaining = self.llm.requests_remaining
+            remaining_str = f", {remaining} requests remaining today" if remaining >= 0 else ""
+            logger.info("Hybrid mode: %s (%s%s)",
+                        self.llm.provider, self.llm.model, remaining_str)
         else:
-            logger.info("Rule-based mode: LLM not available, using rules only")
+            logger.info("Rule-based mode: no LLM available")
 
     def investigate(self, trigger: CasePackEntry) -> CaseAnswer:
         """Run a full hybrid investigation for a single case."""

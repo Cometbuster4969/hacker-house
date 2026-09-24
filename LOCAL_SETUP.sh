@@ -104,24 +104,61 @@ python scripts/load_to_tigergraph.py
 # This is what makes it a HYBRID agent (rules + AI reasoning).
 # Without this, it runs in rule-based mode only.
 
-# Option A: OpenAI (recommended)
-# 1. Go to https://platform.openai.com/api-keys
-# 2. Create an API key
-# 3. Set environment variable:
-export OPENAI_API_KEY="sk-your-key-here"
-export LLM_PROVIDER="openai"
-export LLM_MODEL="gpt-4o"
+# ──────────────────────────────────────────────────────────────
+# Option A: OpenRouter FREE TIER (you have this — use it)
+# ──────────────────────────────────────────────────────────────
+# 1. Go to https://openrouter.ai/keys
+# 2. Copy your API key
+# 3. Set environment variables:
 
-# Option B: Anthropic
-# 1. Go to https://console.anthropic.com/
-# 2. Create an API key
-# 3. Set environment variable:
-export ANTHROPIC_API_KEY="sk-ant-your-key-here"
-export LLM_PROVIDER="anthropic"
-export LLM_MODEL="claude-sonnet-4-20250514"
+export OPENROUTER_API_KEY="sk-or-your-key-here"
+export LLM_PROVIDER="openrouter"
+export LLM_MODEL="llama-3.3-70b"
 
-# Option C: No LLM (rule-based only)
-# Just don't set any API key. The agent will use rules only.
+# RECOMMENDED FREE MODELS (ordered by quality for fraud analysis):
+#
+#   Model ID                              Short name        Quality   Speed
+#   ────────────────────────────────────────────────────────────────────────
+#   meta-llama/llama-3.3-70b-instruct:free   llama-3.3-70b     ★★★★☆   Fast
+#   nvidia/nemotron-3-super-120b-a12b:free   nemotron-120b     ★★★★★   Slow
+#   qwen/qwen3-next-80b-a3b-instruct:free    qwen3-80b         ★★★★☆   Medium
+#   meta-llama/llama-4-maverick:free          llama-4-maverick  ★★★★☆   Medium
+#   google/gemma-4-31b-it:free                gemma-4-31b       ★★★☆☆   Fast
+#   openai/gpt-oss-120b:free                  gpt-oss-120b      ★★★★☆   Medium
+#
+# BEST PICK: llama-3.3-70b (best balance of quality + speed + availability)
+# BEST QUALITY: nemotron-120b (slower but strongest reasoning)
+#
+# RATE LIMITS (free tier):
+#   - 20 requests per minute (hard cap)
+#   - 50 requests per day (no credits)
+#   - 1,000 requests per day (after $10 lifetime credits)
+#
+# For 20 cases × ~4 LLM calls each = ~80 calls total
+# With 50/day limit: takes ~2 days
+# With $10 credits (1000/day): takes ~5 minutes
+#
+# The agent has built-in rate limiting and will auto-rotate between
+# free models if one hits the limit.
+
+# ──────────────────────────────────────────────────────────────
+# Option B: OpenAI (NO rate limiting — for evaluators)
+# ──────────────────────────────────────────────────────────────
+# export OPENAI_API_KEY="sk-your-key-here"
+# export LLM_PROVIDER="openai"
+# export LLM_MODEL="gpt-4o"
+
+# ──────────────────────────────────────────────────────────────
+# Option C: Anthropic (NO rate limiting — for evaluators)
+# ──────────────────────────────────────────────────────────────
+# export ANTHROPIC_API_KEY="sk-ant-your-key-here"
+# export LLM_PROVIDER="anthropic"
+# export LLM_MODEL="claude-sonnet-4-20250514"
+
+# ──────────────────────────────────────────────────────────────
+# Option D: No LLM (rule-based only)
+# ──────────────────────────────────────────────────────────────
+# Don't set any API key. The agent uses rules only.
 # This works but won't have LLM-powered pattern detection or explanations.
 
 
@@ -140,10 +177,14 @@ TIGERGRAPH_TOKEN=your_token_here
 TIGERGRAPH_GRAPH=FraudInvestigation
 TIGERGRAPH_USE_SAVANNA=true
 
-# LLM (choose one)
-OPENAI_API_KEY=sk-your-key-here
-LLM_PROVIDER=openai
-LLM_MODEL=gpt-4o
+# LLM — OpenRouter free tier (your key)
+OPENROUTER_API_KEY=sk-or-your-key-here
+LLM_PROVIDER=openrouter
+LLM_MODEL=llama-3.3-70b
+
+# For evaluators, uncomment ONE of these instead:
+# OPENAI_API_KEY=sk-your-key-here
+# ANTHROPIC_API_KEY=sk-ant-your-key-here
 
 # App
 DATA_DIR=./data/HHGOA_IEEE
