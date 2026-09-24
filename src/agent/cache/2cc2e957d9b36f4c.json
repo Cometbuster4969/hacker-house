@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "9909b353561c45284092e1cda724d42e",
+  "response": "{\n  \"fraud_probability\": 0.12,\n  \"verdict\": \"legitimate\",\n  \"pattern\": \"card_testing\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction is a low\u2011amount in\u2011person purchase ($30.91) that falls below the card\u2019s historical average ($71.17), which is consistent with card\u2011testing behavior. The risk score of 0.55 is moderate but not high enough to outweigh the lack of corroborating evidence such as customer reports, device anomalies, or out\u2011of\u2011region use. Prior cleared case CC\u20110003 for the same card shows a similar alert was resolved as legitimate after travel confirmation. Although vector\u2011retrieved similar cases are account\u2011takeover frauds, they involve different cardholders and lack direct linkage to this customer. Given that half of all alerts are legitimate and there is no definitive fraud signal, the transaction is more likely genuine.\"\n}",
+  "cached_at": 1790286702.302833
+}

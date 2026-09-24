@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "c161f8f6c759608cb78366e1b658deb3",
+  "response": "{\n  \"investigation_summary\": \"The alert stems from an out-of-region use flag on transaction 3514030 ($77.07, in_person) with a risk score of 0.61. Card C12382-K1 shows 30 historical transactions averaging $110.83, and the flagged activity occurred in billing region 444, which has 321 cards transacting there. While prior out-of-region fraud case CC-1066 ($170.98) indicates a possible pattern, the differing case CC-1673 (card_not_present_new_device, $199.98) and the low in-person amount weaken the signal. Consequently, the fraud probability is set at 0.45, resulting in an uncertain verdict that warrants further investigation.\"\n}",
+  "cached_at": 1790285402.708004
+}

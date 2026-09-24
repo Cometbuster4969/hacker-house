@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "f4778fa0823171711a8d6d78d9ab6665",
+  "response": "{\n  \"summary\": \"The investigation concludes fraud with a probability of 0.95, based on card testing patterns. Flagged transaction 3534820 ($59.67, online, risk score 0.37) originated from a Windows Edge 16.0 device, consistent with low\u2011value test attempts. Card C09988\u2011K1 shows 30 historical transactions averaging $45.99, and the current $59.67 charge deviates upward, a typical card\u2011testing escalation. No prior similar cases were found, reinforcing the novelty of this activity.\"\n}",
+  "cached_at": 1790287120.6413548
+}

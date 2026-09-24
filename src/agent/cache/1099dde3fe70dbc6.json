@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "4b35094d5a8ac937e07b4c564ca6cdd3",
+  "response": "{\n  \"fraud_probability\": 0.60,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_fraud\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction is the first online purchase on card C13487-K1, which previously showed only in-person activity. It originated from device DC72BD4, a shared device used by 52 different cards, indicating a high-risk fraud device. The analyst request noted multiple cards this month showing purchases from the same unusual device profile, suggesting coordinated CNP fraud. Although the transaction's risk score is low (0.05), the device anomaly and channel shift outweigh this signal. Therefore, the activity is consistent with card-not-present fraud.\"\n}",
+  "cached_at": 1790286883.6962998
+}

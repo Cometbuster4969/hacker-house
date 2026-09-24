@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "387d915bb9431b476b9e04e7ce991bf6",
+  "response": "{\n  \"investigation_summary\": \"The alert indicates a high\u2011risk card\u2011not\u2011present transaction on a new device, with a fraud probability of 0.95. Evidence shows flagged transaction 3503878 ($99.92, online, risk score 0.90) originated from a Windows device (Chrome 61.0, 1280x720) never seen before on card C07987\u2011K2, which has only one prior transaction averaging $311.86. Historical cases show a similar out\u2011of\u2011region pattern in CC\u20112011 (confirmed fraud, $3,059.89) while CC\u20112087 was cleared, reinforcing the suspicion. Based on the device novelty, low historical usage, and strong risk score, the transaction is assessed as fraudulent.\"\n}",
+  "cached_at": 1790287425.279508
+}

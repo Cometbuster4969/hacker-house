@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "502a77b19e561e855815285d38da7b6a",
+  "response": "{\n  \"narrative\": \"Customer C03042, card C03042-K1, exhibited a card_not_present_new_device pattern with total exposure $8,110.87 across transactions 3054463 ($49.91), 3054510 ($200.00), 3054511 ($24.97), 3054532 ($200.01), and 3063365 ($100.04). An additional flagged transaction 3464869 for $599.94 occurred online with a risk score of 0.77. Transaction 3464869 originated from device D8A3375, identified as Trident/7.0 (Windows 8.1, IE 11.0) with resolution 1680x1050. Device D8A3375 is associated with eight cards, including C03042-K1, and is marked as new for this card. Card C03042-K1 has a historical average transaction amount of $88.22 based on 30 prior transactions. The amount of transaction 3464869 ($599.94) is substantially above the card\u2019s historical average. Prior closed cases for this card/customer include CC-0615, CC-1313, and CC-3886, with CC-0615 and CC-3886 confirmed as fraud under the same card_not_present_new_device pattern. No other cards are connected to C03042-K1.\"\n}",
+  "cached_at": 1790287037.2861485
+}

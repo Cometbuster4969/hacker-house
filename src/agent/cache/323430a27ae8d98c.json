@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "bfb6e54ad5a3a5f33f93404cece3820a",
+  "response": "{\"verdict\":\"legitimate\",\"probability\":0.15,\"pattern\":\"card_testing\",\"summary\":\"Transaction 3553342 ($30.91, in_person) was flagged with a risk score of 0.55 but the card C05876-K2 shows only three historical transactions with an average amount of $71.17, indicating typical usage (evidence 1,2). The customer C05876 holds two cards (C05876-K2, C05876-K1) and has no prior fraud linked to this account (evidence 3). Prior confirmed fraud (CC-2370) involved a card\u2011not\u2011present scheme, unlike the current in\u2011person pattern, supporting a legitimate conclusion.\"}",
+  "cached_at": 1790267816.0179453
+}

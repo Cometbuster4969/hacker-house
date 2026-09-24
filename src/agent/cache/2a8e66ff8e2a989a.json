@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "f7b28cd71b9d49c2a374f2e3ab3d4f39",
+  "response": "{\"investigation_summary\":\"The flagged online transaction 3506725 for $1,000.03 (risk score 0.90) was made from a new Windows device, which differs from the cardholder\u2019s usual environment [1][2]. Card C10434\u2011K1 typically has 30 transactions with an average amount of $133.90, making this high\u2011value, card\u2011not\u2011present purchase atypical [3]. These factors together match the card_not_present_new_device fraud pattern, leading to a fraud verdict with a probability of 0.78.\"}",
+  "cached_at": 1790277255.2092397
+}

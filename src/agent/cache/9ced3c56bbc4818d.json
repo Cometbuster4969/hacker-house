@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "e45ee0d629b485b99d1e5a59bba92608",
+  "response": "{\"verdict\":\"fraud\",\"fraud_probability\":0.95,\"pattern\":\"card_not_present_new_device\",\"evidence\":[\"3506725\"],\"prior_cases\":[{\"case_id\":\"CC-0873\",\"status\":\"cleared\",\"amount\":0.0}],\"summary\":\"The flagged online transaction 3506725 for $1,000.03 carried a risk score of 0.90 and originated from a new Windows device not previously linked to card C10434\u2011K1 (evidence 1,2). The card\u2019s history shows 30 transactions with an average of $133.90, making this amount unusually high and consistent with a card\u2011not\u2011present fraud on a new device (evidence 3). With a fraud probability of 0.95 and the identified pattern, the case is concluded as fraud.\"}",
+  "cached_at": 1790267743.4152238
+}

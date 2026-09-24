@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "21fdbb387479302abfb2250626978534",
+  "response": "{\n  \"fraud_probability\": 0.50,\n  \"verdict\": \"uncertain\",\n  \"pattern\": \"undocumented\",\n  \"pattern_description\": \"The flagged transaction matches the card's typical in-person amount and shows no new device or channel changes. While velocity is elevated (3 transactions in 24h totaling $404.85), there is no clear fraud pattern such as out-of-region use or account takeover evident from the data. Prior cases for this card include both confirmed fraud and a cleared legitimate high-score transaction, leaving the alert ambiguous.\",\n  \"reasoning\": \"The transaction amount ($111.92) is consistent with the card's historical average ($115.98) and all transactions are in-person, indicating no channel shift. The model's high risk score (0.87) contrasts with the lack of anomalous behavioral signals. Elevated short-term velocity is noted but not sufficient to confirm fraud without additional context. Historical cases show a mix of confirmed fraud (often out-of-region or account takeover) and one cleared legitimate high-score case, suggesting uncertainty. Without definitive evidence of a known fraud pattern, the appropriate verdict is uncertain.\"\n}",
+  "cached_at": 1790285947.0605097
+}

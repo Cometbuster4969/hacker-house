@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "e1d44d087cdd7b4d2467da86a355ec2b",
+  "response": "{\"narrative\":\"Customer C09988, card C09988-K1, exhibits a card_not_present_new_device pattern. The customer reported the online purchase as unauthorized [1]. The transaction originated from device DC7DD64, marked as NEW for this card and shared among 163 other cards, indicating suspicious new device usage [5][4]. In the last 24 hours the card generated four transactions (IDs 3305566, 3305634, 3309431, 3309839) with amounts $39.92, $16.99, $16.90, $21.32, demonstrating high velocity activity [6]. A subsequent transaction ID 3309908 for $28.99 occurred shortly thereafter, adding to the rapid sequence. The card\u2019s historical profile shows 30 prior transactions with an average amount of $45.99, making the recent low\u2011value, rapid purchases atypical [3]. No connected cards were identified for C09988-K1, and the device is not linked to any other known legitimate activity for this customer [4]. The total exposure associated with this pattern is $60,816.81, reflecting the cumulative risk from the identified activity.\"}",
+  "cached_at": 1790267913.197819
+}

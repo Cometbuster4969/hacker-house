@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "0b8b6ded126c799116c9845fa1e99653",
+  "response": "{\"summary\":\"The investigation identified a likely account takeover, as the flagged online transaction 3581141 for $30.02 (risk score 0.28) was executed from an unrecognized device. The card C08299\u2011K1 shows a history of 30 transactions with an average amount of $77.35, making the $30.02 amount atypical. Combined with the suspicious device signature, the pattern aligns with account takeover behavior. Given the risk indicators, the case is classified as fraud with a probability of 0.80.\",\"verdict\":\"fraud\",\"fraud_probability\":0.8,\"pattern\":\"account_takeover\",\"evidence_ids\":[\"3581141\"]}",
+  "cached_at": 1790277249.7314775
+}

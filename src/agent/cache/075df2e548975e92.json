@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "56538b4d046de51a0477b833bfaf5d22",
+  "response": "{\n  \"sar_narrative\": \"Customer C10434, card C10434-K1, exhibited a pattern of card-not-present fraud with total exposure $163,124.60 across transactions 3282542, 3282661, 3292160, 3306585, 3329022. The recent amounts for those transactions were $59.01, $59.04, $58.01, $29.97, and $146.06 respectively. A flagged transaction 3506725 for $1,000.03 was identified as anomalous, originating online with a risk score of 0.90 (evidence 1). This amount far exceeds the card's historical average transaction of $133.90 and maximum observed $670.04 (evidence 3). The transaction was conducted from device D9FD230, a Windows 10 Edge browser shared by 209 distinct cards (evidence 2). Device D9FD230 is marked as new for card C10434-K1, indicating first-time use (evidence 7). The purchaser email associated with the flagged transaction was anonymous.com, suggesting an attempt to conceal identity (evidence 8). Although a prior case CC-0873 for this card/customer was closed without fraud, the combination of anomalous amount, shared device, and anonymous email supports further investigation (evidence 5,8).\"\n}",
+  "cached_at": 1790286292.650467
+}

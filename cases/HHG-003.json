@@ -1,0 +1,125 @@
+{
+  "case_id": "HHG-003",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.5,
+    "pattern": "card_testing",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3327710",
+      "3327256",
+      "3326641",
+      "3534946",
+      "3326842",
+      "3530164",
+      "3327626"
+    ],
+    "first_suspicious_txn_id": "3327710",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 831.25,
+    "evidence": [
+      {
+        "claim": "Flagged transaction 3530164: $49.00, in_person channel, risk score 0.40",
+        "source": "graph",
+        "ref": "query:get_transaction(3530164)",
+        "entity_ids": [
+          "3530164"
+        ]
+      },
+      {
+        "claim": "Card C08623-K2 has 6 transactions in history, average amount $138.54",
+        "source": "graph",
+        "ref": "query:card_transactions(C08623-K2)",
+        "entity_ids": [
+          "C08623-K2"
+        ]
+      },
+      {
+        "claim": "Customer C08623 has 2 cards: C08623-K1, C08623-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C08623)",
+        "entity_ids": [
+          "C08623",
+          "C08623-K1",
+          "C08623-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 330 has 1519 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(330)",
+        "entity_ids": [
+          "330"
+        ]
+      },
+      {
+        "claim": "Found 6 prior closed cases for this card/customer: CC-1589, CC-2817, CC-2935, CC-3327, CC-3682, CC-4957",
+        "source": "graph",
+        "ref": "query:closed_cases(C08623-K2, C08623)",
+        "entity_ids": [
+          "CC-1589",
+          "CC-2817",
+          "CC-2935",
+          "CC-3327",
+          "CC-3682",
+          "CC-4957"
+        ]
+      },
+      {
+        "claim": "LLM analysis: The customer explicitly denies making the $49.00 in-person transaction (ID 3530164), which is a strong signal of unauthorized use. The transaction amount is significantly below the card's historical average ($138.54) and matches a pattern of low-value testing seen in prior fraud cases (e.g., CC-2817, CC-2935) where small amounts preceded larger fraud. Graph-level signals note a burst of three or more transactions on the same day, consistent with testing behavior before larger fraudulent activity. The cardholder's history includes multiple confirmed fraud cases (CC-2817, CC-2935, CC-3327, CC-3682) involving out-of-region use and account takeover, indicating a heightened risk profile. Considering the customer report, low amount, burst pattern, and historical fraud, the likelihood of fraud is elevated, supporting a fraud verdict.",
+        "source": "document",
+        "ref": "llm:assess_evidence",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-1589",
+      "CC-2817",
+      "CC-2935",
+      "CC-3327",
+      "CC-3682",
+      "CC-4957"
+    ],
+    "summary": "{\n  \"investigation_summary\": \"The alert for card C08623-K2 shows a pattern consistent with card testing, given the low\u2011value in\u2011person transaction ($49.00, ID 3530164) and a risk score of 0.40. Historical data for this card reveals six transactions averaging $138.54, indicating a sudden drop to a small test amount typical of fraudsters probing card validity. The customer holds two cards (C08623-K1 and C08623-K2), and prior cases such as CC-2817 (confirmed fraud, out\u2011of\u2011region use, $38.96) demonstrate a similar low\u2011value testing behavior, while CC-1589 was cleared with no loss. Based on the calculated fraud probability of 0.50 and the evidence, the verdict is fraud.\"\n}",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-003"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Customer C08623 states they did not make this purchase and still has the card"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Customer report requires verification before any blocking action"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Customer report requires verification before any blocking action"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No SAR triggers met: exposure below threshold and no shared connections",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 8,
+  "tokens": 7809,
+  "latency_s": 34.7
+}

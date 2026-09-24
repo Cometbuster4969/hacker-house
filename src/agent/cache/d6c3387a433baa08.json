@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "1aead7974b5b59733492f621794c487e",
+  "response": "{\"fraud_probability\":0.52,\"verdict\":\"uncertain\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The model assigns a fraud probability of 0.50 and we adjusted it slightly to 0.52, staying within the allowed range. The customer report (evidence 1) flags the $49.00 in\u2011person purchase as unrecognized, which is a strong signal but not definitive. The transaction amount is well below the card\u2019s average spend of $138.54 (evidence 2), a characteristic of testing behavior, and the risk score of 0.40 is moderate. Although the card has a history of confirmed fraud cases (evidence 5), most were out\u2011of\u2011region or takeover incidents, and this transaction shows no out\u2011of\u2011region indicator or device anomaly. Given the mixed signals, the case remains uncertain.\"}",
+  "cached_at": 1790265723.0854728
+}

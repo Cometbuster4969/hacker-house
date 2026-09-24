@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "gemini-flash-latest",
+  "prompt_hash": "7edc6868f1b80f176778ecc577630468",
+  "response": "{\"ok\": true, \"note\": \"Fraud investigation system is initialized and ready for review.\"}",
+  "cached_at": 1790283541.0184395
+}

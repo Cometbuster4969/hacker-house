@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "6fb804ed97bfe0bd73baeda141c8c3df",
+  "response": "{\n  \"investigation_summary\": \"The alert was triggered by a flagged card-not-present transaction (ID 3464869) for $599.94 from an unfamiliar device (Trident/7.0 on Windows 8.1, IE 11.0) with a risk score of 0.77. This transaction deviates sharply from the card's historical behavior (C03042-K1 averages 30 transactions at $88.22), indicating a potential compromise. The pattern matches prior confirmed fraud case CC-0615, which also involved a card-not-present new device and resulted in a $174.99 loss. Given the high fraud probability (0.90) and supporting evidence, the transaction is assessed as fraudulent.\"\n}",
+  "cached_at": 1790287018.1720338
+}

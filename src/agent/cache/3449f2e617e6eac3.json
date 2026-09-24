@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "71a3c20dc734d88aed76ed57d700ed8b",
+  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"account_takeover\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3526826) received a high model risk score of 0.76 (evidence 1). The card was used on device D12CA02, which is shared by 266 other cards, a strong indicator of compromised credentials (evidence 6). The customer\u2019s card history consists solely of in\u2011person purchases (8 transactions, average $113.94) (evidence 3), making an online purchase atypical. Additionally, the card and customer have multiple prior confirmed account\u2011takeover cases (evidence 5). Combined, these signals strongly suggest fraudulent activity.\"}",
+  "cached_at": 1790266801.6170588
+}

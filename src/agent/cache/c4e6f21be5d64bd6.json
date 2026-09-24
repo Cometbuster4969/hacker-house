@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "e94d7db08c442895a60b7df3bef7359b",
+  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly denied the $131.30 purchase (evidence\u202f5) and the transaction originated from a device marked as NEW for this card (evidence\u202f7) that is shared among multiple cards (evidence\u202f6), a known fraud indicator. The card shows unusually high velocity with 22 transactions in 24\u202fhours totaling $752.43 (evidence\u202f8), and the amount is 3.7\u00d7 the card\u2019s average spend (evidence\u202f3). Historical context reveals 11 prior confirmed\u2011fraud cases for the same customer, many involving card\u2011not\u2011present activity on new devices (evidence\u202f5). Combined with a moderate risk score of 0.39 (evidence\u202f1) and the online channel (evidence\u202f2), the evidence strongly points to fraudulent activity.\"}",
+  "cached_at": 1790265875.7501235
+}

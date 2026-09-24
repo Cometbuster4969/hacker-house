@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "a41316c234ac36c0ebffec7180f39234",
+  "response": "{\n  \"investigation_summary\": \"The alert involves a card-not-present transaction on a new device, matching the pattern card_not_present_new_device. Flagged transaction 3583227 for $128.33 online had a low risk score 0.34 but originated from an unfamiliar device (Firefox 47.0) with no prior association. Card C08106-K1 shows 30 historical transactions averaging $50.15, making the $128.33 amount atypical. Prior similar case CC-1736 was confirmed fraud for card-not-present fraud, while CC-0696 was cleared, supporting a fraud assessment. Given the pattern, anomalous amount, new device, and historical precedent, the fraud probability is assessed at 1.00.\",\n  \"verdict\": \"fraud\",\n  \"fraud_probability\": 1.00,\n  \"pattern\": \"card_not_present_new_device\",\n  \"evidence\": [\n    \"Flagged transaction 3583227: $128.33, online channel, risk score 0.34\",\n    \"Transaction came from device: (, firefox 47.0, )\",\n    \"Card C08106-K1 has 30 transactions in history, average amount $50.15\"\n  ],\n  \"prior_cases\": [\n    \"CC-0696: cleared (none), $0.00\",\n    \"CC-1736: confirmed_fraud (card_not_present_fraud), $9.90\"\n  ]\n}",
+  "cached_at": 1790285650.191307
+}

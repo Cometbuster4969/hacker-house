@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "6e7fb2d2248e04856b85914189ade0d2",
+  "response": "{\n  \"investigation_summary\": \"The alert for transaction 3506725 ($1000.03, online) shows a high risk score of 0.90 and originated from a Windows 10 Edge device, which deviates from the card's typical low\u2011value, in\u2011person pattern. Card C10434\u2011K1 normally averages $133.90 over 30 historical transactions, making this $1k purchase an outlier. No prior fraud cases are linked to this card (CC-0873 cleared). Given the risk score, unusual channel, and amount deviation, the fraud probability is assessed at 0.75, supporting a fraud verdict.\"\n}",
+  "cached_at": 1790286276.3801265
+}

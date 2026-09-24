@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "d6294872a4a28ec58f21459e5c6a3b4e",
+  "response": "{\"verdict\":\"fraud\",\"probability\":0.95,\"pattern\":\"account_takeover\",\"summary\":\"The flagged transaction 3526826 ($35.66, online) with a risk score of 0.76 is suspicious (see transaction 3526826). It originated from a Windows device running Chrome 66.0, which is inconsistent with the cardholder\u2019s usual device profile (device info). Card C07671-K2 normally averages $113.94 across 8 transactions, making this low\u2011value transaction atypical, and similar behavior was seen in confirmed account\u2011takeover cases CC-1475 and CC-3216.\"}",
+  "cached_at": 1790266804.2812715
+}

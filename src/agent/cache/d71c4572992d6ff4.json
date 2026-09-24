@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "gemini-flash-latest",
+  "prompt_hash": "8f475dadfc23c6e5c727500654e5ea2f",
+  "response": "{\n  \"customer_id\": \"C08106\",\n  \"card_id\": \"C08106-K1\",\n  \"total_exposure_usd\": 2397.71,\n  \"sar_narrative\": \"This Suspicious Activity Report details card-not-present activity identified on card C08106-K1 belonging to customer C08106. The total exposure identified for this pattern stands at $2397.71. Account history reflects 30 prior transactions with an average transaction amount of $50.15, as well as four prior closed cases: CC-0696, CC-1736, CC-2121, and CC-3778. Online transaction 3583227 was flagged for $128.33 with a calculated risk score of 0.34. The activity originated from device D1C3672 running Firefox 47.0, which was marked as a new device for card C08106-K1. Cross-account analysis reveals that device D1C3672 has been used across six distinct cards: C05031-K1, C07518-K1, C03095-K1, C04248-K1, C02222-K1, and C08106-K1. Additional transactions involved in this review consist of transaction IDs 3087548, 3087605, 3087613, 3087647, and 3087652. Recent associated amounts within the sequence include $96.45, $96.37, $96.41, $96.43, and $24.28. While no connected cards are directly linked to customer C08106, the multi-card device association indicates potential card-not-present compromise.\"\n}",
+  "cached_at": 1790283844.0334508
+}

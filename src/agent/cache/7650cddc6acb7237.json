@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "f246e438d4d8f1e1a98c4c71df2e057f",
+  "response": "{\n  \"investigation_summary\": \"The alert for transaction 3478561 ($74.96, online channel) was flagged with a low risk score of 0.05, but the device fingerprint (SM-G935F running Android 7.0, Chrome 62.0, 1920x1080) does not match the customer's typical usage pattern (evidence 1,2). Card C13487-K1 shows a stable history of 30 transactions averaging $62.64, making the $74.96 amount only slightly above the norm (evidence 3). Given the card-not-present fraud pattern and the anomalous device context, the transaction exhibits characteristics consistent with fraud, supporting a fraud probability of 0.60. No prior similar cases were found for this card, increasing the weight of the current anomalous indicators.\"\n}",
+  "cached_at": 1790286898.0081663
+}

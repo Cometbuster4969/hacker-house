@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "20c44df5425810395bfaa5ff1e46522f",
+  "response": "{\"summary\":\"The flagged transaction 3530164 for $49 in an in\u2011person channel carries a modest risk score of 0.40, which is below typical high\u2011risk thresholds (evidence 1). Card C08623\u2011K2 shows only six historical transactions with an average amount of $138.54, providing limited activity to establish a pattern of abuse (evidence 2). While the customer C08623 holds two cards, there is no evidence of out\u2011of\u2011region usage or rapid, low\u2011value attempts characteristic of card\u2011testing schemes (evidence 3). Given the modest risk indicators and the prior confirmed fraud case (CC\u20112817) involving a different pattern, the current alert leans toward a legitimate transaction, warranting continued monitoring rather than immediate fraud classification.\"}",
+  "cached_at": 1790267453.1721237
+}

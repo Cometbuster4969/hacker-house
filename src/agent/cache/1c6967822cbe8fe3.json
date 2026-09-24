@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "50cc662a799e2c867b076c7f6ccdf0b4",
+  "response": "{\"fraud_probability\":0.15,\"verdict\":\"legitimate\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The flagged in\u2011person transaction of $30.91 is below the card's average amount of $71.17, which can indicate a low\u2011value test rather than fraud. The model risk score of 0.55 is moderate, but the calculated fraud probability is only 0.15, well below typical fraud thresholds. No device signals, no customer complaint, and the prior confirmed fraud case (CC-2370) involved online purchases, a different pattern. Given the lack of strong fraud indicators, the transaction is most likely legitimate.\"}",
+  "cached_at": 1790267813.2275
+}

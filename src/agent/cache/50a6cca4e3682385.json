@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "99032839631adfbf802902c7eab93875",
+  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_fraud\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reports that they did not make the $482.12 online purchase (evidence 1, customer report). The amount is more than double the card's historical maximum of $210.03 and far exceeds the average $91.52 (evidence 3,4). All 30 prior transactions were in\u2011person, making this online use a clear deviation (evidence 3). The transaction originated from device D7059DC, which is shared by 547 different cards, indicating a high\u2011risk, low\u2011trust environment (evidence 6). Combined with a risk score of 0.25 and the strong customer denial, the indicators point to fraudulent activity.\"}",
+  "cached_at": 1790267532.2635314
+}

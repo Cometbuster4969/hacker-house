@@ -1,0 +1,952 @@
+{
+  "server_command": "C:\\Users\\ayush\\projects\\hacker-house-main\\.venv/Scripts\\tigergraph-mcp.EXE",
+  "graph": "FraudInvestigation",
+  "host": "https://tg-0d7f3ac1-7c8e-4b37-b81d-9f15452c48e0.tg-2635877100.i.tgcloud.io",
+  "checks": {
+    "connections": {
+      "tool": "tigergraph__list_connections",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": true,\n  \"operation\": \"list_connections\",\n  \"data\": {\n    \"profiles\": [\n      {\n        \"profile\": \"default\",\n        \"host\": \"https://tg-0d7f3ac1-7c8e-4b37-b81d-9f15452c48e0.tg-2635877100.i.tgcloud.io\",\n        \"graphname\": \"FraudInvestigation\",\n        \"username\": \"ayush\",\n        \"auth_mode\": \"password\",\n        \"restpp_port\": \"9000\",\n        \"gs_port\": \"14240\",\n        \"tgcloud\": \"false\",\n        \"is_default\": true,\n        \"connected\": false\n      }\n    ],\n    \"count\": 1,\n    \"default_profile\": \"default\"\n  },\n  \"summary\": \"Found 1 connection profile(s): default (defa",
+      "call_meta": {
+        "args": {},
+        "missing_required": []
+      }
+    },
+    "schema": {
+      "tool": "tigergraph__get_global_schema",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": true,\n  \"operation\": \"get_global_schema\",\n  \"data\": {\n    \"global_schema\": \"---- Global vertices, edges, and all graphs\\nVertex Types: \\n  - VERTEX Customer(PRIMARY_ID customer_id STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE\\\"\\n  - VERTEX Card(PRIMARY_ID card_id STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE\\\"\\n  - VERTEX Transaction(PRIMARY_ID transaction_id STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE\\\"\\n  - VERTEX DeviceProfile(PRIMARY_ID device_id STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE\\\"\\n  - VERTEX EmailDomain(PRIMARY_ID domain STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE",
+      "call_meta": {
+        "args": {},
+        "missing_required": []
+      }
+    },
+    "vertex_count": {
+      "tool": "tigergraph__get_vertex_count",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": true,\n  \"operation\": \"get_vertex_count\",\n  \"data\": {\n    \"vertex_type\": \"Transaction\",\n    \"count\": 10000\n  },\n  \"summary\": \"Success: Vertex count for type 'Transaction': 10,000\",\n  \"metadata\": {\n    \"graph_name\": \"FraudInvestigation\"\n  },\n  \"suggestions\": [\n    \"View vertices: get_nodes(vertex_type='Transaction', limit=10)\",\n    \"Get all counts: get_vertex_count() (without vertex_type)\"\n  ],\n  \"timestamp\": \"2026-09-24T20:01:08.146430Z\"\n}\n```\n\n**Success: Vertex count for type 'Transaction': 10,000**\n\n**Data:**\n```json\n{\n  \"vertex_type\": \"Transaction\",\n  \"count\": 10000\n}\n",
+      "call_meta": {
+        "args": {
+          "graph_name": "FraudInvestigation",
+          "vertex_type": "Transaction"
+        },
+        "missing_required": []
+      }
+    },
+    "installed_query": {
+      "tool": "tigergraph__run_installed_query",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": true,\n  \"operation\": \"run_installed_query\",\n  \"data\": {\n    \"query_name\": \"graph_stats\",\n    \"parameters\": {},\n    \"result\": [\n      {\n        \"@@customers\": 1805,\n        \"@@cards\": 1868,\n        \"@@txns\": 10000,\n        \"@@devices\": 9703,\n        \"@@emails\": 52,\n        \"@@regions\": 81,\n        \"@@cases\": 5565\n      }\n    ]\n  },\n  \"summary\": \"Success: Query 'graph_stats' executed successfully\",\n  \"metadata\": {\n    \"graph_name\": \"FraudInvestigation\",\n    \"execution_mode\": \"installed\"\n  },\n  \"suggestions\": [\n    \"View query details: show_query(query_name='graph_stats')\",",
+      "call_meta": {
+        "args": {
+          "graph_name": "FraudInvestigation",
+          "query_name": "graph_stats",
+          "params": {}
+        },
+        "missing_required": []
+      }
+    },
+    "gsql": {
+      "tool": "tigergraph__gsql",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": true,\n  \"operation\": \"gsql\",\n  \"data\": {\n    \"result\": \"- VERTEX Transaction(PRIMARY_ID transaction_id STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE\\\"\\n\"\n  },\n  \"summary\": \"GSQL command executed successfully\",\n  \"metadata\": {\n    \"graph_name\": \"FraudInvestigation\"\n  },\n  \"timestamp\": \"2026-09-24T20:01:13.489067Z\"\n}\n```\n\n**GSQL command executed successfully**\n\n**Data:**\n```json\n{\n  \"result\": \"- VERTEX Transaction(PRIMARY_ID transaction_id STRING) WITH STATS=\\\"OUTDEGREE_BY_EDGETYPE\\\"\\n\"\n}\n```\n\n**Metadata:** {\"graph_name\": \"FraudInvestigation\"}",
+      "call_meta": {
+        "args": {
+          "graph_name": "FraudInvestigation",
+          "command": "SHOW VERTEX Transaction"
+        },
+        "missing_required": []
+      }
+    }
+  },
+  "tigervector": {
+    "add_attribute": {
+      "tool": "tigergraph__add_vector_attribute",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": false,\n  \"operation\": \"tigergraph__add_vector_attribute\",\n  \"summary\": \"Failed to tigergraph  add vector attribute: add_vector_attribute() missing 1 required positional argument: 'vector_name'\",\n  \"metadata\": {\n    \"arguments\": {\n      \"graph_name\": \"FraudInvestigation\",\n      \"vertex_type\": \"ClosedCase\",\n      \"dimension\": 128\n    }\n  },\n  \"suggestions\": [\n    \"One or more attributes may not match the schema definition\",\n    \"Call 'show_graph_details' to see required attr",
+      "call_meta": {
+        "args": {
+          "graph_name": "FraudInvestigation",
+          "vertex_type": "ClosedCase",
+          "dimension": 128
+        },
+        "missing_required": [
+          "vector_name"
+        ]
+      }
+    },
+    "supported": true,
+    "upsert_batches_ok": 4,
+    "search": {
+      "tool": "tigergraph__search_top_k_similarity",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": false,\n  \"operation\": \"search_top_k_similarity\",\n  \"summary\": \"Failed to search top k similarity: 404, message='Not Found', url='https://tg-0d7f3ac1-7c8e-4b37-b81d-9f15452c48e0.tg-2635877100.i.tgcloud.io/restpp/query/FraudInvestigation/_vec_search_5df6e087'\",\n  \"metadata\": {\n    \"vertex_type\": \"ClosedCase\",\n    \"vector_attribute\": \"case_embedding\",\n    \"top_k\": 5,\n    \"note\": \"Ensure the vector attribute exists and has been indexed. Check with get_vector_index_status.\"\n  },\n  \"suggestions\": [\n    \"Query syntax error detected\",\n    \"For GSQL: Use 'INTERPRET QUERY () FOR GRAPH <name> { ... }'\",\n    \"For Cypher: Use 'INTERPRET OPENCYPHER QUERY () FOR GRAPH <name> { ... }'\",\n    \"Call 'show_graph_details' to understand the schema before writing queries\"\n  ],\n  \"error\": \"",
+      "call_meta": {
+        "args": {
+          "graph_name": "FraudInvestigation",
+          "vertex_type": "ClosedCase",
+          "vector_attribute": "case_embedding",
+          "query_vector": [
+            0.16227695182156232,
+            0.12799572110011417,
+            0.15152956948509574,
+            0.15847727419426588,
+            0.07510000555059833,
+            0.1179823465373328,
+            0.05025939703655146,
+            0.05273894818870898,
+            0.019253650356283993,
+            0.1217276081667321,
+            0.0585465768272439,
+            -0.015519291887333357,
+            0.12640131189330023,
+            0.016534977418724756,
+            -0.13851261442781937,
+            -0.11511320568940014,
+            -0.1071267292655141,
+            -0.08101057452785002,
+            0.14921623180485877,
+            -0.04358487573774477,
+            -0.0075241674425228465,
+            0.004047013945186267,
+            -0.07131347391694386,
+            -0.03527278942896797,
+            -0.01827757942594054,
+            0.036937099149855664,
+            0.11204734369358835,
+            0.11170802279145436,
+            0.11135267981886202,
+            -0.1409258589190139,
+            0.0948727294654975,
+            0.021106652721713547,
+            0.023447956648617475,
+            -0.13489882088068061,
+            0.001643439712991571,
+            -0.014812295401621671,
+            -0.04228164540944951,
+            -0.14553476969371912,
+            0.02448298563665045,
+            0.06340858319603801,
+            -0.06781777611836405,
+            0.09898394418889472,
+            0.035083675738740654,
+            -0.11292198323050022,
+            -0.09916132404405069,
+            -0.13481269471800775,
+            0.1408715345750452,
+            0.04044569236042029,
+            -0.10866140958727848,
+            0.08747212811933072,
+            0.08768074131129501,
+            0.005851786370822788,
+            0.04860153896366959,
+            0.05496653521616301,
+            -0.00813931571498245,
+            -0.020246102486485694,
+            -0.022135527831581087,
+            -0.04073311448283066,
+            -0.060969387605995504,
+            0.13420580385275357,
+            -0.006270689091107513,
+            -0.046666307169251166,
+            -0.06644936113362773,
+            0.03803220654209573,
+            0.050136017138893464,
+            0.07027951472147397,
+            0.046764725420494105,
+            -0.06546270106762533,
+            0.16324678257665964,
+            -0.022966513941012588,
+            -0.009865621505240453,
+            -0.0024861240334982863,
+            -0.055219772300774905,
+            -0.03017857138235591,
+            0.02147792916891238,
+            0.15203478875660914,
+            0.07620265864616743,
+            0.11132988722511276,
+            -0.07905094148169504,
+            0.037942646114970495,
+            0.13410608681303668,
+            -0.004426339255578551,
+            0.1506382364606979,
+            0.06541251197134437,
+            -0.06797872127607886,
+            -0.13068319642717624,
+            -0.09764337098398222,
+            0.03161867469470547,
+            -0.011258445319248082,
+            0.1666597989749288,
+            0.0553127919226278,
+            -0.1316152953800382,
+            0.15169655030260662,
+            0.04838439525546693,
+            -0.012701233568376814,
+            0.1210236382558051,
+            0.08988859523867927,
+            0.038640851914746574,
+            -0.07999564907809953,
+            0.05505043151362172,
+            0.10747758188869477,
+            0.053718419848092294,
+            0.06551396881439688,
+            -0.00547878991361408,
+            -0.11031220268859585,
+            0.14928073568437317,
+            -0.010692732223485888,
+            0.00016241303417862188,
+            -0.033293934955420906,
+            -0.13361458242608343,
+            -0.05308700682596604,
+            0.0499726378677431,
+            0.0779919561204401,
+            -0.004115655948030763,
+            -0.13652600165542028,
+            0.011456923159918624,
+            0.12666586957800627,
+            -0.04246774267303753,
+            -0.09646702037261758,
+            0.05571793847459808,
+            -0.1174965951187884,
+            0.12166286525496582,
+            0.012279729916487497,
+            0.15742768920444458,
+            -0.05075654149975802,
+            -0.16269245410862263,
+            0.09283898041750037,
+            0.08428174919251663
+          ],
+          "top_k": 5
+        },
+        "missing_required": []
+      }
+    },
+    "expected_local_top5": [
+      "SYN-089",
+      "SYN-099",
+      "SYN-043",
+      "SYN-129",
+      "SYN-103"
+    ],
+    "tg_top5_in_order": [],
+    "top5_overlap": 0,
+    "fetch": {
+      "tool": "tigergraph__fetch_vector",
+      "ok": true,
+      "excerpt": "```json\n{\n  \"success\": false,\n  \"operation\": \"fetch_vector\",\n  \"summary\": \"Failed to fetch vector: ('Runtime Error: S is not valid ClosedCase vertex.', 'GSQL-4502')\",\n  \"metadata\": {\n    \"vertex_type\": \"ClosedCase\",\n    \"vertex_ids\": \"SYN-000\",\n    \"note\": \"Vector attributes require an installed que"
+    },
+    "tool_schemas": {
+      "tigergraph__add_vector_attribute": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Name of the vertex type to add the vector attribute to.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vector_name": {
+            "description": "Name of the vector attribute.",
+            "title": "Vector Name",
+            "type": "string"
+          },
+          "dimension": {
+            "description": "Dimension (length) of the vector. Max 4096 for Community, 32768 for Enterprise.",
+            "title": "Dimension",
+            "type": "integer"
+          },
+          "metric": {
+            "default": "COSINE",
+            "description": "Similarity metric: 'COSINE', 'L2' (Euclidean), or 'IP' (inner product).",
+            "title": "Metric",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vector_name",
+          "dimension"
+        ],
+        "type": "object",
+        "description": "Input schema for adding a vector attribute to a vertex type.",
+        "title": "VectorAddAttributeToolInput"
+      },
+      "tigergraph__drop_vector_attribute": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Name of the vertex type.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vector_name": {
+            "description": "Name of the vector attribute to drop.",
+            "title": "Vector Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vector_name"
+        ],
+        "type": "object",
+        "description": "Input schema for dropping a vector attribute from a vertex type.",
+        "title": "VectorDropAttributeToolInput"
+      },
+      "tigergraph__list_vector_attributes": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Filter by vertex type. If not provided, returns vector attributes for all vertex types.",
+            "title": "Vertex Type"
+          }
+        },
+        "type": "object",
+        "description": "Input schema for listing vector attributes in a graph.",
+        "title": "VectorListAttributesToolInput"
+      },
+      "tigergraph__get_vector_index_status": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Vertex type to check. If not provided, checks all.",
+            "title": "Vertex Type"
+          },
+          "vector_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Vector attribute name. If not provided, checks all.",
+            "title": "Vector Name"
+          }
+        },
+        "type": "object",
+        "description": "Input schema for checking vector index status.",
+        "title": "VectorIndexStatusToolInput"
+      },
+      "tigergraph__upsert_vectors": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Type of the vertices.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vector_attribute": {
+            "description": "Name of the vector attribute.",
+            "title": "Vector Attribute",
+            "type": "string"
+          },
+          "vectors": {
+            "description": "List of vectors to upsert, each with vertex_id, vector, and optional attributes.",
+            "items": {
+              "$ref": "#/$defs/VectorData"
+            },
+            "title": "Vectors",
+            "type": "array"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vector_attribute",
+          "vectors"
+        ],
+        "type": "object",
+        "$defs": {
+          "VectorData": {
+            "description": "Schema for a single vector upsert operation.",
+            "properties": {
+              "vertex_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "description": "ID of the vertex.",
+                "title": "Vertex Id"
+              },
+              "vector": {
+                "description": "Vector data as a list of floats.",
+                "items": {
+                  "type": "number"
+                },
+                "title": "Vector",
+                "type": "array"
+              },
+              "attributes": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Additional vertex attributes.",
+                "title": "Attributes"
+              }
+            },
+            "required": [
+              "vertex_id",
+              "vector"
+            ],
+            "title": "VectorData",
+            "type": "object"
+          }
+        },
+        "description": "Input schema for upserting multiple vectors via REST API.",
+        "title": "VectorUpsertToolInput"
+      },
+      "tigergraph__load_vectors_from_csv": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Target vertex type that has the vector attribute.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vector_attribute": {
+            "description": "Name of the vector attribute to load into.",
+            "title": "Vector Attribute",
+            "type": "string"
+          },
+          "file_path": {
+            "description": "Absolute path to the CSV/delimited data file on the local machine (uploaded to TigerGraph via REST). Each row has a vertex ID and a vector column.",
+            "title": "File Path",
+            "type": "string"
+          },
+          "id_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "default": 0,
+            "description": "Column for vertex ID: integer index (0-based) or header name. Default: 0 (first column).",
+            "title": "Id Column"
+          },
+          "vector_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "default": 1,
+            "description": "Column containing the vector data: integer index (0-based) or header name. Default: 1 (second column).",
+            "title": "Vector Column"
+          },
+          "element_separator": {
+            "default": ",",
+            "description": "Separator between vector elements within the vector column. Default: ','.",
+            "title": "Element Separator",
+            "type": "string"
+          },
+          "field_separator": {
+            "default": "|",
+            "description": "Separator between fields (columns) in the file. Default: '|'.",
+            "title": "Field Separator",
+            "type": "string"
+          },
+          "header": {
+            "default": false,
+            "description": "Whether the file has a header row. Default: false.",
+            "title": "Header",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vector_attribute",
+          "file_path"
+        ],
+        "type": "object",
+        "description": "Input schema for bulk-loading vectors from a CSV/delimited file via a GSQL loading job.",
+        "title": "VectorLoadFromCsvToolInput"
+      },
+      "tigergraph__load_vectors_from_json": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Target vertex type that has the vector attribute.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vector_attribute": {
+            "description": "Name of the vector attribute to load into.",
+            "title": "Vector Attribute",
+            "type": "string"
+          },
+          "file_path": {
+            "description": "Absolute path to the JSON Lines (.jsonl) file on the local machine (uploaded to TigerGraph via REST). Each line is a JSON object with an ID field and a vector field.",
+            "title": "File Path",
+            "type": "string"
+          },
+          "id_key": {
+            "default": "id",
+            "description": "JSON key for the vertex ID. Default: 'id'.",
+            "title": "Id Key",
+            "type": "string"
+          },
+          "vector_key": {
+            "default": "vector",
+            "description": "JSON key for the vector data (stored as a comma-separated string). Default: 'vector'.",
+            "title": "Vector Key",
+            "type": "string"
+          },
+          "element_separator": {
+            "default": ",",
+            "description": "Separator between vector elements within the vector string value. Default: ','.",
+            "title": "Element Separator",
+            "type": "string"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vector_attribute",
+          "file_path"
+        ],
+        "type": "object",
+        "description": "Input schema for bulk-loading vectors from a JSON Lines file via a GSQL loading job.",
+        "title": "VectorLoadFromJsonToolInput"
+      },
+      "tigergraph__search_top_k_similarity": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Type of vertices to search.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vector_attribute": {
+            "description": "Name of the vector attribute to search.",
+            "title": "Vector Attribute",
+            "type": "string"
+          },
+          "query_vector": {
+            "description": "Query vector for similarity search.",
+            "items": {
+              "type": "number"
+            },
+            "title": "Query Vector",
+            "type": "array"
+          },
+          "top_k": {
+            "default": 10,
+            "description": "Number of top similar results to return.",
+            "title": "Top K",
+            "type": "integer"
+          },
+          "ef": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Exploration factor for HNSW algorithm. Higher = more accurate but slower.",
+            "title": "Ef"
+          },
+          "return_vectors": {
+            "default": false,
+            "description": "Whether to return the vector values (can be large).",
+            "title": "Return Vectors",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vector_attribute",
+          "query_vector"
+        ],
+        "type": "object",
+        "description": "Input schema for vector similarity search using vectorSearch() function.",
+        "title": "VectorSearchToolInput"
+      },
+      "tigergraph__fetch_vector": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Connection profile name. Omit to use the active default profile. Use 'list_connections' to see available profiles.",
+            "title": "Profile"
+          },
+          "graph_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Name of the graph. If not provided, uses default connection.",
+            "title": "Graph Name"
+          },
+          "vertex_type": {
+            "description": "Type of the vertex.",
+            "title": "Vertex Type",
+            "type": "string"
+          },
+          "vertex_ids": {
+            "description": "List of vertex IDs to fetch.",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Vertex Ids",
+            "type": "array"
+          },
+          "vector_attribute": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Specific vector attribute to fetch. If not provided, fetches all vectors.",
+            "title": "Vector Attribute"
+          }
+        },
+        "required": [
+          "vertex_type",
+          "vertex_ids"
+        ],
+        "type": "object",
+        "description": "Input schema for fetching vertices with their vector data using GSQL.",
+        "title": "VectorFetchToolInput"
+      }
+    }
+  },
+  "server_info": {
+    "name": "TigerGraph-MCP",
+    "version": "",
+    "protocol": "2025-11-25"
+  },
+  "tool_count": 69,
+  "tools": [
+    "tigergraph__list_connections",
+    "tigergraph__show_connection",
+    "tigergraph__authenticate",
+    "tigergraph__get_global_schema",
+    "tigergraph__list_graphs",
+    "tigergraph__create_graph",
+    "tigergraph__drop_graph",
+    "tigergraph__clear_graph_data",
+    "tigergraph__get_graph_schema",
+    "tigergraph__show_graph_details",
+    "tigergraph__update_schema",
+    "tigergraph__validate_schema_names",
+    "tigergraph__add_node",
+    "tigergraph__add_nodes",
+    "tigergraph__get_node",
+    "tigergraph__get_nodes",
+    "tigergraph__delete_node",
+    "tigergraph__delete_nodes",
+    "tigergraph__has_node",
+    "tigergraph__get_node_edges",
+    "tigergraph__add_edge",
+    "tigergraph__add_edges",
+    "tigergraph__get_edge",
+    "tigergraph__get_edges",
+    "tigergraph__delete_edge",
+    "tigergraph__delete_edges",
+    "tigergraph__has_edge",
+    "tigergraph__run_query",
+    "tigergraph__run_installed_query",
+    "tigergraph__install_query",
+    "tigergraph__drop_query",
+    "tigergraph__show_query",
+    "tigergraph__get_query_metadata",
+    "tigergraph__update_query_description",
+    "tigergraph__get_query_description",
+    "tigergraph__is_query_installed",
+    "tigergraph__get_neighbors",
+    "tigergraph__create_loading_job",
+    "tigergraph__run_loading_job_with_file",
+    "tigergraph__run_loading_job_with_data",
+    "tigergraph__get_loading_jobs",
+    "tigergraph__get_loading_job_status",
+    "tigergraph__drop_loading_job",
+    "tigergraph__get_vertex_count",
+    "tigergraph__get_edge_count",
+    "tigergraph__get_node_degree",
+    "tigergraph__gsql",
+    "tigergraph__generate_gsql",
+    "tigergraph__generate_cypher",
+    "tigergraph__add_vector_attribute",
+    "tigergraph__drop_vector_attribute",
+    "tigergraph__list_vector_attributes",
+    "tigergraph__get_vector_index_status",
+    "tigergraph__upsert_vectors",
+    "tigergraph__load_vectors_from_csv",
+    "tigergraph__load_vectors_from_json",
+    "tigergraph__search_top_k_similarity",
+    "tigergraph__fetch_vector",
+    "tigergraph__create_data_source",
+    "tigergraph__update_data_source",
+    "tigergraph__get_data_source",
+    "tigergraph__drop_data_source",
+    "tigergraph__get_all_data_sources",
+    "tigergraph__drop_all_data_sources",
+    "tigergraph__get_data_source_types",
+    "tigergraph__preview_sample_data",
+    "tigergraph__discover_tools",
+    "tigergraph__get_workflow",
+    "tigergraph__get_tool_info"
+  ],
+  "stage1_passed": 5,
+  "stage1_total": 5
+}

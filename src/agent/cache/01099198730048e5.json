@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "89c0a6d4c4f90758564ddb27d6c80a95",
+  "response": "{\n  \"fraud_probability\": 1.00,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"account_takeover\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3523199 ($100.07, online) has a calculated fraud probability of 1.00, indicating high likelihood of fraud [1]. The transaction originated from device D5B64CE, which is shared by 112 cards and is marked as NEW for card C02923-K1, suggesting a new device used in an account takeover [6][7]. The customer has three prior confirmed fraud cases (CC-2400, CC-2717, CC-2857) all labeled account_takeover, showing a historical pattern of compromise [5]. Together, the new device, high risk score, and prior account takeover incidents support the conclusion that this transaction is fraudulent due to account takeover.\"\n}",
+  "cached_at": 1790285746.46171
+}

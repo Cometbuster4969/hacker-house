@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "34e146acdea61051e10ea344389567a1",
+  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reported transaction 3534820 ($59.67) as unauthorized [1]. The flagged transaction was made online from a device (DC7DD64) that is new for card C09988\u2011K1 and is shared with 163 other cards, indicating a high\u2011risk environment [5,4]. The card shows a high velocity of four transactions in the last 24\u202fhours totaling $236.15, and a burst pattern of multiple transactions on the same day [6,7]. The risk score of 0.37, combined with the shared\u2011device and new\u2011device signals, further supports fraudulent activity.\"}",
+  "cached_at": 1790266010.8771353
+}

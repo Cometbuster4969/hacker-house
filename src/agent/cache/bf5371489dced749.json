@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "7a702077894dbc30fd9e7da0d5185c12",
+  "response": "{\n  \"fraud_probability\": 0.45,\n  \"verdict\": \"uncertain\",\n  \"pattern\": \"out_of_region_use\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3514030 ($77.07, in_person, risk 0.61) triggered the alert. The card has 30 historical in_person transactions with an average amount of $110.83, showing consistent card-present usage. Four prior closed cases for this card/customer (CC-1066, CC-1673, CC-2964, CC-3587) were all confirmed fraud, three involving out_of_region_use and one card_not_present_new_device. Graph signals indicate a burst of activity (9 transactions in 24h totaling $736.43) and the vector similarity matches prior out_of_region_use fraud cases. While the current transaction is in_person and lacks device anomalies, the combination of high risk score, velocity, and strong historical fraud pattern suggests a heightened likelihood of fraud, though region information is insufficient to confirm out_of_region_use definitively.\"\n}",
+  "cached_at": 1790285381.6596162
+}

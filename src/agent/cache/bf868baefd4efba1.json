@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "a165f4c2c2592709f87f02b1bfe3d715",
+  "response": "{\n  \"narrative\": \"Customer C13171, card C13171-K2, was flagged for a card-not-present-new-device pattern with total exposure of $57,658.51. The alert includes transaction ID 3308150, which is part of the exposed activity. A specific suspicious transaction, ID 3558054, occurred for $55.68 via an online channel. The transaction originated from device DF89AEB, which is marked as new for this card and has been used by other cards. Card C13171-K2 has only one prior transaction in its history, amounting to $72.44. The customer has reported that they did not authorize the transaction.\",\n  \"fraud_probability\": 0.55,\n  \"exposure_usd\": 57658.51,\n  \"transaction_ids\": [3308150, 3558054],\n  \"transaction_count\": 2,\n  \"device_ids\": [\"DF89AEB\"],\n  \"card_id\": \"C13171-K2\",\n  \"customer_id\": \"C13171\",\n  \"recommendation\": \"Escalate to fraud team for immediate review; consider temporary card block and contact customer to verify recent activity.\",\n  \"evidence_summary\": [\n    \"Total exposure $57,658.51\",\n    \"Suspicious transaction ID 3558054 for $55.68 online\",\n    \"Transaction ID 3308150 part of exposed activity\",\n    \"Device DF89AEB is new for this card and used by other cards\",\n    \"Card has only one prior transaction of $72.44\",\n    \"Customer reports unauthorized transaction\"\n  ]\n}",
+  "cached_at": 1790286068.912204
+}

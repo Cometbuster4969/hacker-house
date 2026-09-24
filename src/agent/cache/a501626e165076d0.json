@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "cafce612ec2a774d9d1cffad0f85e4b1",
+  "response": "{\n    \"fraud_probability\": 0.95,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"card_testing\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"The customer explicitly denies authorizing the $59.67 online purchase (transaction 3534820), providing a strong indicator of fraud. The transaction originated from device DC7DD64, which has been used by 163 different cards, indicating a shared device commonly exploited for card\u2011testing activities. For card C09988\u2011K1 this device is marked as NEW, and the card shows high velocity\u2014four transactions in the last 24\u202fhours totaling $236.15\u2014consistent with rapid testing of a compromised card. Together, these signals support a fraud verdict.\"\n}",
+  "cached_at": 1790287114.845168
+}

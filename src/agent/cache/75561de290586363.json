@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "61527b823232e4c012ce47c2567593b5",
+  "response": "{\n  \"fraud_probability\": 0.95,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_new_device\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction is online for $99.92, which is below the card's historical average of $311.86, suggesting a low-value test ([evidence 1], [evidence 3]). It occurred on device D8D1C12 that is new for this card and shared by five different cards, indicating a potentially compromised device ([evidence 2], [evidence 7], [evidence 8]). Prior cases for this cardholder show confirmed fraud for similar out-of-region or card-not-present activity (CC-2011, CC-2860, CC-5026) ([evidence 4], [evidence 6]). The combination of a low-value online transaction on a new, shared device matches the card_not_present_new_device pattern. Therefore, the fraud probability remains high, consistent with the model score of 0.90.\"\n}",
+  "cached_at": 1790287416.3835323
+}

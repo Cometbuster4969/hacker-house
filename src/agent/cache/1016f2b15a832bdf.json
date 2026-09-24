@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "b4a1db5579e4f6d02c8a06934dd53733",
+  "response": "{\n  \"narrative\": \"Customer C09988, card C09988-K1, exhibits a card_testing pattern with total exposure of $60816.81. The involved transaction IDs are 3305566 ($39.92), 3305634 ($16.99), 3309431 ($16.90), 3309839 ($21.32), and 3309908 ($28.99). Additionally, transaction 3534820 for $59.67 was flagged online with a risk score of 0.37. The transaction originated from device DC7DD64, which has been used by 163 distinct cards. For card C09988-K1, device DC7DD64 is marked as NEW. Card C09988-K1 shows high velocity: four transactions in 24 hours totaling $236.15. The customer explicitly denies authorizing the $59.67 online purchase (transaction 3534820). These indicators collectively suggest card\u2011testing activity consistent with fraud.\"\n}",
+  "cached_at": 1790287133.8480148
+}

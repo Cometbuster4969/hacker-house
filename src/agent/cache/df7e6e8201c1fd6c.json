@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "d8e577a27a3d78c2af884ad5226f3567",
+  "response": "{\"investigation_summary\":\"The flagged transaction 3509359 of $125.08 was initiated online from a device identified as Trident/7.0 on Windows 10, which deviates from the card's typical usage pattern. Card C12265\u2011K2 normally shows only three low\u2011value transactions averaging $114.35, making this higher amount suspicious. Similar account\u2011takeover cases (CC\u20112277 and CC\u20112447) involved comparable device signatures and transaction profiles. Given the risk score of 0.52 and the anomalous device fingerprint, the activity aligns with known takeover patterns. Therefore, the case is classified as fraud.\",\"verdict\":\"fraud\",\"fraud_probability\":0.95,\"pattern\":\"account_takeover\",\"evidence\":[{\"id\":\"3509359\",\"amount_usd\":125.08,\"channel\":\"online\",\"risk_score\":0.52},{\"device\":\"Trident/7.0 (Windows 10, ie 11.0 for desktop, 1920x1080)\"},{\"card\":\"C12265-K2\",\"history_transactions\":3,\"average_amount_usd\":114.35}],\"prior_cases\":[{\"case_id\":\"CC-2277\",\"outcome\":\"confirmed_fraud\",\"pattern\":\"account_takeover\",\"amount_usd\":81.93},{\"case_id\":\"CC-2447\",\"outcome\":\"confirmed_fraud\",\"pattern\":\"account_takeover\",\"amount_usd\":33.95}]}",
+  "cached_at": 1790267005.3960128
+}

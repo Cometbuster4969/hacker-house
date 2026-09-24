@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "gemini-flash-latest",
+  "prompt_hash": "89c0a6d4c4f90758564ddb27d6c80a95",
+  "response": "{\n    \"fraud_probability\": 0.98,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"account_takeover\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"Transaction 3523199 for $100.07 originated from device D5B64CE, which is newly associated with card C02923-K1 and heavily compromised, appearing across 112 different cards. Furthermore, customer C02923 has three prior confirmed fraud cases (CC-2400, CC-2717, and CC-2857) specifically categorized as account takeover. The combination of a high-risk multi-card device and established account takeover history confirms the fraudulent nature of this activity.\"\n}",
+  "cached_at": 1790283856.0590687
+}

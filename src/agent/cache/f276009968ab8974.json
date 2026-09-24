@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "b7d353a036f7bfb0785600a52c9f8a8e",
+  "response": "{\"summary\":\"Transaction 3478561, amount $74.96, was flagged with a low risk score of 0.05 but originated from a new device (SM-G935F) not previously seen for card C13487\u2011K1. The card\u2019s historical profile shows 30 transactions with an average amount of $62.64, making this out\u2011of\u2011pattern online purchase notable. Given the new device usage and deviation from typical spending, the case is assessed as fraud with a probability of 0.85.\",\"verdict\":\"fraud\",\"probability\":0.85,\"pattern\":\"card_not_present_new_device\",\"evidence_ids\":[\"3478561\"]}",
+  "cached_at": 1790267845.7423546
+}

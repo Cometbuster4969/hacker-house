@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "95a920d752c1a9cd6e7680e38aebc9bb",
+  "response": "{\"narrative\":\"The subject is customer C10434 using card C10434\u2011K1, flagged for a card\u2011not\u2011present transaction on a new device (pattern card_not_present_new_device) [2][7]. Recent activity includes five online purchases with IDs 3282542 ($59.01), 3282661 ($59.04), 3292160 ($58.01), 3306585 ($29.97) and 3329022 ($146.06) [facts]. The card\u2019s historical profile shows 30 transactions with an average amount of $133.90, and a historical maximum of $670.04 [3]. A high\u2011value transaction ID 3506725 for $1,000.03 was processed online, generating a risk score of 0.90 and a calculated fraud probability of 0.75 [1][8]. This transaction originated from device D9FD230, which is recorded as a new device for this card and is shared among 209 other cards, indicating a potential device\u2011sharing risk [6][7]. The device\u2019s characteristics (Windows 10, Edge 16.0, 1366x768) match the flagged transaction\u2019s channel [2]. No connected cards are linked to C10434\u2011K1, and only one prior closed case (CC\u20110873) exists for this customer, suggesting limited prior fraud history [5]. The total exposure associated with the flagged activity is $163124.60, exceeding the typical transaction size for this card and supporting the need for a SAR filing [facts].\",\"fraud_probability\":0.75,\"exposure_usd\":163124.60,\"transaction_count\":30}",
+  "cached_at": 1790267766.4071746
+}

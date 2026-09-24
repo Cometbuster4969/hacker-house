@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "e1b7710dfc7d9af905ce8afa0b655d15",
+  "response": "{\"fraud_probability\":0.94,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"evidence\":[\"Flagged transaction 3476682: $482.12, online channel, risk score 0.25\",\"Device: Trident/7.0 (Windows 7, IE 11.0), desktop 1920x1080\",\"Card C07297-K1 has 30 transactions, avg $91.52\"],\"summary\":\"The flagged online transaction 3476682 for $482.12 was made from a new device (Trident/7.0 on Windows 7) that does not match the cardholder\u2019s typical usage pattern. The card C07297\u2011K1 normally sees 30 transactions with an average amount of $91.52, making this $482.12 purchase unusually large. Combined with a risk score of 0.25 and the card\u2011not\u2011present new\u2011device pattern, the evidence supports a fraud verdict with a high probability of 0.94.\"}",
+  "cached_at": 1790277189.6563349
+}

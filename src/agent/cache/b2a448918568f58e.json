@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "ae1fcdca947a8b3fb066b0e5cda54648",
+  "response": "{\"fraud_probability\":0.66,\"verdict\":\"uncertain\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3450629) has a moderate risk score of 0.57 and a calculated fraud probability of 0.65, indicating elevated risk but not conclusive evidence of fraud. It was made online from device D06A9AB, which is listed as a shared device used by 302 different cards, a known indicator of potential account takeover or card\u2011not\u2011present fraud. The transaction amount ($100.09) is well below the card's historical average ($427.76) and similar to other low\u2011value online purchases, which could be legitimate spending. No prior fraud cases exist for this card (CC\u20111383 was cleared) and the customer has not reported any issue. Given the mixed signals, the case remains uncertain.\"}",
+  "cached_at": 1790266913.7309544
+}

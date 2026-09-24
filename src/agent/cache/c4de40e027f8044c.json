@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "f7d64ec6a940f6a7997ee05cec63876b",
+  "response": "{\"fraud_probability\":0.97,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged online transaction (ID 3526826) scored a high risk of 0.76 [1] and occurred on a device marked as NEW for this card and shared with 266 other cards [6][7]. The card has shown high velocity with 5 transactions in 24\u202fh totaling $386.56 [8] and the amount ($35.66) is well below the customer\u2019s average $113.94, a typical testing behavior. Moreover, the same cardholder has three prior confirmed fraud cases (CC-1475, CC-3216, CC-4294) involving account takeover and new\u2011device CNP fraud [5]. Combined, these signals strongly indicate fraudulent activity.\"}",
+  "cached_at": 1790265936.6732502
+}

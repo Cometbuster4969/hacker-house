@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "d37f41e7949ca1fbc16b1151615b31db",
+  "response": "{\"investigation_summary\":\"The flagged transaction 3583368 for $131.30 was processed online with a risk score of 0.39 and originated from a new device (SM-G610F Build/NRD90M, Chrome 66.0 for Android). The card C11923\u2011K2 normally averages $35.62 across 29 prior transactions, making this amount unusually high. This behavior matches the card_not_present_new_device pattern and aligns with prior confirmed fraud case CC\u20110031. Given the strong device anomaly and deviation from normal spending, the case is classified as fraud.\",\"verdict\":\"fraud\",\"fraud_probability\":1.00,\"pattern\":\"card_not_present_new_device\",\"evidence\":[{\"id\":\"3583368\",\"amount_usd\":131.30,\"channel\":\"online\",\"risk_score\":0.39},{\"device\":\"SM-G610F Build/NRD90M\",\"browser\":\"Chrome 66.0 for Android\"},{\"card\":\"C11923-K2\",\"history_txn_count\":29,\"avg_amount_usd\":35.62}],\"prior_cases\":[{\"id\":\"CC-0031\",\"outcome\":\"confirmed_fraud\",\"pattern\":\"card_not_present_new_device\",\"amount_usd\":20.36},{\"id\":\"CC-0290\",\"outcome\":\"confirmed_fraud\",\"pattern\":\"card_testing\",\"amount_usd\":144.56}]}",
+  "cached_at": 1790267799.276389
+}

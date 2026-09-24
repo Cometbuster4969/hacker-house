@@ -1,0 +1,173 @@
+{
+  "case_id": "HHG-007",
+  "case": {
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.5,
+    "pattern": "undocumented",
+    "pattern_description": "The flagged transaction is an in-person purchase with an amount similar to the card's historical average, and while the model assigned a high risk score, there is no clear evidence of typical fraud patterns such as out-of-region use or account takeover from the available data.",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction 3514948: $111.92, in_person channel, risk score 0.87",
+        "source": "graph",
+        "ref": "query:get_transaction(3514948)",
+        "entity_ids": [
+          "3514948"
+        ]
+      },
+      {
+        "claim": "Card C09933-K2 has 4 transactions in history, average amount $115.98",
+        "source": "graph",
+        "ref": "query:card_transactions(C09933-K2)",
+        "entity_ids": [
+          "C09933-K2"
+        ]
+      },
+      {
+        "claim": "Customer C09933 has 2 cards: C09933-K1, C09933-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C09933)",
+        "entity_ids": [
+          "C09933",
+          "C09933-K1",
+          "C09933-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 264 has 2033 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(264)",
+        "entity_ids": [
+          "264"
+        ]
+      },
+      {
+        "claim": "Found 19 prior closed cases for this card/customer: CC-0104, CC-0657, CC-0765, CC-1228, CC-1524, CC-1682, CC-2565, CC-2834, CC-2986, CC-3136, CC-3439, CC-3821, CC-4196, CC-4277, CC-4455, CC-4597, CC-4787, CC-5092, CC-5521",
+        "source": "graph",
+        "ref": "query:closed_cases(C09933-K2, C09933)",
+        "entity_ids": [
+          "CC-0104",
+          "CC-0657",
+          "CC-0765",
+          "CC-1228",
+          "CC-1524",
+          "CC-1682",
+          "CC-2565",
+          "CC-2834",
+          "CC-2986",
+          "CC-3136",
+          "CC-3439",
+          "CC-3821",
+          "CC-4196",
+          "CC-4277",
+          "CC-4455",
+          "CC-4597",
+          "CC-4787",
+          "CC-5092",
+          "CC-5521"
+        ]
+      },
+      {
+        "claim": "Card C09933-K2 shows high velocity: 3 transactions in 24h totaling $404.85",
+        "source": "graph",
+        "ref": "query:card_velocity(C09933-K2, 24h)",
+        "entity_ids": [
+          "3526283",
+          "3526586",
+          "3526854"
+        ]
+      },
+      {
+        "claim": "LLM analysis: The flagged transaction (ID 3514948) is an in-person charge of $111.92 with a high model risk score of 0.87 (Evidence 1). Historical behavior shows 4 transactions averaging $115.98, indicating the amount is consistent with the card's usual activity (Evidence 2). Prior cases for this card include multiple confirmed fraud incidents, mostly out-of-region use and account takeover, but also a cleared case where a high-scoring transaction was legitimate (Evidence 5, CC-0657). The card exhibited elevated velocity with three transactions in 24 hours totaling $404.85 (Evidence 6), yet no new device or channel changes are observed. Without definitive evidence of a known fraud pattern, the alert remains uncertain.",
+        "source": "document",
+        "ref": "llm:assess_evidence",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0104",
+      "CC-0657",
+      "CC-0765",
+      "CC-1228",
+      "CC-1524",
+      "CC-1682",
+      "CC-2565",
+      "CC-2834",
+      "CC-2986",
+      "CC-3136",
+      "CC-3439",
+      "CC-3821",
+      "CC-4196",
+      "CC-4277",
+      "CC-4455",
+      "CC-4597",
+      "CC-4787",
+      "CC-5092",
+      "CC-5521"
+    ],
+    "summary": "{\n  \"investigation_summary\": \"The alert remains uncertain with a fraud probability of 0.50. The flagged transaction 3514948 ($111.92, in\u2011person) carries a high risk score of 0.87, but the card\u2019s historical behavior (4 transactions averaging $115.98) shows no deviation. Customer C09933 holds two cards, and prior similar cases (CC-0104 confirmed fraud, CC-0657 cleared) do not establish a clear pattern. Consequently, the evidence is insufficient to confirm or rule out fraud.\"\n}",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-007"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Customer C09933 cannot recall this transaction"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.50 below 0.70 threshold, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.50 warrants a case"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: Undocumented pattern needs analyst review"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.50 below 0.70 threshold, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.50 warrants a case"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: Undocumented pattern needs analyst review"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 8,
+  "tokens": 8367,
+  "latency_s": 36.1
+}

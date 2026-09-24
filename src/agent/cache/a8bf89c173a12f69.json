@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "81f24a3932a5777460b752cee8ddd20a",
+  "response": "{\"verdict\":\"uncertain\",\"probability\":0.40,\"summary\":\"The flagged transaction 3514030 ($77.07, in_person) has a risk score of 0.61, which raises concern, but the card C12382-K1 shows a normal pattern of 30 past transactions with an average amount of $110.83, indicating typical usage. Billing region 444 processes activity from 321 cards, so there is no unusual regional concentration. Prior fraud cases CC-1066 and CC-1673 involve different patterns (out\u2011of\u2011region use and card\u2011not\u2011present on a new device) and do not directly align with the current behavior. Considering these mixed signals, the investigation remains uncertain with a fraud probability of 0.40.\",\"evidence\":[\"3514030\"]}",
+  "cached_at": 1790267448.4001043
+}

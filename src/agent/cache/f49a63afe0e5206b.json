@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "66489d8f4138b18173eaf216be57005e",
+  "response": "{\n  \"fraud_probability\": 1.00,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_new_device\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3526826 is a $35.66 online purchase with a high risk score of 0.76, deviating from the card's historical pattern of eight in-person transactions averaging $113.94. The transaction originated from device D12CA02, which is shared by 266 different cards, indicating a high-risk device farm. This is the first online/channel-not-present transaction for card C07671-K2, matching a new-device scenario seen in prior confirmed fraud case CC-3216. Combined with the customer's history of account takeover fraud (CC-1475, CC-4294), the evidence points to card-not-present fraud on a new device.\"\n}",
+  "cached_at": 1790286785.1571333
+}

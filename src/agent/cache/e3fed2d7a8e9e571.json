@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "82ef71cb5860d9956040d12e374bdce7",
+  "response": "{\"narrative\":\"Customer C04570, card C04570-K1, exhibits a card_not_present_new_device pattern. The card has a history of 30 transactions with an average amount of $427.76 [3]. In the recent period, five online transactions were made from a new device (Windows 10, Chrome 65.0, 1920x1080) with amounts $200.00 (ID 3121778), $199.93 (ID 3135192), $199.95 (ID 3137978), $199.91 (ID 3149016), and $199.92 (ID 3155462) [2]. These amounts are roughly half of the historical average, which may indicate atypical spending behavior but are within normal low\u2011value online purchase range. The device used (D06A9AB) is associated with 302 other cards, a known indicator of potential account takeover or card\u2011not\u2011present fraud [6]. A flagged transaction received a risk score of 0.57 and a calculated fraud probability of 0.65, indicating elevated risk though not conclusive [1][7]. No connected cards are linked to this account and only one prior closed case (CC\u20111383) exists, which was cleared [5]. The total exposure related to the recent activity is $252,641.87, and given the mixed signals the case remains uncertain and warrants continued monitoring.\"}",
+  "cached_at": 1790267982.7924933
+}

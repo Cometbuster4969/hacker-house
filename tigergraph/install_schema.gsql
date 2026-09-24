@@ -1,0 +1,11 @@
+-- Run AFTER schema.gsql succeeds.
+-- Creates the graph that binds all vertices and edges.
+CREATE GRAPH FraudInvestigation (
+    Customer, Card, Transaction, DeviceProfile,
+    EmailDomain, BillingRegion, ClosedCase, InvestigationCase,
+    OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL,
+    BILLED_IN, NEXT_TXN, INVOLVES_TXN, ON_CARD, CONNECTED_CARD,
+    SHARES_DEVICE, SAME_REGION, CASE_INVOLVES_TXN, CASE_ON_CARD,
+    CASE_CONNECTED_CARD, CASE_INVOLVES_DEVICE, CASE_SIMILAR_TO,
+    LINKED_CUSTOMER
+);

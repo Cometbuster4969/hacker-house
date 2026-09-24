@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "gemini-flash-latest",
+  "prompt_hash": "266f7963cac70e82f7ecb780bba30dd6",
+  "response": "{\n    \"fraud_probability\": 0.85,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"card_not_present_fraud\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"Transaction 3478782 for $292.36 represents a 6.5x surge over the cardholder's historical average of $45.02 and exceeds the previous maximum amount of $121.32 across 30 transactions. Additionally, card C11891-K1 has an established history of card-not-present fraud under prior case CC-4160 involving transaction 3311844 ($90.54). The elevated model risk score of 0.79 combined with the severe amount anomaly on the online channel strongly indicates unauthorized card-not-present fraud.\"\n}",
+  "cached_at": 1790283798.0023143
+}

@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "258efd520b0d7fff83c26cd0a2fe9320",
+  "response": "{\n  \"investigation_summary\": \"The alert remains uncertain with a fraud probability of 0.50. The flagged transaction 3514948 ($111.92, in\u2011person) carries a high risk score of 0.87, but the card\u2019s historical behavior (4 transactions averaging $115.98) shows no deviation. Customer C09933 holds two cards, and prior similar cases (CC-0104 confirmed fraud, CC-0657 cleared) do not establish a clear pattern. Consequently, the evidence is insufficient to confirm or rule out fraud.\"\n}",
+  "cached_at": 1790285952.4758735
+}

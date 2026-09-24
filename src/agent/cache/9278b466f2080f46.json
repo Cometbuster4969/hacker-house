@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "5a379e4953dc87031a69c7940f24edd9",
+  "response": "{\n  \"investigation_summary\": \"The alert for card C08623-K2 shows a pattern consistent with card testing, given the low\u2011value in\u2011person transaction ($49.00, ID 3530164) and a risk score of 0.40. Historical data for this card reveals six transactions averaging $138.54, indicating a sudden drop to a small test amount typical of fraudsters probing card validity. The customer holds two cards (C08623-K1 and C08623-K2), and prior cases such as CC-2817 (confirmed fraud, out\u2011of\u2011region use, $38.96) demonstrate a similar low\u2011value testing behavior, while CC-1589 was cleared with no loss. Based on the calculated fraud probability of 0.50 and the evidence, the verdict is fraud.\"\n}",
+  "cached_at": 1790285559.1882906
+}

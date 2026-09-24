@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "5fb92043a9f6b46a05d9af4acb31deed",
+  "response": "{\n  \"fraud_probability\": 0.55,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"account_takeover\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The customer explicitly reports not authorizing the $39.08 transaction (3491361), which is a strong signal of fraud. The flagged amount is well below the card's average transaction size ($159.70), consistent with a low-value test or probe often seen in account takeover schemes. The card shows high velocity (8 transactions in 24 hours totaling $956.88) and a burst of multiple transactions on the same day, indicating rapid, possibly automated use after compromise. Historical cases for this card/customer include multiple confirmed frauds with an account_takeover pattern (CC-0255, CC-0454, CC-1450), reinforcing the likelihood of a compromised account. Together, these elements support a fraud verdict.\"\n}",
+  "cached_at": 1790287324.1415398
+}

@@ -1,0 +1,118 @@
+{
+  "case_id": "HHG-002",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Card-not-present fraud: $292.36 online purchase is 6.5x the average ($45.02). Burst of 30 online transactions detected.",
+    "affected_txn_ids": [
+      "3400334",
+      "3478782",
+      "3400385",
+      "3307245",
+      "3311844",
+      "3385561",
+      "3400395",
+      "3400406",
+      "3307244",
+      "3326030",
+      "3351763"
+    ],
+    "first_suspicious_txn_id": "3400334",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 410.94,
+    "evidence": [
+      {
+        "claim": "Flagged transaction 3478782: $292.36, online channel, risk score 0.79",
+        "source": "graph",
+        "ref": "query:get_transaction(3478782)",
+        "entity_ids": [
+          "3478782"
+        ]
+      },
+      {
+        "claim": "Card C11891-K1 has 30 transactions in history, average amount $45.02",
+        "source": "graph",
+        "ref": "query:card_transactions(C11891-K1)",
+        "entity_ids": [
+          "C11891-K1"
+        ]
+      },
+      {
+        "claim": "Found 1 prior closed cases for this card/customer: CC-4160",
+        "source": "graph",
+        "ref": "query:closed_cases(C11891-K1, C11891)",
+        "entity_ids": [
+          "CC-4160"
+        ]
+      },
+      {
+        "claim": "Card C11891-K1 shows high velocity: 6 transactions in 24h totaling $161.39",
+        "source": "graph",
+        "ref": "query:card_velocity(C11891-K1, 24h)",
+        "entity_ids": [
+          "3544645",
+          "3545271",
+          "3545283",
+          "3545290",
+          "3545367",
+          "3545398"
+        ]
+      },
+      {
+        "claim": "LLM analysis: The flagged transaction 3478782 for $292.36 is 6.5 times the card's historical average of $45.02 and carries a high risk score of 0.79, indicating anomalous activity. It occurs within a burst of six transactions in 24 hours totaling $161.39, showing unusual velocity. Prior case CC-4160 on the same card was confirmed fraud (card_not_present_fraud), and similar retrieved cases (CC-2480, CC-2295, CC-2470, CC-5052) all resulted in confirmed fraud with comparable patterns. Together, these signals strongly suggest the transaction is fraudulent.",
+        "source": "document",
+        "ref": "llm:assess_evidence",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-4160"
+    ],
+    "summary": "{\n  \"verdict\": \"fraud\",\n  \"fraud_probability\": 0.85,\n  \"pattern\": \"card_not_present_fraud\",\n  \"investigation_summary\": \"The alert for transaction 3478782 ($292.36, online) triggered a risk score of 0.79, indicating suspicious card-not-present activity. Card C11891-K1 shows atypical behavior with this transaction amount far exceeding its historical average of $45.02 over 30 prior transactions. The customer\u2019s prior closed case CC-4160 was confirmed fraud (card_not_present_fraud) for $90.54, establishing a pattern of similar misuse. Given the high risk score, deviation from normal spend, and prior fraud history, the fraud probability is assessed at 0.85, supporting a verdict of fraud.\"\n}",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-002"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: High confidence fraud with exposure $292.36"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: Confirmed fraud requires case"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "High confidence fraud, exposure $292.36"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "Confirmed fraud requires case creation"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No SAR triggers met: exposure below threshold and no shared connections",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 0.85 \u2265 0.85 supported by 4 independent pieces of evidence",
+  "tool_calls": 7,
+  "tokens": 4045,
+  "latency_s": 21.4
+}

@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "c22848234dbecdfe7b54c4d1900aa3f5",
+  "response": "{\"verdict\":\"uncertain\",\"probability\":0.38,\"pattern\":\"none\",\"summary\":\"The flagged in\u2011person transaction 3514030 for $77.07 has a risk score of 0.61, which raises some concern (evidence 1). However, card C12382\u2011K1 shows a typical usage pattern with 30 historical transactions averaging $110.83 (evidence 2), and billing region 444 is a high\u2011traffic area with 321 active cards (evidence 3). Compared with prior confirmed fraud cases CC\u20111066 and CC\u20111673, this activity lacks the out\u2011of\u2011region or new\u2011device characteristics that drove those fraud decisions. Consequently, while the risk score suggests potential risk, the overall behavior appears consistent with normal usage, leading to an uncertain verdict with a fraud probability of 0.38.\"}",
+  "cached_at": 1790277135.064672
+}

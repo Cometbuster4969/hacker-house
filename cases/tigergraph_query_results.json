@@ -1,0 +1,66 @@
+{
+  "host": "https://tg-0d7f3ac1-7c8e-4b37-b81d-9f15452c48e0.tg-2635877100.i.tgcloud.io",
+  "graph": "FraudInvestigation",
+  "dataset_provenance": "HHGOA_IEEE (IEEE-CIS-derived dataset provided by HHGOA organizers); first-10K subset + full identity/closed-cases loaded into TigerGraph",
+  "input_ids": {
+    "transaction": "3000001",
+    "customer": "C06075",
+    "card": "C06075-K1",
+    "device": "DA39719",
+    "region": "444"
+  },
+  "queries_ok": 10,
+  "queries_total": 10,
+  "results": {
+    "graph_stats": {
+      "status": "ok",
+      "latency_s": 0.28,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"@@customers\": 1805,\n      \"@@cards\": 1868,\n      \"@@txns\": 10000,\n      \"@@devices\": 9703,\n      \"@@emails\": 52,\n      \"@@regions\": 81,\n      \"@@cases\": 5565\n    }\n  ]\n}"
+    },
+    "card_activity": {
+      "status": "ok",
+      "latency_s": 0.27,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"@@n_txns\": 1,\n      \"@@devices\": [\n        \"D3A2A69\"\n      ]\n    }\n  ]\n}"
+    },
+    "card_txns": {
+      "status": "ok",
+      "latency_s": 0.27,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"@@n_txns\": 1\n    }\n  ]\n}"
+    },
+    "customer_cards": {
+      "status": "ok",
+      "latency_s": 0.27,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"@@n_cards\": 1,\n      \"cards\": [\n        {\n          \"v_id\": \"C06075-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {}\n        }\n      ]\n    }\n  ]\n}"
+    },
+    "card_case_history": {
+      "status": "ok",
+      "latency_s": 0.27,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"cases\": [\n        {\n          \"v_id\": \"CC-2944\",\n          \"v_type\": \"ClosedCase\",\n          \"attributes\": {}\n        },\n        {\n          \"v_id\": \"CC-2460\",\n          \"v_type\": \"ClosedCase\",\n          \"attributes\": {}\n        }\n      ]\n    }\n  ]\n}"
+    },
+    "txn_devices": {
+      "status": "ok",
+      "latency_s": 0.27,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"devices\": [\n        {\n          \"v_id\": \"D3A2A69\",\n          \"v_type\": \"DeviceProfile\",\n          \"attributes\": {}\n        }\n      ]\n    }\n  ]\n}"
+    },
+    "txn_emails": {
+      "status": "ok",
+      "latency_s": 0.27,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"p\": [\n        {\n          \"v_id\": \"yahoo.com\",\n          \"v_type\": \"EmailDomain\",\n          \"attributes\": {}\n        }\n      ],\n      \"r\": []\n    }\n  ]\n}"
+    },
+    "device_txns": {
+      "status": "ok",
+      "latency_s": 0.29,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"@@n_txns\": 1\n    }\n  ]\n}"
+    },
+    "region_txns": {
+      "status": "ok",
+      "latency_s": 0.29,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"@@n_txns\": 33\n    }\n  ]\n}"
+    },
+    "fraud_pagerank(GDS)": {
+      "status": "ok",
+      "latency_s": 0.3,
+      "output": "Using graph 'FraudInvestigation'\n{\n  \"version\": {\n    \"edition\": \"enterprise\",\n    \"api\": \"v2\",\n    \"schema\": 0\n  },\n  \"error\": false,\n  \"message\": \"\",\n  \"results\": [\n    {\n      \"top\": [\n        {\n          \"v_id\": \"C09165-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C04582-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C12982-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C00823-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C09947-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C05443-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C04762-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C00094-K2\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C11709-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        },\n        {\n          \"v_id\": \"C10852-K1\",\n          \"v_type\": \"Card\",\n          \"attributes\": {\n            \"top.@score\": 1\n          }\n        }\n      ]\n    }\n  ]\n}"
+    }
+  }
+}

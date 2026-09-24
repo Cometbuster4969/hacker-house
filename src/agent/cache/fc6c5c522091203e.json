@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "bab68c52e448a3d63b9e62e7019f89de",
+  "response": "{\"fraud_probability\":0.58,\"verdict\":\"fraud\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The cardholder reported the $39.08 in\u2011person purchase as unauthorized (evidence\u202f1). The card has a history of confirmed account\u2011takeover fraud (cases CC\u20110255, CC\u20110454, CC\u20110631, CC\u20111450) and shows high velocity with 8 transactions in 24\u202fh (evidence\u202f6). The flagged amount is well below the card\u2019s average $159.70, a common sign of testing (graph\u2011level signal). Combined with a moderate risk score of 0.48, the calculated fraud probability of 0.55 supports a fraud verdict.\"}",
+  "cached_at": 1790266932.6793594
+}

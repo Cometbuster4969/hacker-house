@@ -1,0 +1,170 @@
+-- TigerGraph Schema for Fraud Investigation
+-- Compatible with TigerGraph 4.x (Savanna and Community Edition)
+--
+-- USAGE:
+--   Step 1: Run this file to create the schema
+--   Step 2: Run install_schema.gsql to create the graph
+--
+-- NOTE: No inline comments (//) — GSQL parser rejects them.
+--       No DEFAULT "" — use DEFAULT " " or omit default.
+-- =============================================
+-- VERTICES
+-- =============================================
+CREATE VERTEX Customer (
+    PRIMARY_ID customer_id STRING,
+    num_cards INT DEFAULT 0,
+    first_seen STRING DEFAULT " ",
+    last_seen STRING DEFAULT " "
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX Card (
+    PRIMARY_ID card_id STRING,
+    customer_id STRING,
+    network STRING DEFAULT " ",
+    card_type STRING DEFAULT " ",
+    card1 STRING DEFAULT " ",
+    first_seen STRING DEFAULT " ",
+    last_seen STRING DEFAULT " ",
+    num_transactions INT DEFAULT 0,
+    total_amount DOUBLE DEFAULT 0.0
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX Transaction (
+    PRIMARY_ID transaction_id STRING,
+    customer_id STRING,
+    card_id STRING,
+    amount DOUBLE,
+    ts STRING,
+    channel STRING,
+    risk_score DOUBLE,
+    product_cd STRING DEFAULT " ",
+    addr1 DOUBLE DEFAULT 0.0,
+    addr2 DOUBLE DEFAULT 0.0,
+    p_emaildomain STRING DEFAULT " ",
+    r_emaildomain STRING DEFAULT " ",
+    is_flagged BOOL DEFAULT FALSE,
+    is_fraud_episode BOOL DEFAULT FALSE
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX DeviceProfile (
+    PRIMARY_ID device_id STRING,
+    device_info STRING DEFAULT " ",
+    device_type STRING DEFAULT " ",
+    os STRING DEFAULT " ",
+    browser STRING DEFAULT " ",
+    screen STRING DEFAULT " ",
+    num_cards_seen INT DEFAULT 0,
+    first_seen STRING DEFAULT " ",
+    last_seen STRING DEFAULT " "
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX EmailDomain (
+    PRIMARY_ID domain STRING,
+    domain_type STRING DEFAULT " ",
+    num_customers INT DEFAULT 0
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX BillingRegion (
+    PRIMARY_ID region_id STRING,
+    country_code DOUBLE DEFAULT 0.0,
+    num_customers INT DEFAULT 0
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX ClosedCase (
+    PRIMARY_ID case_id STRING,
+    customer_id STRING,
+    card_id STRING,
+    opened_at STRING,
+    closed_at STRING,
+    outcome STRING,
+    pattern STRING,
+    exposure_usd DOUBLE DEFAULT 0.0,
+    n_txns INT DEFAULT 0,
+    analyst_notes STRING DEFAULT " "
+) WITH primary_id_as_attribute="true";
+CREATE VERTEX InvestigationCase (
+    PRIMARY_ID case_id STRING,
+    customer_id STRING,
+    card_id STRING,
+    opened_at STRING,
+    status STRING DEFAULT "open",
+    verdict STRING DEFAULT "uncertain",
+    fraud_probability DOUBLE DEFAULT 0.5,
+    pattern STRING DEFAULT "none",
+    exposure_usd DOUBLE DEFAULT 0.0,
+    summary STRING DEFAULT " "
+) WITH primary_id_as_attribute="true";
+-- =============================================
+-- EDGES
+-- =============================================
+CREATE DIRECTED EDGE OWNS (
+    FROM Customer, TO Card,
+    since STRING DEFAULT " "
+);
+CREATE DIRECTED EDGE MADE (
+    FROM Card, TO Transaction,
+    is_primary BOOL DEFAULT TRUE
+);
+CREATE DIRECTED EDGE FROM_DEVICE (
+    FROM Transaction, TO DeviceProfile,
+    is_new_device BOOL DEFAULT FALSE,
+    proxy_type STRING DEFAULT " "
+);
+CREATE DIRECTED EDGE PURCHASER_EMAIL (
+    FROM Transaction, TO EmailDomain
+);
+CREATE DIRECTED EDGE RECIPIENT_EMAIL (
+    FROM Transaction, TO EmailDomain
+);
+CREATE DIRECTED EDGE BILLED_IN (
+    FROM Transaction, TO BillingRegion
+);
+CREATE DIRECTED EDGE NEXT_TXN (
+    FROM Transaction, TO Transaction,
+    delta_seconds DOUBLE DEFAULT 0.0
+);
+CREATE DIRECTED EDGE INVOLVES_TXN (
+    FROM ClosedCase, TO Transaction
+);
+CREATE DIRECTED EDGE ON_CARD (
+    FROM ClosedCase, TO Card
+);
+CREATE DIRECTED EDGE CONNECTED_CARD (
+    FROM ClosedCase, TO Card
+);
+CREATE DIRECTED EDGE SHARES_DEVICE (
+    FROM Card, TO DeviceProfile,
+    first_seen STRING DEFAULT " ",
+    last_seen STRING DEFAULT " "
+);
+CREATE DIRECTED EDGE SAME_REGION (
+    FROM Card, TO BillingRegion,
+    txn_count INT DEFAULT 0
+);
+CREATE DIRECTED EDGE CASE_INVOLVES_TXN (
+    FROM InvestigationCase, TO Transaction
+);
+CREATE DIRECTED EDGE CASE_ON_CARD (
+    FROM InvestigationCase, TO Card
+);
+CREATE DIRECTED EDGE CASE_CONNECTED_CARD (
+    FROM InvestigationCase, TO Card
+);
+CREATE DIRECTED EDGE CASE_INVOLVES_DEVICE (
+    FROM InvestigationCase, TO DeviceProfile
+);
+CREATE DIRECTED EDGE CASE_SIMILAR_TO (
+    FROM InvestigationCase, TO ClosedCase,
+    similarity_score DOUBLE DEFAULT 0.0
+);
+CREATE DIRECTED EDGE LINKED_CUSTOMER (
+    FROM Customer, TO Customer,
+    link_type STRING DEFAULT " ",
+    link_value STRING DEFAULT " "
+);
+-- =============================================
+-- GRAPH
+-- =============================================
+CREATE GRAPH FraudInvestigation (
+    Customer, Card, Transaction, DeviceProfile,
+    EmailDomain, BillingRegion, ClosedCase, InvestigationCase,
+    OWNS, MADE, FROM_DEVICE, PURCHASER_EMAIL, RECIPIENT_EMAIL,
+    BILLED_IN, NEXT_TXN, INVOLVES_TXN, ON_CARD, CONNECTED_CARD,
+    SHARES_DEVICE, SAME_REGION, CASE_INVOLVES_TXN, CASE_ON_CARD,
+    CASE_CONNECTED_CARD, CASE_INVOLVES_DEVICE, CASE_SIMILAR_TO,
+    LINKED_CUSTOMER
+);

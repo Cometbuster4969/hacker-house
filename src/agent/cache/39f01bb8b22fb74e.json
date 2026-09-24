@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "0a80e2f68ada24c7ae4e6289c82567a9",
+  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The customer report (evidence 1) flags the $49.00 in\u2011person purchase as unrecognized, a strong indicator of fraud. The transaction amount is well below the card\u2019s average spend of $138.54 (evidence 2), a typical testing behavior. The card has a history of multiple confirmed fraud cases (evidence 5), increasing the likelihood of repeat abuse. The model assigns a high fraud probability of 1.00 (evidence 6) and the risk score of 0.40, supporting a fraud verdict.\"}",
+  "cached_at": 1790267450.3417974
+}

@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "72071c5ed733d669c2b239f7b804d48b",
+  "response": "{\n  \"sar_narrative\": \"Customer C12265, card C12265\u2011K2, exhibited behavior indicative of an account takeover. Several recent transactions on this card\u2014IDs 3322761 ($49.07), 3532036 ($226.09), and 3532309 ($67.89)\u2014were identified as suspicious. An additional online transaction, ID 3509359 for $125.08, originated from a device not previously associated with this card. The device used for transaction 3509359 had been linked to numerous other cards, suggesting a high\u2011risk environment. Prior to these events, the card\u2019s transaction history consisted exclusively of in\u2011person purchases. The card had a couple of prior closed fraud cases, both classified as account takeover. The customer holds a couple of cards, with no additional cards linked to the account. The combined exposure from the identified transactions is significant.\"\n}",
+  "cached_at": 1790287597.1092563
+}

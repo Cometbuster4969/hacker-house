@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "prompt_hash": "1769dd023fb4ef3506afa02866ba24bf",
+  "response": "{\n    \"fraud_probability\": 0.5,\n    \"verdict\": \"uncertain\",\n    \"pattern\": \"undocumented\",\n    \"pattern_description\": \"The flagged transaction is an in-person purchase with an amount similar to the card's historical average, and while the model assigned a high risk score, there is no clear evidence of typical fraud patterns such as out-of-region use or account takeover from the available data.\",\n    \"reasoning\": \"The flagged transaction (ID 3514948) is an in-person charge of $111.92 with a high model risk score of 0.87 (Evidence 1). Historical behavior shows 4 transactions averaging $115.98, indicating the amount is consistent with the card's usual activity (Evidence 2). Prior cases for this card include multiple confirmed fraud incidents, mostly out-of-region use and account takeover, but also a cleared case where a high-scoring transaction was legitimate (Evidence 5, CC-0657). The card exhibited elevated velocity with three transactions in 24 hours totaling $404.85 (Evidence 6), yet no new device or channel changes are observed. Without definitive evidence of a known fraud pattern, the alert remains uncertain.\"\n}",
+  "cached_at": 1790285938.98735
+}

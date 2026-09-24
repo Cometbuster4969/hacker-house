@@ -1,0 +1,129 @@
+{
+  "case_id": "HHG-001",
+  "case": {
+    "status": "open",
+    "verdict": "uncertain",
+    "fraud_probability": 0.45,
+    "pattern": "out_of_region_use",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction 3514030: $77.07, in_person channel, risk score 0.61",
+        "source": "graph",
+        "ref": "query:get_transaction(3514030)",
+        "entity_ids": [
+          "3514030"
+        ]
+      },
+      {
+        "claim": "Card C12382-K1 has 30 transactions in history, average amount $110.83",
+        "source": "graph",
+        "ref": "query:card_transactions(C12382-K1)",
+        "entity_ids": [
+          "C12382-K1"
+        ]
+      },
+      {
+        "claim": "Billing region 444 has 321 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(444)",
+        "entity_ids": [
+          "444"
+        ]
+      },
+      {
+        "claim": "Found 4 prior closed cases for this card/customer: CC-1066, CC-1673, CC-2964, CC-3587",
+        "source": "graph",
+        "ref": "query:closed_cases(C12382-K1, C12382)",
+        "entity_ids": [
+          "CC-1066",
+          "CC-1673",
+          "CC-2964",
+          "CC-3587"
+        ]
+      },
+      {
+        "claim": "Card C12382-K1 shows high velocity: 9 transactions in 24h totaling $736.43",
+        "source": "graph",
+        "ref": "query:card_velocity(C12382-K1, 24h)",
+        "entity_ids": [
+          "3181436",
+          "3181648",
+          "3182245",
+          "3183342",
+          "3183487",
+          "3183679",
+          "3183697",
+          "3183742",
+          "3183783"
+        ]
+      },
+      {
+        "claim": "LLM analysis: The flagged transaction 3514030 ($77.07, in_person, risk 0.61) triggered the alert. The card has 30 historical in_person transactions with an average amount of $110.83, showing consistent card-present usage. Four prior closed cases for this card/customer (CC-1066, CC-1673, CC-2964, CC-3587) were all confirmed fraud, three involving out_of_region_use and one card_not_present_new_device. Graph signals indicate a burst of activity (9 transactions in 24h totaling $736.43) and the vector similarity matches prior out_of_region_use fraud cases. While the current transaction is in_person and lacks device anomalies, the combination of high risk score, velocity, and strong historical fraud pattern suggests a heightened likelihood of fraud, though region information is insufficient to confirm out_of_region_use definitively.",
+        "source": "document",
+        "ref": "llm:assess_evidence",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-1066",
+      "CC-1673",
+      "CC-2964",
+      "CC-3587"
+    ],
+    "summary": "{\n  \"investigation_summary\": \"The alert stems from an out-of-region use flag on transaction 3514030 ($77.07, in_person) with a risk score of 0.61. Card C12382-K1 shows 30 historical transactions averaging $110.83, and the flagged activity occurred in billing region 444, which has 321 cards transacting there. While prior out-of-region fraud case CC-1066 ($170.98) indicates a possible pattern, the differing case CC-1673 (card_not_present_new_device, $199.98) and the low in-person amount weaken the signal. Consequently, the fraud probability is set at 0.45, resulting in an uncertain verdict that warrants further investigation.\"\n}",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-001"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Customer C12382 cannot recall this transaction"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.45 below 0.70 threshold, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.45 warrants a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Probability 0.45 below 0.70 threshold, verify before blocking"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R1/3a: Probability 0.45 warrants a case"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 8,
+  "tokens": 8783,
+  "latency_s": 33.3
+}

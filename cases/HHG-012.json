@@ -1,0 +1,103 @@
+{
+  "case_id": "HHG-012",
+  "case": {
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.12,
+    "pattern": "card_testing",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Flagged transaction 3553342: $30.91, in_person channel, risk score 0.55",
+        "source": "graph",
+        "ref": "query:get_transaction(3553342)",
+        "entity_ids": [
+          "3553342"
+        ]
+      },
+      {
+        "claim": "Card C05876-K2 has 3 transactions in history, average amount $71.17",
+        "source": "graph",
+        "ref": "query:card_transactions(C05876-K2)",
+        "entity_ids": [
+          "C05876-K2"
+        ]
+      },
+      {
+        "claim": "Customer C05876 has 2 cards: C05876-K2, C05876-K1",
+        "source": "graph",
+        "ref": "query:customer_cards(C05876)",
+        "entity_ids": [
+          "C05876",
+          "C05876-K2",
+          "C05876-K1"
+        ]
+      },
+      {
+        "claim": "Billing region 494 has 394 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(494)",
+        "entity_ids": [
+          "494"
+        ]
+      },
+      {
+        "claim": "Found 2 prior closed cases for this card/customer: CC-0003, CC-2370",
+        "source": "graph",
+        "ref": "query:closed_cases(C05876-K2, C05876)",
+        "entity_ids": [
+          "CC-0003",
+          "CC-2370"
+        ]
+      },
+      {
+        "claim": "LLM analysis: The flagged transaction is a low\u2011amount in\u2011person purchase ($30.91) that falls below the card\u2019s historical average ($71.17), which is consistent with card\u2011testing behavior. The risk score of 0.55 is moderate but not high enough to outweigh the lack of corroborating evidence such as customer reports, device anomalies, or out\u2011of\u2011region use. Prior cleared case CC\u20110003 for the same card shows a similar alert was resolved as legitimate after travel confirmation. Although vector\u2011retrieved similar cases are account\u2011takeover frauds, they involve different cardholders and lack direct linkage to this customer. Given that half of all alerts are legitimate and there is no definitive fraud signal, the transaction is more likely genuine.",
+        "source": "document",
+        "ref": "llm:assess_evidence",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0003",
+      "CC-2370"
+    ],
+    "summary": "{\n  \"investigation_summary\": \"The alert for card C05876-K2 carries a low fraud probability of 0.12, indicating weak fraud signals. The flagged transaction is a modest $30.91 in-person purchase with a risk score of 0.55, which does not align with typical card\u2011testing behavior involving numerous low\u2011value attempts. Historical data show only three transactions on this card averaging $71.17, and the customer holds two cards, suggesting normal usage rather than testing activity. Prior cases for this customer have been cleared, further supporting a legitimate assessment.\"\n}",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-012"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "MONITOR_CARD",
+        "route": "auto",
+        "reason": "R1: Low probability 0.12, monitor for now"
+      }
+    ],
+    "final": [
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "Low fraud probability 0.12 < 0.15, insufficient evidence of fraud"
+      }
+    ],
+    "what_changed": "Added: CLOSE_NO_FRAUD; Removed: MONITOR_CARD"
+  },
+  "sar": {
+    "file": false,
+    "reason": "Verdict is not fraud",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Fraud probability 0.12 \u2264 0.15 with 6 pieces of evidence showing no fraud indicators",
+  "tool_calls": 8,
+  "tokens": 3934,
+  "latency_s": 27.5
+}

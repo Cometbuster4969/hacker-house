@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "acd1c949c24d2d3c61e6ad1590478a98",
+  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reported the $55.68 online purchase (ID 3558054) as unauthorized (evidence 1,7). The transaction originated from device DF89AEB, which is a shared device linked to 175 other cards, a known risk factor (evidence 6). The card has a history of 19 prior closed fraud cases, many classified as card_not_present_new_device (evidence 5,9). Although the risk score is moderate (0.38), the combination of a customer report, shared device, and extensive fraud history strongly points to fraud.\"}",
+  "cached_at": 1790267646.3306317
+}

@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "f915cb41103e1dc515f11a887ee4b3f3",
+  "response": "{\"investigation_summary\":\"The flagged transaction 3534820 of $59.67 was processed online using a new Windows device with Edge 16.0, which deviates from the cardholder\u2019s typical usage. Card C09988\u2011K1 normally shows 30 transactions averaging $45.99, making this higher amount and new device suspicious. Given the risk score of 0.37 and the deviation from historical behavior, the activity aligns with a card\u2011not\u2011present fraud pattern on a new device. No prior similar cases were identified, supporting a fraud determination.\",\"verdict\":\"fraud\",\"fraud_probability\":1.00,\"pattern\":\"card_not_present_new_device\",\"evidence\":[{\"id\":3534820,\"amount\":59.67,\"channel\":\"online\",\"risk_score\":0.37},{\"device\":\"Windows\",\"browser\":\"Edge\",\"version\":\"16.0\"},{\"card\":\"C09988-K1\",\"history_transactions\":30,\"average_amount\":45.99}]}",
+  "cached_at": 1790267894.3793428
+}

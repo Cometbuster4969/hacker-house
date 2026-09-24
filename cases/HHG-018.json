@@ -1,0 +1,172 @@
+{
+  "case_id": "HHG-018",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.55,
+    "pattern": "account_takeover",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3311243",
+      "3523768",
+      "3523535",
+      "3523392",
+      "3524115",
+      "3311203",
+      "3523709",
+      "3523384",
+      "3524102",
+      "3491361",
+      "3523668"
+    ],
+    "first_suspicious_txn_id": "3311243",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 1700.51,
+    "evidence": [
+      {
+        "claim": "Flagged transaction 3491361: $39.08, in_person channel, risk score 0.48",
+        "source": "graph",
+        "ref": "query:get_transaction(3491361)",
+        "entity_ids": [
+          "3491361"
+        ]
+      },
+      {
+        "claim": "Card C02354-K2 has 12 transactions in history, average amount $159.70",
+        "source": "graph",
+        "ref": "query:card_transactions(C02354-K2)",
+        "entity_ids": [
+          "C02354-K2"
+        ]
+      },
+      {
+        "claim": "Customer C02354 has 2 cards: C02354-K1, C02354-K2",
+        "source": "graph",
+        "ref": "query:customer_cards(C02354)",
+        "entity_ids": [
+          "C02354",
+          "C02354-K1",
+          "C02354-K2"
+        ]
+      },
+      {
+        "claim": "Billing region 126 has 1088 cards transacting in it",
+        "source": "graph",
+        "ref": "query:region_cards(126)",
+        "entity_ids": [
+          "126"
+        ]
+      },
+      {
+        "claim": "Found 20 prior closed cases for this card/customer: CC-0255, CC-0405, CC-0454, CC-0631, CC-1450, CC-1699, CC-2051, CC-2187, CC-2432, CC-2589, CC-3085, CC-3537, CC-3634, CC-3899, CC-4070, CC-4436, CC-4721, CC-4942, CC-5441, CC-5558",
+        "source": "graph",
+        "ref": "query:closed_cases(C02354-K2, C02354)",
+        "entity_ids": [
+          "CC-0255",
+          "CC-0405",
+          "CC-0454",
+          "CC-0631",
+          "CC-1450",
+          "CC-1699",
+          "CC-2051",
+          "CC-2187",
+          "CC-2432",
+          "CC-2589",
+          "CC-3085",
+          "CC-3537",
+          "CC-3634",
+          "CC-3899",
+          "CC-4070",
+          "CC-4436",
+          "CC-4721",
+          "CC-4942",
+          "CC-5441",
+          "CC-5558"
+        ]
+      },
+      {
+        "claim": "Card C02354-K2 shows high velocity: 8 transactions in 24h totaling $956.88",
+        "source": "graph",
+        "ref": "query:card_velocity(C02354-K2, 24h)",
+        "entity_ids": [
+          "3523384",
+          "3523392",
+          "3523535",
+          "3523668",
+          "3523709",
+          "3523768",
+          "3524102",
+          "3524115"
+        ]
+      },
+      {
+        "claim": "LLM analysis: Customer C02354 reports unauthorized $39.08 transaction 3491361 (evidence 1). The flagged amount is below the card's average $159.70 (evidence 2), suggesting a low-value test or probe. The card exhibits high velocity with 8 transactions in 24h totaling $956.88 (evidence 6) and a burst of 4+ transactions same day (graph-level signals), indicative of compromised card use. Prior cases for this card/customer show multiple confirmed frauds with account_takeover pattern (CC-0255, CC-0454, CC-1450) (evidence 5/prior cases). Together, these signals support an account takeover fraud verdict.",
+        "source": "document",
+        "ref": "llm:assess_evidence",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0255",
+      "CC-0405",
+      "CC-0454",
+      "CC-0631",
+      "CC-1450",
+      "CC-1699",
+      "CC-2051",
+      "CC-2187",
+      "CC-2432",
+      "CC-2589",
+      "CC-3085",
+      "CC-3537",
+      "CC-3634",
+      "CC-3899",
+      "CC-4070",
+      "CC-4436",
+      "CC-4721",
+      "CC-4942",
+      "CC-5441",
+      "CC-5558"
+    ],
+    "summary": "{\n  \"investigation_summary\": \"The alert for customer C02354 suggests a possible account takeover, as indicated by the flagged in-person transaction 3491361 for $39.08 with a risk score of 0.48 (evidence 1). Card C02354-K2, which belongs to the customer, has a history of 12 transactions averaging $159.70, making the low\u2011value flagged transaction anomalous relative to its usual activity (evidence 2). The customer holds two cards (C02354-K1 and C02354-K2), increasing the attack surface for credential compromise (evidence 3). A prior confirmed fraud case, CC-0255, involved an account takeover and a loss of $1,167.08, reinforcing the pattern observed here (evidence from prior cases).\"\n}",
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-018"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 6,
+      "assumed_response": "Customer C02354 states they did not make this purchase and still has the card"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Customer report requires verification before any blocking action"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: Customer report requires verification before any blocking action"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": false,
+    "reason": "No SAR triggers met: exposure below threshold and no shared connections",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Investigation complete; all available evidence examined",
+  "tool_calls": 8,
+  "tokens": 8114,
+  "latency_s": 36.3
+}

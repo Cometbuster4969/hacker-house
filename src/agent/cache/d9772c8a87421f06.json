@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "gemini-flash-latest",
+  "prompt_hash": "cc07b491aa56f130fb93a9fc4bb0a3a6",
+  "response": "{\n  \"fraud_probability\": 0.58,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"out_of_region_use\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"Customer C08623 explicitly reported flagged transaction 3530164 ($49.00) as unauthorized. Card C08623-K2 has extensive history of confirmed fraudulent card-present activity in remote regions across prior cases CC-2817, CC-2935, and CC-3682. Given the direct cardholder dispute corroborating an established pattern of physical out-of-region card compromise, the transaction is assessed as fraudulent.\"\n}",
+  "cached_at": 1790283814.6717887
+}

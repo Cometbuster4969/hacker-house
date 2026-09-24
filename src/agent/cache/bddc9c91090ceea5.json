@@ -1,0 +1,7 @@
+{
+  "provider": "openai",
+  "model": "openai/gpt-oss-120b",
+  "prompt_hash": "8623df31bcb5f298908320dfe4da70de",
+  "response": "{\"summary\":\"The flagged transaction 3514948 ($111.92, in_person) has a high risk score of 0.87, yet the card C09933\u2011K2 shows a typical spending pattern with four recent transactions averaging $115.98, indicating normal behavior. The customer C09933 holds two cards (C09933\u2011K2, C09933\u2011K1) and there is no identified fraud pattern, unlike prior case CC\u20110104 which involved out\u2011of\u2011region use. With a fraud probability of 0.35 and no clear anomalies, the investigation remains uncertain.\"}",
+  "cached_at": 1790267612.8093688
+}
