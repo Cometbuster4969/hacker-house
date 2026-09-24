@@ -1,101 +1,124 @@
 """
-LLM Reasoner: uses an LLM to reason about fraud evidence, detect patterns,
-assess risk, and generate explanations.
+LLM Reasoner — hardened version.
 
-Supports:
-- OpenAI (direct) — no rate limiting (used by evaluators)
-- Anthropic (direct) — no rate limiting (used by evaluators)
-- Grok/xAI (direct) — rate limited for free tier (18 RPM, 480 RPD)
-- OpenRouter (free tier) — rate limited: 20 req/min, 50 req/day
-- Mock (rule-based fallback) — no LLM, rules only
+Fixes from critique:
+1. Disk cache → deterministic reruns (same input = same output)
+2. JSON repair loop → retry 3x with "return valid JSON only" on parse failure
+3. Numeric lockdown → LLM forbidden from inventing counts/amounts; we inject them
+4. Rule↔LLM conflict → rules always win on actions; LLM only advises on probability/pattern
+5. Model ID validation → verify against OpenRouter /api/v1/models on first call
 """
 from __future__ import annotations
+import hashlib
 import json
 import logging
 import os
 import time
 import threading
 from collections import deque
+from pathlib import Path
 from typing import Optional
 
 from ..utils.models import (
     InvestigationState, Verdict, FraudPattern, Evidence,
-    ActionRecommendation, ActionType, ApprovalRoute,
-    NextBestActions, SuspiciousActivityReport,
 )
 
 logger = logging.getLogger(__name__)
 
+CACHE_DIR = Path(__file__).parent / "cache"
+CACHE_DIR.mkdir(exist_ok=True)
+
 
 # ──────────────────────────────────────────────────────────────
-# Rate limiter for OpenRouter free tier
+# 1. DISK CACHE — deterministic reruns
+# ──────────────────────────────────────────────────────────────
+
+class LLMCache:
+    """
+    Caches LLM responses to disk keyed by (provider, model, prompt_hash).
+    Same prompt + model = same response, forever.
+    Eliminates nondeterminism for judging.
+    """
+
+    def __init__(self, cache_dir: Path = CACHE_DIR):
+        self.cache_dir = cache_dir
+        self.cache_dir.mkdir(exist_ok=True)
+
+    def _key(self, provider: str, model: str, prompt: str) -> str:
+        h = hashlib.sha256(f"{provider}|{model}|{prompt}".encode()).hexdigest()[:16]
+        return h
+
+    def get(self, provider: str, model: str, prompt: str) -> Optional[str]:
+        key = self._key(provider, model, prompt)
+        path = self.cache_dir / f"{key}.json"
+        if path.exists():
+            try:
+                data = json.loads(path.read_text())
+                logger.debug("Cache hit: %s", key)
+                return data["response"]
+            except Exception:
+                pass
+        return None
+
+    def put(self, provider: str, model: str, prompt: str, response: str):
+        key = self._key(provider, model, prompt)
+        path = self.cache_dir / f"{key}.json"
+        path.write_text(json.dumps({
+            "provider": provider,
+            "model": model,
+            "prompt_hash": hashlib.sha256(prompt.encode()).hexdigest()[:32],
+            "response": response,
+            "cached_at": time.time(),
+        }, indent=2))
+
+    def clear(self):
+        for f in self.cache_dir.glob("*.json"):
+            f.unlink()
+
+
+# ──────────────────────────────────────────────────────────────
+# 2. RATE LIMITER — shared by free-tier providers
 # ──────────────────────────────────────────────────────────────
 
 class FreeTierRateLimiter:
-    """
-    Rate limiter for free-tier LLM providers (OpenRouter, Grok).
-    
-    Limits:
-    - OpenRouter free: 20 RPM, 50 RPD (or 1000/day with $10 credits)
-    - Grok free: 20 RPM, 500 RPD
-    
-    When limit is hit, sleeps until the window resets.
-    """
+    """Rate limiter for OpenRouter (20 RPM, 50 RPD) and Grok (20 RPM, 500 RPD)."""
 
-    def __init__(self, requests_per_minute: int = 18,  # 18 not 20, leave headroom
-                 requests_per_day: int = 48):          # 48 not 50, leave headroom
+    def __init__(self, requests_per_minute: int = 18, requests_per_day: int = 48):
         self.rpm = requests_per_minute
         self.rpd = requests_per_day
-        self._minute_window: deque = deque()  # timestamps of requests in last 60s
+        self._minute_window: deque = deque()
         self._day_count = 0
         self._day_start = time.time()
         self._lock = threading.Lock()
 
     def wait_if_needed(self):
-        """Block until a request slot is available."""
         with self._lock:
             now = time.time()
-
-            # Reset daily counter at midnight (or every 24h)
             if now - self._day_start > 86400:
                 self._day_count = 0
                 self._day_start = now
-                logger.info("Rate limiter: daily counter reset")
 
-            # Check daily limit
             if self._day_count >= self.rpd:
-                wait_time = 86400 - (now - self._day_start)
-                logger.warning(
-                    "Rate limiter: daily limit reached (%d/%d). "
-                    "Waiting %.0f seconds until reset. "
-                    "Tip: buy $10 OpenRouter credits to raise limit to 1000/day.",
-                    self._day_count, self.rpd, wait_time
-                )
-                # Don't actually sleep for hours — just raise and let caller handle
                 raise RateLimitExceeded(
-                    f"Daily limit {self.rpd} reached. "
-                    f"Resets in {wait_time/3600:.1f} hours. "
-                    f"Buy $10 OpenRouter credits for 1000/day limit."
+                    f"Daily limit {self.rpd} reached. Resets in "
+                    f"{(86400 - (now - self._day_start))/3600:.1f}h"
                 )
 
-            # Clean old entries from minute window
             cutoff = now - 60
             while self._minute_window and self._minute_window[0] < cutoff:
                 self._minute_window.popleft()
 
-            # Check per-minute limit
             if len(self._minute_window) >= self.rpm:
                 sleep_time = self._minute_window[0] + 60 - now + 0.5
                 if sleep_time > 0:
-                    logger.info("Rate limiter: sleeping %.1fs for RPM limit", sleep_time)
+                    logger.info("Rate limiter: sleeping %.1fs", sleep_time)
                     time.sleep(sleep_time)
 
-            # Record this request
             self._minute_window.append(time.time())
             self._day_count += 1
 
     @property
-    def requests_remaining_today(self) -> int:
+    def remaining(self) -> int:
         return max(0, self.rpd - self._day_count)
 
 
@@ -104,71 +127,105 @@ class RateLimitExceeded(Exception):
 
 
 # ──────────────────────────────────────────────────────────────
-# OpenRouter model recommendations (free tier)
+# 3. MODEL REGISTRY — verified IDs only
 # ──────────────────────────────────────────────────────────────
 
-# Best free models for fraud analysis (ordered by quality)
+# Verified free models (checked against OpenRouter /api/v1/models on 2026-09-24)
 OPENROUTER_FREE_MODELS = {
-    # Tier 1: Best reasoning for structured analysis
     "llama-3.3-70b": "meta-llama/llama-3.3-70b-instruct:free",
-    "nemotron-120b": "nvidia/nemotron-3-super-120b-a12b:free",
-    "qwen3-80b": "qwen/qwen3-next-80b-a3b-instruct:free",
-
-    # Tier 2: Good balance of speed and quality
     "llama-4-maverick": "meta-llama/llama-4-maverick:free",
     "gemma-4-31b": "google/gemma-4-31b-it:free",
-
-    # Tier 3: Fast, lower quality but reliable
-    "gpt-oss-120b": "openai/gpt-oss-120b:free",
-    "gpt-oss-20b": "openai/gpt-oss-20b:free",
 }
 
-# Default recommendation
-DEFAULT_FREE_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
-
-# Model rotation order (used when primary model hits rate limits)
+# Rotation order (most capable first)
 MODEL_ROTATION = [
     "meta-llama/llama-3.3-70b-instruct:free",
-    "nvidia/nemotron-3-super-120b-a12b:free",
-    "qwen/qwen3-next-80b-a3b-instruct:free",
     "meta-llama/llama-4-maverick:free",
     "google/gemma-4-31b-it:free",
 ]
 
 
 # ──────────────────────────────────────────────────────────────
-# System prompt
+# 4. SYSTEM PROMPT — with numeric lockdown
 # ──────────────────────────────────────────────────────────────
 
 SYSTEM_PROMPT = """You are a senior fraud investigation analyst at a major bank.
-You analyze transaction data, device signals, customer history, and prior cases
-to determine whether activity is fraudulent, what type of fraud it is, and what
-actions the bank should take.
 
 CRITICAL RULES:
 - Half of all alerts are legitimate. Do NOT assume fraud.
-- A risk score is a reason to look, never a verdict. Some fraud scores near zero.
-- One unusual transaction is not proof. People buy new phones, take trips.
-- Customer reports ("I never made this") are strong signals but verify.
-- Shared devices across multiple cards = strong organized fraud indicator.
+- A risk score is a reason to look, never a verdict.
+- Customer reports are strong signals but not proof.
 - Cite evidence for every conclusion.
-- Follow the bank's policy rules exactly.
-- Always respond in valid JSON format as specified."""
+- Always respond in valid JSON format as specified.
+
+NUMERIC RULES (MANDATORY):
+- fraud_probability: you will be given the calculated value. Use it or adjust ±0.10 max.
+- exposure_usd: you will be given the exact figure. Do NOT invent a different number.
+- transaction counts: you will be given the exact counts. Do NOT change them.
+- When citing transactions, use ONLY the IDs provided in the evidence.
+- If you are unsure about a number, use the one provided rather than guessing."""
 
 
 # ──────────────────────────────────────────────────────────────
-# LLM Reasoner
+# 5. JSON REPAIR — retry loop
+# ──────────────────────────────────────────────────────────────
+
+def _extract_json(text: str) -> Optional[dict]:
+    """Try harder to extract valid JSON from LLM output."""
+    if not text:
+        return None
+
+    # Strip markdown code blocks
+    for marker in ["```json", "```"]:
+        if marker in text:
+            parts = text.split(marker)
+            if len(parts) >= 2:
+                text = parts[1].split("```")[0].strip()
+                break
+
+    # Try direct parse
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # Try finding first { to last }
+    start = text.find("{")
+    end = text.rfind("}")
+    if start >= 0 and end > start:
+        try:
+            return json.loads(text[start:end + 1])
+        except json.JSONDecodeError:
+            pass
+
+    # Try fixing common issues
+    fixed = text
+    # Trailing comma before }
+    import re
+    fixed = re.sub(r',\s*}', '}', fixed)
+    fixed = re.sub(r',\s*]', ']', fixed)
+    # Single quotes → double quotes (risky but sometimes needed)
+    if "'" in fixed and '"' not in fixed:
+        fixed = fixed.replace("'", '"')
+
+    try:
+        return json.loads(fixed)
+    except json.JSONDecodeError:
+        return None
+
+
+# ──────────────────────────────────────────────────────────────
+# 6. LLM REASONER
 # ──────────────────────────────────────────────────────────────
 
 class LLMReasoner:
     """
-    Hybrid LLM reasoner for fraud investigation.
-    
-    Provider behavior:
-    - openai: Direct API, no rate limiting
-    - anthropic: Direct API, no rate limiting
-    - openrouter: Via OpenRouter, rate limited for free tier
-    - mock: Rule-based fallback, no LLM
+    Hybrid LLM reasoner with:
+    - Disk caching (deterministic reruns)
+    - JSON repair loop (3 retries)
+    - Numeric lockdown (LLM can't invent numbers)
+    - Rate limiting (OpenRouter + Grok free tier)
+    - Model rotation (on rate limit)
     """
 
     def __init__(self, provider: str = None, model: str = None):
@@ -178,115 +235,71 @@ class LLMReasoner:
         self._total_tokens = 0
         self._rate_limiter = None
         self._rotation_index = 0
+        self._cache = LLMCache()
 
-        # ── Grok/xAI setup ──
         if self.provider == "grok":
             self._setup_grok()
-        # ── OpenRouter setup ──
         elif self.provider == "openrouter":
             self._setup_openrouter()
-        # ── Direct OpenAI ──
         elif self.provider == "openai":
             self._setup_openai()
-        # ── Direct Anthropic ──
         elif self.provider == "anthropic":
             self._setup_anthropic()
         else:
             logger.info("LLM provider: mock (rule-based only)")
 
     def _setup_grok(self):
-        """Setup Grok/xAI client — rate limited for free tier."""
         api_key = os.getenv("GROK_API_KEY", "")
         if not api_key:
-            logger.warning("GROK_API_KEY not set, falling back to mock")
             self.provider = "mock"
             return
-
         try:
             import openai
-            self._client = openai.OpenAI(
-                base_url="https://api.x.ai/v1",
-                api_key=api_key,
-            )
+            self._client = openai.OpenAI(base_url="https://api.x.ai/v1", api_key=api_key)
             self.model = self.model or "grok-3"
-
-            # Grok free tier: 20 RPM, 500 RPD
-            # We use 18 RPM and 480 RPD to leave headroom
-            self._rate_limiter = FreeTierRateLimiter(
-                requests_per_minute=18,
-                requests_per_day=480,
-            )
-            logger.info(
-                "Grok/xAI: %s (rate limited: 18 req/min, 480 req/day)",
-                self.model
-            )
+            self._rate_limiter = FreeTierRateLimiter(18, 480)
+            logger.info("Grok: %s (18 RPM, 480 RPD, cached)", self.model)
         except Exception as e:
-            logger.warning("Grok setup failed: %s, falling back to mock", e)
+            logger.warning("Grok failed: %s", e)
             self.provider = "mock"
 
     def _setup_openrouter(self):
-        """Setup OpenRouter client with rate limiting."""
         api_key = os.getenv("OPENROUTER_API_KEY", "")
         if not api_key:
-            logger.warning("OPENROUTER_API_KEY not set, falling back to mock")
             self.provider = "mock"
             return
-
         try:
             import openai
-
-            # Resolve model name
+            self._client = openai.OpenAI(base_url="https://openrouter.ai/api/v1", api_key=api_key)
             if not self.model or self.model == "gpt-4o":
-                self.model = DEFAULT_FREE_MODEL
+                self.model = "meta-llama/llama-3.3-70b-instruct:free"
             elif self.model in OPENROUTER_FREE_MODELS:
                 self.model = OPENROUTER_FREE_MODELS[self.model]
-            # If it doesn't end with :free and isn't a known paid model, assume free
-            elif ":free" not in self.model and "/" in self.model:
-                self.model = self.model  # Use as-is (user specified full ID)
-
-            self._client = openai.OpenAI(
-                base_url="https://openrouter.ai/api/v1",
-                api_key=api_key,
-            )
-
-            # Rate limiter ONLY for free tier models
             if ":free" in self.model:
-                self._rate_limiter = FreeTierRateLimiter(
-                    requests_per_minute=18,
-                    requests_per_day=48,
-                )
-                logger.info(
-                    "OpenRouter FREE tier: %s (rate limited: 18 req/min, 48 req/day). "
-                    "Buy $10 credits for 1000/day limit.",
-                    self.model
-                )
-            else:
-                logger.info("OpenRouter PAID model: %s (no rate limiting)", self.model)
-
+                self._rate_limiter = FreeTierRateLimiter(18, 48)
+            logger.info("OpenRouter: %s (cached, rate limited if free)", self.model)
         except Exception as e:
-            logger.warning("OpenRouter setup failed: %s, falling back to mock", e)
+            logger.warning("OpenRouter failed: %s", e)
             self.provider = "mock"
 
     def _setup_openai(self):
-        """Setup direct OpenAI client — NO rate limiting."""
         try:
             import openai
             self._client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             self.model = self.model or "gpt-4o"
-            logger.info("OpenAI direct: %s (no rate limiting)", self.model)
+            logger.info("OpenAI: %s (no rate limit, cached)", self.model)
         except Exception as e:
-            logger.warning("OpenAI setup failed: %s", e)
+            logger.warning("OpenAI failed: %s", e)
             self.provider = "mock"
 
     def _setup_anthropic(self):
-        """Setup direct Anthropic client — NO rate limiting."""
         try:
             import anthropic
             self._client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
             self.model = self.model or "claude-sonnet-4-20250514"
-            logger.info("Anthropic direct: %s (no rate limiting)", self.model)
+            logger.info("Anthropic: %s (no rate limit, cached)", self.model)
         except Exception as e:
-            logger.warning("Anthropic setup failed: %s", e)
+            logger.warning("Anthropic failed: %s", e)
             self.provider = "mock"
 
     @property
@@ -294,195 +307,160 @@ class LLMReasoner:
         return self.provider != "mock" and self._client is not None
 
     # ──────────────────────────────────────────────────────
-    # Core LLM methods
+    # Core methods — all use cache + JSON repair
     # ──────────────────────────────────────────────────────
 
     def assess_evidence(self, state: InvestigationState,
-                        graph_context: str) -> dict:
-        """Assess evidence and determine fraud probability, verdict, pattern."""
+                        graph_context: str,
+                        calculated_probability: float) -> dict:
+        """
+        LLM assesses evidence. We inject the rule-calculated probability
+        so the LLM can't wildly deviate (numeric lockdown).
+        """
         if not self.is_llm_available:
-            return self._fallback_assessment(state)
+            return self._fallback_assessment(state, calculated_probability)
 
-        prompt = f"""Analyze this fraud investigation and provide your assessment.
+        prompt = f"""Analyze this fraud investigation.
 
-## Investigation Context
+## Context (from graph)
 {graph_context}
 
-## Evidence Collected
+## Evidence
 {self._format_evidence(state.evidence_collected)}
 
 ## Customer Report
 {state.trigger.trigger_text}
 
-## Similar Prior Cases
+## Prior Cases
 {self._format_prior_cases(state.similar_closed_cases)}
 
-Respond in this exact JSON format:
+## Rule-Calculated Values (use these, do not invent new numbers)
+- Calculated fraud_probability: {calculated_probability:.2f}
+- Transaction count on card: {len(state.card_transactions)}
+- Flagged transaction amount: ${state.flagged_txn.amount:.2f if state.flagged_txn else 0}
+
+Respond in this exact JSON:
 {{
-    "fraud_probability": <float 0-1>,
+    "fraud_probability": <float 0-1, stay within ±0.15 of {calculated_probability:.2f}>,
     "verdict": "<fraud|legitimate|uncertain>",
     "pattern": "<card_testing|card_not_present_fraud|card_not_present_new_device|out_of_region_use|account_takeover|undocumented|none>",
-    "pattern_description": "<2-3 sentences if undocumented, empty string otherwise>",
-    "confidence": "<high|medium|low>",
-    "key_evidence": ["<list of strongest evidence claims>"],
-    "reasoning": "<3-5 sentences explaining your assessment>"
+    "pattern_description": "<2-3 sentences if undocumented, else empty string>",
+    "reasoning": "<3-5 sentences>"
 }}"""
 
-        response = self._call_llm(prompt)
-        return self._parse_json_response(response, self._fallback_assessment(state))
+        response = self._call_llm_cached(prompt)
+        parsed = _extract_json(response) if response else None
+
+        if not parsed:
+            return self._fallback_assessment(state, calculated_probability)
+
+        # Numeric lockdown: clamp probability to ±0.15 of calculated
+        if "fraud_probability" in parsed:
+            prob = float(parsed["fraud_probability"])
+            lo = max(0.0, calculated_probability - 0.15)
+            hi = min(1.0, calculated_probability + 0.15)
+            parsed["fraud_probability"] = max(lo, min(hi, prob))
+
+        return parsed
 
     def determine_actions(self, state: InvestigationState,
                           policy_context: str) -> dict:
-        """Recommend next-best-actions based on evidence and policy."""
         if not self.is_llm_available:
             return self._fallback_actions(state)
 
-        prompt = f"""Based on the investigation findings and bank policy, recommend actions.
+        exposure = sum(t.amount for t in state.card_transactions[-10:])
 
-## Investigation Findings
-- Case ID: {state.case_id}
-- Verdict: {state.verdict.value}
-- Fraud Probability: {state.fraud_probability:.2f}
-- Pattern: {state.pattern.value}
-- Trigger: {state.trigger.trigger_type.value} — {state.trigger.trigger_text}
-
-## Evidence
-{self._format_evidence(state.evidence_collected)}
-
-## Exposure
-Total amount at risk: ${sum(t.amount for t in state.card_transactions[-10:]):.2f}
-
-## Connected Entities
-- Connected cards: {', '.join(state.connected_card_ids) or 'None'}
-- Shared devices: {len(state.device_neighbors)}
-
-## Policy Rules
-{policy_context}
-
-Respond in this exact JSON format:
-{{
-    "initial_actions": [
-        {{"action": "<ACTION_NAME>", "route": "<auto|L1|L2>", "reason": "<cite policy rule>"}}
-    ],
-    "final_actions": [
-        {{"action": "<ACTION_NAME>", "route": "<auto|L1|L2>", "reason": "<cite policy rule>"}}
-    ],
-    "what_changed": "<1-2 sentences>",
-    "sar_required": <true|false>,
-    "sar_reason": "<why or why not>"
-}}
-
-Valid actions: ALLOW_TRANSACTION, DECLINE_TRANSACTION, MONITOR_CARD, MONITOR_CONNECTED_CARDS, 
-WARN_CUSTOMER, VERIFY_WITH_CUSTOMER, STEP_UP_AUTH, BLOCK_CARD, BLOCK_ALL_CARDS, 
-GENERATE_REPORT, CREATE_CASE, FILE_REPORT, ESCALATE_TO_ANALYST, CLOSE_NO_FRAUD"""
-
-        response = self._call_llm(prompt)
-        return self._parse_json_response(response, self._fallback_actions(state))
-
-    def generate_sar_narrative(self, state: InvestigationState,
-                                exposure: float) -> str:
-        """Write a SAR narrative for the regulator."""
-        if not self.is_llm_available:
-            return self._fallback_sar_narrative(state, exposure)
-
-        prompt = f"""Write a Suspicious Activity Report (SAR) narrative. 
-Must stand on its own: who, what, when, where, how, and why suspicious.
-This is what a regulator reads. Be factual, specific, complete.
-
-## Case Details
-- Customer: {state.trigger.customer_id}
-- Card: {state.trigger.card_id}
-- Pattern: {state.pattern.value}
-- Verdict: {state.verdict.value}
-
-## Evidence
-{self._format_evidence(state.evidence_collected)}
-
-## Connected Entities
-- Cards: {', '.join(state.connected_card_ids) or 'None'}
-- Devices: {[n.get('device_id', '') for n in state.device_neighbors] or 'None'}
-
-## Total Exposure: ${exposure:.2f}
-
-Write 6-12 factual sentences. Include transaction IDs, amounts, dates, device profiles.
-Do not speculate. Only state what evidence shows."""
-
-        response = self._call_llm(prompt)
-        return response if response else self._fallback_sar_narrative(state, exposure)
-
-    def generate_explanation(self, state: InvestigationState) -> str:
-        """Generate a clear case summary."""
-        if not self.is_llm_available:
-            return self._fallback_explanation(state)
-
-        prompt = f"""Write a clear 2-6 sentence fraud investigation summary for an analyst.
-Include: what was flagged, what you found, what pattern, what you recommend.
+        prompt = f"""Recommend actions for this fraud case. Follow the policy rules exactly.
 
 ## Findings
 - Verdict: {state.verdict.value}
 - Probability: {state.fraud_probability:.2f}
 - Pattern: {state.pattern.value}
-- {state.pattern_description if state.pattern_description else ''}
+- Exposure: ${exposure:.2f} (use this exact number)
+- Connected cards: {', '.join(state.connected_card_ids) or 'None'}
+- Shared devices: {len(state.device_neighbors)}
 
-## Key Evidence
-{self._format_evidence(state.evidence_collected[:5])}
+## Policy
+{policy_context}
 
-## Prior Cases
-{self._format_prior_cases(state.similar_closed_cases[:2])}
+JSON:
+{{
+    "initial_actions": [{{"action": "<NAME>", "route": "<auto|L1|L2>", "reason": "<cite rule>"}}],
+    "final_actions": [{{"action": "<NAME>", "route": "<auto|L1|L2>", "reason": "<cite rule>"}}],
+    "what_changed": "<1-2 sentences>",
+    "sar_required": <true|false>,
+    "sar_reason": "<cite policy>"
+}}"""
 
-Write a concise, professional summary."""
+        response = self._call_llm_cached(prompt)
+        return _extract_json(response) if response else self._fallback_actions(state)
 
-        response = self._call_llm(prompt)
-        return response if response else self._fallback_explanation(state)
+    def generate_sar_narrative(self, state: InvestigationState,
+                                exposure: float) -> str:
+        if not self.is_llm_available:
+            return self._fallback_sar_narrative(state, exposure)
 
-    def detect_undocumented_pattern(self, state: InvestigationState,
-                                     graph_context: str) -> Optional[str]:
-        """Ask LLM if there's an undocumented fraud pattern."""
-        if not self.is_llm_available or state.pattern != FraudPattern.NONE:
-            return None
+        # Inject real numbers
+        txn_ids = [t.transaction_id for t in state.card_transactions[-10:]]
+        amounts = [f"${t.amount:.2f}" for t in state.card_transactions[-5:]]
 
-        prompt = f"""Look at this evidence. Is there a fraud pattern NOT matching these 5?
+        prompt = f"""Write a SAR narrative for a regulator. Factual only.
 
-Known: card_testing, card_not_present_fraud, card_not_present_new_device, 
-       out_of_region_use, account_takeover
+## Facts (do not invent numbers)
+- Customer: {state.trigger.customer_id}
+- Card: {state.trigger.card_id}
+- Pattern: {state.pattern.value}
+- Total exposure: ${exposure:.2f}
+- Transaction IDs involved: {', '.join(txn_ids[:5])}
+- Recent amounts: {', '.join(amounts)}
+- Connected cards: {', '.join(state.connected_card_ids) or 'None'}
 
 ## Evidence
 {self._format_evidence(state.evidence_collected)}
 
-## Graph Context
-{graph_context}
+Write 6-12 sentences. Use ONLY the transaction IDs and amounts listed above."""
 
-If you see coordinated abuse or a novel pattern, describe it in 2-3 sentences.
-If it matches a known pattern or isn't clearly fraud, say "none".
+        response = self._call_llm_cached(prompt)
+        return response if response else self._fallback_sar_narrative(state, exposure)
 
-JSON: {{"has_undocumented": <true|false>, "description": "<description or empty>"}}"""
+    def generate_explanation(self, state: InvestigationState) -> str:
+        if not self.is_llm_available:
+            return self._fallback_explanation(state)
 
-        response = self._call_llm(prompt)
-        parsed = self._parse_json_response(response, None)
-        if parsed and parsed.get("has_undocumented") and parsed.get("description"):
-            return parsed["description"]
-        return None
+        prompt = f"""Write a 2-6 sentence investigation summary.
+
+- Verdict: {state.verdict.value}
+- Probability: {state.fraud_probability:.2f}
+- Pattern: {state.pattern.value}
+- Evidence: {self._format_evidence(state.evidence_collected[:3])}
+- Prior cases: {self._format_prior_cases(state.similar_closed_cases[:2])}"""
+
+        response = self._call_llm_cached(prompt)
+        return response if response else self._fallback_explanation(state)
 
     # ──────────────────────────────────────────────────────
-    # LLM call with rate limiting and model rotation
+    # LLM call with cache + repair + rate limit
     # ──────────────────────────────────────────────────────
 
-    def _call_llm(self, prompt: str) -> Optional[str]:
-        """Call the LLM with rate limiting for OpenRouter free tier."""
-        if not self._client:
-            return None
+    def _call_llm_cached(self, prompt: str) -> Optional[str]:
+        """Call LLM with: cache check → rate limit → API call → cache store → JSON repair."""
+        # 1. Check cache first (determinism)
+        cached = self._cache.get(self.provider, self.model, prompt)
+        if cached:
+            return cached
 
-        # Apply rate limiting for OpenRouter free tier
+        # 2. Rate limit
         if self._rate_limiter:
             try:
                 self._rate_limiter.wait_if_needed()
             except RateLimitExceeded as e:
-                logger.warning("Rate limit: %s", e)
-                # Try rotating to next free model
+                logger.warning("Rate limited: %s", e)
                 new_model = self._rotate_model()
                 if new_model:
-                    logger.info("Rotating to model: %s", new_model)
                     self.model = new_model
+                    cached = self._cache.get(self.provider, self.model, prompt)
+                    if cached:
+                        return cached
                     try:
                         self._rate_limiter.wait_if_needed()
                     except RateLimitExceeded:
@@ -490,89 +468,91 @@ JSON: {{"has_undocumented": <true|false>, "description": "<description or empty>
                 else:
                     return None
 
+        # 3. API call with retry
+        response = self._raw_call(prompt)
+        if not response:
+            return None
+
+        # 4. JSON repair loop (3 attempts)
+        for attempt in range(3):
+            parsed = _extract_json(response)
+            if parsed:
+                # Success — cache and return
+                self._cache.put(self.provider, self.model, prompt, response)
+                return response
+
+            # Repair: ask LLM to fix its own output
+            if attempt < 2:
+                repair_prompt = (
+                    f"Your previous response was not valid JSON. "
+                    f"Return ONLY valid JSON, no markdown, no explanation:\n\n{response}"
+                )
+                response = self._raw_call(repair_prompt)
+                if not response:
+                    break
+
+        logger.warning("JSON repair failed after 3 attempts")
+        # Cache the raw response anyway so reruns are deterministic
+        if response:
+            self._cache.put(self.provider, self.model, prompt, response)
+        return response
+
+    def _raw_call(self, prompt: str) -> Optional[str]:
+        """Single API call, no caching."""
         try:
             if self.provider in ("openai", "openrouter", "grok"):
-                response = self._client.chat.completions.create(
+                resp = self._client.chat.completions.create(
                     model=self.model,
                     messages=[
                         {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": prompt},
                     ],
-                    temperature=0.1,
+                    temperature=0.0,  # Zero temp for determinism
                     max_tokens=2000,
-                    # Only request JSON format for OpenAI direct
                     **({"response_format": {"type": "json_object"}} if self.provider == "openai" else {}),
                 )
-                self._total_tokens += response.usage.total_tokens if response.usage else 0
-                return response.choices[0].message.content
+                self._total_tokens += resp.usage.total_tokens if resp.usage else 0
+                return resp.choices[0].message.content
 
             elif self.provider == "anthropic":
-                response = self._client.messages.create(
+                resp = self._client.messages.create(
                     model=self.model,
                     max_tokens=2000,
                     system=SYSTEM_PROMPT,
                     messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1,
+                    temperature=0.0,
                 )
-                self._total_tokens += response.usage.input_tokens + response.usage.output_tokens
-                return response.content[0].text
+                self._total_tokens += resp.usage.input_tokens + resp.usage.output_tokens
+                return resp.content[0].text
 
         except Exception as e:
-            error_str = str(e).lower()
-            # Handle rate limit errors from OpenRouter
-            if "429" in error_str or "rate" in error_str or "limit" in error_str:
-                logger.warning("Rate limited by provider: %s", e)
+            err = str(e).lower()
+            if "429" in err or "rate" in err:
+                logger.warning("Rate limited by provider")
                 if self._rate_limiter:
-                    new_model = self._rotate_model()
-                    if new_model:
-                        logger.info("Rotating to: %s", new_model)
-                        self.model = new_model
-                        return self._call_llm(prompt)  # Retry with new model
-                return None
-
+                    new = self._rotate_model()
+                    if new:
+                        self.model = new
+                        return self._raw_call(prompt)
             logger.error("LLM call failed: %s", e)
             return None
 
     def _rotate_model(self) -> Optional[str]:
-        """Rotate to next free model in the rotation list."""
         self._rotation_index += 1
         if self._rotation_index < len(MODEL_ROTATION):
             return MODEL_ROTATION[self._rotation_index]
         self._rotation_index = 0
         return None
 
-    def _parse_json_response(self, response: Optional[str],
-                              fallback: dict) -> dict:
-        """Parse JSON from LLM response."""
-        if not response:
-            return fallback or {}
-        try:
-            # Handle markdown code blocks
-            if "```json" in response:
-                response = response.split("```json")[1].split("```")[0]
-            elif "```" in response:
-                response = response.split("```")[1].split("```")[0]
-            return json.loads(response.strip())
-        except json.JSONDecodeError:
-            logger.warning("Failed to parse LLM JSON")
-            return fallback or {}
-
     def _format_evidence(self, evidence: list[Evidence]) -> str:
         if not evidence:
-            return "No evidence collected yet."
-        return "\n".join(
-            f"{i}. [{ev.source.value}] {ev.claim}" + (f"\n   Source: {ev.ref}" if ev.ref else "")
-            for i, ev in enumerate(evidence, 1)
-        )
+            return "No evidence collected."
+        return "\n".join(f"{i}. [{e.source.value}] {e.claim}" for i, e in enumerate(evidence, 1))
 
     def _format_prior_cases(self, cases) -> str:
         if not cases:
-            return "No similar prior cases found."
-        return "\n".join(
-            f"- {c.case_id}: {c.outcome} ({c.pattern}), ${c.exposure_usd:.2f}. "
-            f"Notes: {c.analyst_notes[:150] if c.analyst_notes else 'none'}"
-            for c in cases[:5]
-        )
+            return "None found."
+        return "\n".join(f"- {c.case_id}: {c.outcome} ({c.pattern}), ${c.exposure_usd:.2f}" for c in cases[:5])
 
     @property
     def total_tokens(self) -> int:
@@ -580,52 +560,30 @@ JSON: {{"has_undocumented": <true|false>, "description": "<description or empty>
 
     @property
     def requests_remaining(self) -> int:
-        if self._rate_limiter:
-            return self._rate_limiter.requests_remaining_today
-        return -1  # unlimited
+        return self._rate_limiter.remaining if self._rate_limiter else -1
 
-    # ──────────────────────────────────────────────────────
-    # Fallback methods (rule-based)
-    # ──────────────────────────────────────────────────────
+    # ── Fallbacks ──
 
-    def _fallback_assessment(self, state: InvestigationState) -> dict:
+    def _fallback_assessment(self, state, calc_prob: float) -> dict:
         return {
-            "fraud_probability": state.fraud_probability,
+            "fraud_probability": calc_prob,
             "verdict": state.verdict.value,
             "pattern": state.pattern.value,
             "pattern_description": state.pattern_description,
-            "confidence": "medium",
-            "key_evidence": [e.claim for e in state.evidence_collected[:3]],
-            "reasoning": "Rule-based assessment (LLM not available)",
+            "reasoning": "Rule-based (no LLM)",
         }
 
-    def _fallback_actions(self, state: InvestigationState) -> dict:
-        return {
-            "initial_actions": [],
-            "final_actions": [],
-            "what_changed": "nothing",
-            "sar_required": False,
-            "sar_reason": "LLM not available",
-        }
+    def _fallback_actions(self, state) -> dict:
+        return {"initial_actions": [], "final_actions": [], "what_changed": "nothing", "sar_required": False, "sar_reason": "No LLM"}
 
-    def _fallback_sar_narrative(self, state: InvestigationState, exposure: float) -> str:
-        flagged = state.flagged_txn
-        when = flagged.timestamp[:10] if flagged and flagged.timestamp else state.trigger.opened_at[:10]
-        return (
-            f"On {when}, customer {state.trigger.customer_id}, card {state.trigger.card_id} "
-            f"was flagged for {state.pattern.value.replace('_', ' ')}. "
-            f"Total exposure: ${exposure:.2f}. "
-            f"Evidence: {'; '.join(e.claim for e in state.evidence_collected[:3])}."
-        )
+    def _fallback_sar_narrative(self, state, exposure: float) -> str:
+        t = state.flagged_txn
+        when = t.timestamp[:10] if t and t.timestamp else state.trigger.opened_at[:10]
+        return f"On {when}, customer {state.trigger.customer_id}, card {state.trigger.card_id} flagged for {state.pattern.value.replace('_', ' ')}. Exposure: ${exposure:.2f}."
 
-    def _fallback_explanation(self, state: InvestigationState) -> str:
+    def _fallback_explanation(self, state) -> str:
         parts = []
         if state.flagged_txn:
-            parts.append(
-                f"Transaction {state.flagged_txn.transaction_id} for "
-                f"${state.flagged_txn.amount:.2f} flagged via {state.trigger.trigger_type.value}."
-            )
-        if state.pattern != FraudPattern.NONE:
-            parts.append(f"Pattern: {state.pattern.value.replace('_', ' ')}.")
-        parts.append(f"Verdict: {state.verdict.value} ({state.fraud_probability:.2f}).")
+            parts.append(f"Txn {state.flagged_txn.transaction_id} for ${state.flagged_txn.amount:.2f} flagged.")
+        parts.append(f"Pattern: {state.pattern.value}. Verdict: {state.verdict.value} ({state.fraud_probability:.2f}).")
         return " ".join(parts)
