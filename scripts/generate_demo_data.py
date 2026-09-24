@@ -324,7 +324,24 @@ def generate_case_pack(transactions):
 
 
 def main():
-    print("=== Generating Demo Dataset ===")
+    # Safety guard: never silently overwrite the real HHGOA dataset.
+    # The real closed_cases_history.csv is ~2.6 MB / 5,565 cases; the synthetic
+    # one is much smaller. Require an explicit --force to overwrite anything.
+    import sys
+    existing = [
+        f for f in ("transactions.csv", "identity.csv",
+                    "closed_cases_history.csv", "case_pack.csv")
+        if (DATA_DIR / f).exists()
+    ]
+    if existing and "--force" not in sys.argv:
+        print("REFUSING to overwrite existing dataset files in "
+              f"{DATA_DIR}: {', '.join(existing)}")
+        print("These may be the REAL HHGOA benchmark files. This script")
+        print("generates SYNTHETIC demo data for testing only.")
+        print("Re-run with --force if you really want to replace them.")
+        sys.exit(1)
+
+    print("=== Generating Demo Dataset (SYNTHETIC — testing only) ===")
     print(f"Output: {DATA_DIR}")
     print()
 
