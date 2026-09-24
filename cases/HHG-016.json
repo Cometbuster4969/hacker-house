@@ -7,18 +7,23 @@
     "pattern": "card_testing",
     "pattern_description": "Card testing: 2 small online authorizations ($9.37 total) followed by a larger purchase. Consistent with testing a stolen card number before use.",
     "affected_txn_ids": [
-      "T0002526",
-      "T0001919",
-      "T0003777",
-      "T0004693",
-      "T0004860",
-      "T0002754",
-      "T0001247",
       "T0000203",
       "T0003820",
-      "T0003170"
+      "T0005740",
+      "T0003777",
+      "T0002754",
+      "T0003267",
+      "T0003266",
+      "T0002526",
+      "T0004860",
+      "T0006565",
+      "T0001919",
+      "T0001247",
+      "T0003170",
+      "T0000193",
+      "T0004693"
     ],
-    "first_suspicious_txn_id": "T0002526",
+    "first_suspicious_txn_id": "T0000203",
     "connected_card_ids": [],
     "connected_device_profiles": [
       "D557773"
@@ -50,13 +55,13 @@
         ]
       },
       {
-        "claim": "Customer C00174 has 2 cards: C00174-K1, C00174-K2",
+        "claim": "Customer C00174 has 2 cards: C00174-K2, C00174-K1",
         "source": "graph",
         "ref": "query:customer_cards(C00174)",
         "entity_ids": [
           "C00174",
-          "C00174-K1",
-          "C00174-K2"
+          "C00174-K2",
+          "C00174-K1"
         ]
       },
       {
@@ -87,14 +92,14 @@
       }
     ],
     "similar_prior_cases": [],
-    "summary": "Transaction T0001247 for $200.09 (online) on card C00174-K1 was flagged via customer_report. Card testing: 2 small online authorizations ($9.37 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Key evidence: Flagged transaction T0001247: $200.09, online channel, risk score 0.56; Transaction came from device: SAMSUNG SM-G935F Build/NRD90M (Android 8.0, chrome for android, 2220x1080). Verdict: fraud (probability 1.00).",
+    "summary": "Transaction T0001247 for $200.09 (online) on card C00174-K1 was flagged via customer_report. Card testing: 2 small online authorizations ($9.37 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Evidence: Flagged transaction T0001247: $200.09, online channel, risk score 0.56; Transaction came from device: SAMSUNG SM-G935F Build/NRD90M (Android 8.0, chrome for android, 2220x1080). Verdict: fraud (1.00).",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-016"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 5,
+      "asked_after_step": 6,
       "assumed_response": "Customer C00174 states they did not make this purchase and still has the card"
     }
   ],
@@ -138,12 +143,12 @@
         "reason": "Shared device profile detected"
       }
     ],
-    "what_changed": "Added: MONITOR_CONNECTED_CARDS, FILE_REPORT, BLOCK_CARD; Removed: DECLINE_TRANSACTION, STEP_UP_AUTH"
+    "what_changed": "Added: FILE_REPORT, BLOCK_CARD, MONITOR_CONNECTED_CARDS; Removed: DECLINE_TRANSACTION, STEP_UP_AUTH"
   },
   "sar": {
     "file": true,
     "reason": "Shared device profile linking multiple cards",
-    "narrative": "On 2016-10-27, Customer C00174, card C00174-K1 was flagged for card testing, $200.09 online transaction. Location: online. Card testing: 2 small online authorizations ($9.37 total) followed by a larger purchase. Consistent with testing a stolen card number before use.. Activity linked to device shared across 2 cards. The activity is suspicious because: Flagged transaction T0001247: $200.09, online channel, risk score 0.56. Transaction came from device: SAMSUNG SM-G935F Build/NRD90M (Android 8.0, chrome for android, 2220x1080). Card C00174-K1 has 16 transactions in history, average amount $44.49. Customer C00174 has 2 cards: C00174-K1, C00174-K2. Billing region 160 has 180 cards transacting in it. Total exposure: $466.30. Investigation pattern: card_testing.",
+    "narrative": "On 2016-10-27, Customer C00174, card C00174-K1 was flagged for card testing, $200.09 online transaction. Location: online. Card testing: 2 small online authorizations ($9.37 total) followed by a larger purchase. Consistent with testing a stolen card number before use.. Activity linked to device shared across 2 cards. The activity is suspicious because: Flagged transaction T0001247: $200.09, online channel, risk score 0.56. Transaction came from device: SAMSUNG SM-G935F Build/NRD90M (Android 8.0, chrome for android, 2220x1080). Card C00174-K1 has 16 transactions in history, average amount $44.49. Customer C00174 has 2 cards: C00174-K2, C00174-K1. Billing region 160 has 180 cards transacting in it. Total exposure: $466.30. Investigation pattern: card_testing.",
     "subjects": [
       "C00174",
       "C00174-K1",

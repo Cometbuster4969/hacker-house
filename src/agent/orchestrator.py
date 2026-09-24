@@ -1,14 +1,16 @@
 """
-Agent Orchestrator: drives the end-to-end investigation flow.
-Implements the 8-step investigation cycle:
-  Trigger → Investigate → Gather Evidence → Assess Uncertainty →
-  Gather More Evidence → Take Actions → Explain → Update Memory
+Hybrid Agent Orchestrator: combines rule-based policy enforcement with LLM reasoning.
+
+Flow:
+1. Rule-based: gather evidence from graph (fast, deterministic)
+2. LLM-based: assess evidence, detect patterns, reason about uncertainty
+3. Rule-based: enforce policy actions (R1-R10, approval routing)
+4. LLM-based: generate explanations and SAR narratives
 """
 from __future__ import annotations
 import json
 import logging
 import time
-from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -16,7 +18,9 @@ from ..graph.in_memory_graph import InMemoryGraph
 from ..graph.data_loader import DataLoader
 from ..evidence.gatherer import EvidenceGatherer
 from ..evidence.pattern_detector import PatternDetector
+from ..evidence.graphrag import GraphRAGSynthesizer
 from ..policy.engine import PolicyEngine
+from ..agent.llm_reasoner import LLMReasoner
 from ..utils.models import (
     CasePackEntry, CaseAnswer, InvestigationCase, InvestigationState,
     CaseStatus, Verdict, FraudPattern, EvidenceRequest, SourceType,
@@ -28,109 +32,122 @@ logger = logging.getLogger(__name__)
 
 class FraudInvestigationAgent:
     """
-    The main fraud investigation agent.
-    Orchestrates the full investigation lifecycle for each case.
+    Hybrid fraud investigation agent.
+    Uses graph traversal for evidence, LLM for reasoning, rules for policy.
     """
 
-    def __init__(self, graph: InMemoryGraph, llm_client=None):
+    def __init__(self, graph: InMemoryGraph, llm_provider: str = None,
+                 llm_model: str = None):
         self.graph = graph
         self.evidence_gatherer = EvidenceGatherer(graph)
         self.pattern_detector = PatternDetector()
         self.policy_engine = PolicyEngine()
-        self.llm_client = llm_client
-        self.tool_calls_total = 0
-        self.tokens_total = 0
+        self.graphrag = GraphRAGSynthesizer(graph)
+        self.llm = LLMReasoner(provider=llm_provider, model=llm_model)
+
+        if self.llm.is_llm_available:
+            logger.info("Hybrid mode: LLM reasoning enabled (%s)", llm_provider)
+        else:
+            logger.info("Rule-based mode: LLM not available, using rules only")
 
     def investigate(self, trigger: CasePackEntry) -> CaseAnswer:
-        """
-        Run a full investigation for a single case.
-        Returns the complete answer in the required format.
-        """
+        """Run a full hybrid investigation for a single case."""
         start_time = time.time()
         logger.info("=== Investigating %s ===", trigger.case_id)
-        logger.info("Trigger: %s | Card: %s | Customer: %s",
-                     trigger.trigger_type.value, trigger.card_id, trigger.customer_id)
 
-        # Initialize investigation state
-        state = InvestigationState(
-            case_id=trigger.case_id,
-            trigger=trigger,
-        )
+        state = InvestigationState(case_id=trigger.case_id, trigger=trigger)
 
-        # Step 1: Trigger & Initial Evidence Gathering
-        logger.info("Step 1: Gathering initial evidence...")
+        # ──────────────────────────────────────────────────────
+        # STEP 1-3: Graph-based evidence gathering (deterministic)
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 1: Gathering initial evidence from graph...")
         state = self.evidence_gatherer.gather_initial_evidence(state)
         state.steps_completed += 1
 
-        # Step 2: Device & Connection Investigation
         logger.info("Step 2: Investigating device connections...")
         state = self.evidence_gatherer.gather_device_evidence(state)
         state.steps_completed += 1
 
-        # Step 3: Velocity Analysis
-        logger.info("Step 3: Analyzing transaction velocity...")
+        logger.info("Step 3: Analyzing velocity and patterns...")
         state = self.evidence_gatherer.gather_velocity_evidence(state)
-        state.steps_completed += 1
-
-        # Step 4: Pattern Detection
-        logger.info("Step 4: Detecting fraud patterns...")
         state = self.pattern_detector.detect_patterns(state)
         state.steps_completed += 1
 
-        # Step 5: Find Similar Closed Cases (case memory)
-        logger.info("Step 5: Searching case memory...")
+        logger.info("Step 4: Retrieving case memory...")
         state = self.evidence_gatherer.find_similar_closed_cases(state)
         state.steps_completed += 1
 
-        # Calculate initial fraud probability
-        state.fraud_probability = self.pattern_detector.calculate_fraud_probability(state)
-        logger.info("Initial fraud probability: %.2f | Pattern: %s",
-                     state.fraud_probability, state.pattern.value)
+        # ──────────────────────────────────────────────────────
+        # STEP 5: GraphRAG context synthesis
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 5: Building GraphRAG context...")
+        graph_context = self.graphrag.build_investigation_context(state)
+        policy_context = self.graphrag.build_policy_context(state)
+        state.steps_completed += 1
 
-        # Step 6: Determine if more evidence needed & initial actions
-        logger.info("Step 6: Evaluating initial actions...")
-        initial_nba = self.policy_engine.evaluate_initial_actions(state)
+        # ──────────────────────────────────────────────────────
+        # STEP 6: LLM-based assessment (hybrid intelligence)
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 6: LLM assessment of evidence...")
+        assessment = self._llm_assess(state, graph_context)
+        state.steps_completed += 1
 
-        # Determine if we should request more evidence
+        # ──────────────────────────────────────────────────────
+        # STEP 7: Evidence requests and reassessment
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 7: Determining evidence needs...")
         evidence_requests = self._decide_evidence_requests(state)
         state.evidence_requests = evidence_requests
 
-        # If evidence requested, simulate the response and re-evaluate
         if evidence_requests:
-            logger.info("Step 6b: Processing evidence requests...")
             for req in evidence_requests:
-                req.assumed_response = self._simulate_evidence_response(state, req)
+                req.assumed_response = self._simulate_response(state, req)
                 state.steps_completed += 1
 
-            # Re-gather evidence and reassess after simulated responses
+            # Reassess after evidence request
             state.fraud_probability = self.pattern_detector.calculate_fraud_probability(state)
-            logger.info("Updated fraud probability after evidence requests: %.2f",
-                         state.fraud_probability)
+            if self.llm.is_llm_available:
+                # Ask LLM to reassess with new evidence
+                reassessment = self.llm.assess_evidence(state, graph_context)
+                if reassessment.get("fraud_probability"):
+                    state.fraud_probability = reassessment["fraud_probability"]
+                if reassessment.get("verdict"):
+                    state.verdict = Verdict(reassessment["verdict"])
+                logger.info("LLM reassessment: prob=%.2f, verdict=%s",
+                            state.fraud_probability, state.verdict.value)
 
-        # Step 7: Final actions
-        logger.info("Step 7: Determining final actions...")
+        # ──────────────────────────────────────────────────────
+        # STEP 8: Policy-based action determination
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 8: Determining actions (policy engine)...")
         final_nba = self.policy_engine.evaluate_final_actions(state, evidence_requests)
-
-        # Evaluate SAR
         sar = self.policy_engine.evaluate_sar(state)
 
-        # Determine stop reason
+        # ──────────────────────────────────────────────────────
+        # STEP 9: LLM-generated explanations
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 9: Generating explanations...")
+        summary = self._generate_summary(state, graph_context)
+
+        # Enhance SAR narrative with LLM if available
+        if sar.file and self.llm.is_llm_available:
+            sar.narrative = self.llm.generate_sar_narrative(
+                state, sar.total_amount_usd
+            )
+
+        # Determine stop reason and status
         should_stop, stop_reason = self.policy_engine.should_stop_investigation(state)
         if not stop_reason:
             stop_reason = "Investigation complete; all available evidence examined"
-
-        # Determine final status
         case_status = self.policy_engine.determine_status(state)
 
-        # Build the case
-        affected_txn_ids = list(set(
-            [t.transaction_id for t in state.card_transactions[-10:]]
-            + [state.trigger.flagged_txn_id]
-        ))
-        exposure = sum(
-            t.amount for t in state.card_transactions[-10:]
-            if t.transaction_id in affected_txn_ids
-        )
+        # ──────────────────────────────────────────────────────
+        # STEP 10: Build case and write to graph
+        # ──────────────────────────────────────────────────────
+        logger.info("Step 10: Writing case to graph...")
+        affected_txn_ids = self._get_affected_txn_ids(state)
+        exposure = sum(t.amount for t in state.card_transactions[-10:]
+                       if t.transaction_id in affected_txn_ids)
 
         investigation_case = InvestigationCase(
             status=case_status,
@@ -149,16 +166,13 @@ class FraudInvestigationAgent:
             exposure_usd=exposure if state.verdict == Verdict.FRAUD else 0.0,
             evidence=state.evidence_collected,
             similar_prior_cases=[c.case_id for c in state.similar_closed_cases],
-            summary=self._build_summary(state),
+            summary=summary,
             written_to_graph=True,
             graph_case_id=f"CASE-{state.case_id}",
         )
 
-        # Step 8: Write to graph (case memory)
-        logger.info("Step 8: Writing case to graph...")
         self._write_case_to_graph(state, investigation_case)
 
-        # Build final answer
         latency = time.time() - start_time
 
         answer = CaseAnswer(
@@ -169,29 +183,69 @@ class FraudInvestigationAgent:
             sar=sar,
             stop_reason=stop_reason,
             tool_calls=state.tool_calls,
-            tokens=self.tokens_total,
+            tokens=self.llm.total_tokens,
             latency_s=round(latency, 1),
         )
 
-        logger.info("=== %s Complete === Verdict: %s | Probability: %.2f | "
-                     "Pattern: %s | Actions: %d | Took %.1fs",
-                     trigger.case_id, state.verdict.value,
-                     state.fraud_probability, state.pattern.value,
-                     len(final_nba.final), latency)
+        logger.info("=== %s Complete === Verdict: %s | Prob: %.2f | Pattern: %s | "
+                     "Actions: %d | LLM tokens: %d | %.1fs",
+                     trigger.case_id, state.verdict.value, state.fraud_probability,
+                     state.pattern.value, len(final_nba.final), self.llm.total_tokens, latency)
 
         return answer
 
+    def _llm_assess(self, state: InvestigationState,
+                     graph_context: str) -> dict:
+        """Use LLM for evidence assessment, fall back to rules."""
+        # Rule-based initial assessment
+        state.fraud_probability = self.pattern_detector.calculate_fraud_probability(state)
+
+        if not self.llm.is_llm_available:
+            return {
+                "fraud_probability": state.fraud_probability,
+                "verdict": state.verdict.value,
+                "pattern": state.pattern.value,
+            }
+
+        # Ask LLM to assess
+        assessment = self.llm.assess_evidence(state, graph_context)
+
+        # Update state with LLM assessment
+        if assessment.get("fraud_probability") is not None:
+            state.fraud_probability = float(assessment["fraud_probability"])
+        if assessment.get("verdict"):
+            try:
+                state.verdict = Verdict(assessment["verdict"])
+            except ValueError:
+                pass
+        if assessment.get("pattern"):
+            try:
+                state.pattern = FraudPattern(assessment["pattern"])
+            except ValueError:
+                pass
+        if assessment.get("pattern_description"):
+            state.pattern_description = assessment["pattern_description"]
+
+        # Add LLM reasoning as evidence
+        if assessment.get("reasoning"):
+            state.evidence_collected.append(
+                self._make_evidence(
+                    f"LLM analysis: {assessment['reasoning']}",
+                    SourceType.DOCUMENT,
+                    "llm:assess_evidence",
+                )
+            )
+
+        logger.info("LLM assessment: prob=%.2f, verdict=%s, pattern=%s",
+                     state.fraud_probability, state.verdict.value, state.pattern.value)
+
+        return assessment
+
     def _decide_evidence_requests(self, state: InvestigationState) -> list[EvidenceRequest]:
-        """Decide if additional evidence should be requested."""
+        """Decide if more evidence is needed."""
         requests = []
 
-        # Request customer validation if:
-        # - Probability is moderate (0.30 - 0.70) and it's a customer report or risk score trigger
-        # - Policy R1 says to verify before blocking
-        prob = state.fraud_probability
-
         if state.trigger.trigger_type == "customer_report":
-            # Customer report - assume they denied (the message says "I never made this")
             requests.append(EvidenceRequest(
                 type="customer_validation",
                 asked_after_step=state.steps_completed,
@@ -200,8 +254,7 @@ class FraudInvestigationAgent:
                     f"this purchase and still has the card"
                 ),
             ))
-        elif 0.30 <= prob < 0.85:
-            # Moderate risk - request verification
+        elif 0.30 <= state.fraud_probability < 0.85:
             requests.append(EvidenceRequest(
                 type="customer_validation",
                 asked_after_step=state.steps_completed,
@@ -210,99 +263,70 @@ class FraudInvestigationAgent:
 
         return requests
 
-    def _simulate_evidence_response(self, state: InvestigationState,
-                                     request: EvidenceRequest) -> str:
-        """Simulate a response to an evidence request."""
+    def _simulate_response(self, state: InvestigationState,
+                            request: EvidenceRequest) -> str:
         if request.type == "customer_validation":
             return self._simulate_customer_response(state)
         elif request.type == "step_up_auth":
             return "Authentication completed successfully"
-        elif request.type == "analyst_info":
-            return "Analyst confirmed suspicious pattern"
         return ""
 
     def _simulate_customer_response(self, state: InvestigationState) -> str:
-        """
-        Simulate customer response based on investigation signals.
-        Customer reports ("I never made this purchase") → denied
-        High-risk signals → likely denied
-        Low-risk patterns → likely confirmed
-        """
-        # Customer reports always deny
         if state.trigger.trigger_type == "customer_report":
             return (
                 f"Customer {state.trigger.customer_id} states they did not make "
                 f"this purchase and still has the card"
             )
-
-        # High probability fraud → deny
         if state.fraud_probability >= 0.60:
-            return (
-                f"Customer {state.trigger.customer_id} states they did not make "
-                f"this purchase"
-            )
-
-        # Low probability → confirm (recurring charge, etc.)
+            return f"Customer {state.trigger.customer_id} states they did not make this purchase"
         if state.fraud_probability < 0.30:
             return "Customer confirms this is a legitimate purchase"
+        return f"Customer {state.trigger.customer_id} cannot recall this transaction"
 
-        # Default: assume denial for moderate risk
-        return (
-            f"Customer {state.trigger.customer_id} cannot recall this transaction "
-            f"and requests further investigation"
-        )
+    def _generate_summary(self, state: InvestigationState,
+                           graph_context: str) -> str:
+        """Generate case summary, using LLM if available."""
+        if self.llm.is_llm_available:
+            llm_summary = self.llm.generate_explanation(state)
+            if llm_summary:
+                return llm_summary
 
-    def _build_summary(self, state: InvestigationState) -> str:
-        """Build a 2-6 sentence summary for the case."""
-        trigger = state.trigger
-        flagged = state.flagged_txn
-
+        # Fallback: template-based
         parts = []
-
-        # What happened
-        if flagged:
+        if state.flagged_txn:
             parts.append(
-                f"Transaction {flagged.transaction_id} for ${flagged.amount:.2f} "
-                f"({flagged.channel}) on card {trigger.card_id} was flagged "
-                f"via {trigger.trigger_type.value}."
+                f"Transaction {state.flagged_txn.transaction_id} for "
+                f"${state.flagged_txn.amount:.2f} ({state.flagged_txn.channel}) "
+                f"on card {state.trigger.card_id} was flagged via "
+                f"{state.trigger.trigger_type.value}."
             )
-
-        # Pattern found
         if state.pattern != FraudPattern.NONE:
             if state.pattern_description:
                 parts.append(state.pattern_description)
             else:
-                parts.append(f"Pattern detected: {state.pattern.value.replace('_', ' ')}.")
-
-        # Key evidence
-        key_evidence = [ev for ev in state.evidence_collected[:3]
-                        if ev.source == SourceType.GRAPH]
-        if key_evidence:
-            parts.append(
-                "Key evidence: " + "; ".join(ev.claim for ev in key_evidence[:2]) + "."
-            )
-
-        # Prior cases
+                parts.append(f"Pattern: {state.pattern.value.replace('_', ' ')}.")
+        key_ev = [ev for ev in state.evidence_collected[:2] if ev.source == SourceType.GRAPH]
+        if key_ev:
+            parts.append("Evidence: " + "; ".join(e.claim for e in key_ev) + ".")
         if state.similar_closed_cases:
-            case_ids = [c.case_id for c in state.similar_closed_cases[:2]]
-            parts.append(f"Similar prior cases: {', '.join(case_ids)}.")
-
-        # Verdict
-        parts.append(
-            f"Verdict: {state.verdict.value} "
-            f"(probability {state.fraud_probability:.2f})."
-        )
-
+            parts.append(f"Similar cases: {', '.join(c.case_id for c in state.similar_closed_cases[:2])}.")
+        parts.append(f"Verdict: {state.verdict.value} ({state.fraud_probability:.2f}).")
         return " ".join(parts)
+
+    def _get_affected_txn_ids(self, state: InvestigationState) -> list[str]:
+        ids = set()
+        if state.trigger.flagged_txn_id:
+            ids.add(state.trigger.flagged_txn_id)
+        for t in state.card_transactions[-10:]:
+            ids.add(t.transaction_id)
+        for t in state.connected_transactions:
+            ids.add(t.transaction_id)
+        return list(ids)
 
     def _write_case_to_graph(self, state: InvestigationState,
                               case: InvestigationCase):
-        """Write the investigation case to the graph for case memory."""
-        graph_case_id = case.graph_case_id
-
-        # Write case vertex
-        self.graph.write_investigation_case(graph_case_id, {
-            "case_id": graph_case_id,
+        self.graph.write_investigation_case(case.graph_case_id, {
+            "case_id": case.graph_case_id,
             "customer_id": state.trigger.customer_id,
             "card_id": state.trigger.card_id,
             "opened_at": state.trigger.opened_at,
@@ -313,72 +337,51 @@ class FraudInvestigationAgent:
             "exposure_usd": case.exposure_usd,
             "summary": case.summary,
         })
-
-        # Link to transactions
         for txn_id in case.affected_txn_ids:
-            self.graph.link_case_to_transaction(graph_case_id, txn_id)
-
-        # Link to card
-        self.graph.link_case_to_card(graph_case_id, state.trigger.card_id)
-
-        # Link to devices
+            self.graph.link_case_to_transaction(case.graph_case_id, txn_id)
+        self.graph.link_case_to_card(case.graph_case_id, state.trigger.card_id)
         for device_id in case.connected_device_profiles:
             if device_id:
-                self.graph.link_case_to_device(graph_case_id, device_id)
+                self.graph.link_case_to_device(case.graph_case_id, device_id)
+        for closed_id in case.similar_prior_cases:
+            self.graph.link_case_to_closed_case(case.graph_case_id, closed_id, 0.8)
 
-        # Link to similar closed cases
-        for closed_case_id in case.similar_prior_cases:
-            self.graph.link_case_to_closed_case(
-                graph_case_id, closed_case_id, 0.8
-            )
-
-        logger.info("Case %s written to graph as %s",
-                     state.case_id, graph_case_id)
+    def _make_evidence(self, claim: str, source: SourceType,
+                        ref: str) -> Evidence:
+        return Evidence(claim=claim, source=source, ref=ref, entity_ids=[])
 
     def investigate_all(self, case_pack: list[CasePackEntry],
                          output_dir: str = "cases") -> list[CaseAnswer]:
-        """Run investigation on all cases in the case pack."""
         answers = []
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
 
         for i, trigger in enumerate(case_pack):
-            logger.info("Processing case %d/%d: %s",
-                         i + 1, len(case_pack), trigger.case_id)
+            logger.info("Processing %d/%d: %s", i + 1, len(case_pack), trigger.case_id)
             try:
                 answer = self.investigate(trigger)
                 answers.append(answer)
-
-                # Write answer to file
-                answer_path = output_path / f"{trigger.case_id}.json"
-                with open(answer_path, "w") as f:
+                with open(output_path / f"{trigger.case_id}.json", "w") as f:
                     json.dump(answer.model_dump(), f, indent=2, default=str)
-
-                logger.info("Answer written to %s", answer_path)
-
             except Exception as e:
-                logger.error("Error investigating %s: %s", trigger.case_id, e)
+                logger.error("Error on %s: %s", trigger.case_id, e)
                 import traceback
                 traceback.print_exc()
 
-        # Print summary
         self._print_summary(answers)
         return answers
 
     def _print_summary(self, answers: list[CaseAnswer]):
-        """Print investigation summary."""
-        total = len(answers)
         fraud = sum(1 for a in answers if a.case.verdict == Verdict.FRAUD)
         legit = sum(1 for a in answers if a.case.verdict == Verdict.LEGITIMATE)
         uncertain = sum(1 for a in answers if a.case.verdict == Verdict.UNCERTAIN)
-        sar_filed = sum(1 for a in answers if a.sar.file)
-        total_tools = sum(a.tool_calls for a in answers)
+        sars = sum(1 for a in answers if a.sar.file)
+        total_tokens = sum(a.tokens for a in answers)
 
         logger.info("=" * 60)
         logger.info("INVESTIGATION SUMMARY")
         logger.info("=" * 60)
-        logger.info("Total cases: %d", total)
-        logger.info("Fraud: %d | Legitimate: %d | Uncertain: %d", fraud, legit, uncertain)
-        logger.info("SARs filed: %d", sar_filed)
-        logger.info("Total tool calls: %d", total_tools)
+        logger.info("Total: %d | Fraud: %d | Legit: %d | Uncertain: %d",
+                     len(answers), fraud, legit, uncertain)
+        logger.info("SARs filed: %d | Total LLM tokens: %d", sars, total_tokens)
         logger.info("=" * 60)

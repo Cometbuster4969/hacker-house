@@ -8,15 +8,15 @@
     "pattern_description": "Card testing: 2 small online authorizations ($7.77 total) followed by a larger purchase. Consistent with testing a stolen card number before use.",
     "affected_txn_ids": [
       "T0005848",
-      "T0003972",
-      "T0000884",
-      "T0007461",
-      "T0003653",
-      "T0003535",
-      "T0004550",
       "T0006683",
-      "T0008829",
+      "T0000884",
+      "T0003535",
+      "T0007461",
+      "T0003972",
       "T0002936",
+      "T0008829",
+      "T0004550",
+      "T0003653",
       "T0004338"
     ],
     "first_suspicious_txn_id": "T0005848",
@@ -41,13 +41,13 @@
         ]
       },
       {
-        "claim": "Customer C00153 has 3 cards: C00153-K1, C00153-K2, C00153-K3",
+        "claim": "Customer C00153 has 3 cards: C00153-K2, C00153-K1, C00153-K3",
         "source": "graph",
         "ref": "query:customer_cards(C00153)",
         "entity_ids": [
           "C00153",
-          "C00153-K1",
           "C00153-K2",
+          "C00153-K1",
           "C00153-K3"
         ]
       },
@@ -61,7 +61,7 @@
       }
     ],
     "similar_prior_cases": [],
-    "summary": "Transaction T0003535 for $54.33 (in_person) on card C00153-K1 was flagged via risk_score. Card testing: 2 small online authorizations ($7.77 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Key evidence: Flagged transaction T0003535: $54.33, in_person channel, risk score 0.60; Card C00153-K1 has 11 transactions in history, average amount $106.93. Verdict: fraud (probability 0.85).",
+    "summary": "Transaction T0003535 for $54.33 (in_person) on card C00153-K1 was flagged via risk_score. Card testing: 2 small online authorizations ($7.77 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Evidence: Flagged transaction T0003535: $54.33, in_person channel, risk score 0.60; Card C00153-K1 has 11 transactions in history, average amount $106.93. Verdict: fraud (0.85).",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-006"
   },

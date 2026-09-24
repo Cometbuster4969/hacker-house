@@ -7,18 +7,18 @@
     "pattern": "card_testing",
     "pattern_description": "Card testing: 2 small online authorizations ($3.68 total) followed by a larger purchase. Consistent with testing a stolen card number before use.",
     "affected_txn_ids": [
-      "T0006447",
+      "T0005122",
       "T0008530",
-      "T0007026",
-      "T0009073",
       "T0000034",
-      "T0004397",
-      "T0009653",
-      "T0002883",
       "T0007360",
-      "T0005122"
+      "T0009653",
+      "T0006447",
+      "T0009073",
+      "T0007026",
+      "T0004397",
+      "T0002883"
     ],
-    "first_suspicious_txn_id": "T0006447",
+    "first_suspicious_txn_id": "T0005122",
     "connected_card_ids": [],
     "connected_device_profiles": [],
     "exposure_usd": 582.38,
@@ -49,7 +49,7 @@
       }
     ],
     "similar_prior_cases": [],
-    "summary": "Transaction T0008530 for $44.30 (online) on card C00404-K1 was flagged via risk_score. Card testing: 2 small online authorizations ($3.68 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Key evidence: Flagged transaction T0008530: $44.30, online channel, risk score 0.64; Card C00404-K1 has 21 transactions in history, average amount $60.82. Verdict: fraud (probability 0.85).",
+    "summary": "Transaction T0008530 for $44.30 (online) on card C00404-K1 was flagged via risk_score. Card testing: 2 small online authorizations ($3.68 total) followed by a larger purchase. Consistent with testing a stolen card number before use. Evidence: Flagged transaction T0008530: $44.30, online channel, risk score 0.64; Card C00404-K1 has 21 transactions in history, average amount $60.82. Verdict: fraud (0.85).",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-005"
   },

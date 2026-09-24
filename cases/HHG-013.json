@@ -58,14 +58,14 @@
     "similar_prior_cases": [
       "CC-0110"
     ],
-    "summary": "Transaction T0002476 for $86.88 (online) on card C00020-K1 was flagged via risk_score. Undocumented pattern: card used with 3 different recipient email domains, suggesting potential money movement or account manipulation. Key evidence: Flagged transaction T0002476: $86.88, online channel, risk score 0.36; Card C00020-K1 has 12 transactions in history, average amount $78.21. Similar prior cases: CC-0110. Verdict: uncertain (probability 0.75).",
+    "summary": "Transaction T0002476 for $86.88 (online) on card C00020-K1 was flagged via risk_score. Undocumented pattern: card used with 3 different recipient email domains, suggesting potential money movement or account manipulation. Evidence: Flagged transaction T0002476: $86.88, online channel, risk score 0.36; Card C00020-K1 has 12 transactions in history, average amount $78.21. Similar cases: CC-0110. Verdict: uncertain (0.75).",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-013"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 5,
+      "asked_after_step": 6,
       "assumed_response": "Customer C00020 states they did not make this purchase"
     }
   ],

@@ -11,7 +11,7 @@ DATA_DIR = Path(os.getenv("DATA_DIR", str(BASE_DIR / "data" / "HHGOA_IEEE")))
 CASES_DIR = Path(os.getenv("CASES_DIR", str(BASE_DIR / "cases")))
 
 # TigerGraph
-TG_HOST = os.getenv("TIGERGRAPH_HOST", "https://savanna.tgcloud.io")
+TG_HOST = os.getenv("TIGERGRAPH_HOST", "")
 TG_TOKEN = os.getenv("TIGERGRAPH_TOKEN", "")
 TG_GRAPH = os.getenv("TIGERGRAPH_GRAPH", "FraudInvestigation")
 TG_USE_SAVANNA = os.getenv("TIGERGRAPH_USE_SAVANNA", "true").lower() == "true"
@@ -26,7 +26,7 @@ LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 PORT = int(os.getenv("PORT", "8000"))
 
-# Policy thresholds (from the dataset's fraud policy)
+# Policy thresholds
 FRAUD_PROBABILITY_THRESHOLD = float(os.getenv("FRAUD_PROBABILITY_THRESHOLD", "0.70"))
 HIGH_RISK_THRESHOLD = float(os.getenv("HIGH_RISK_THRESHOLD", "0.85"))
 LOW_RISK_THRESHOLD = float(os.getenv("LOW_RISK_THRESHOLD", "0.15"))
@@ -34,8 +34,6 @@ EXPOSURE_THRESHOLD_SAR = float(os.getenv("EXPOSURE_THRESHOLD_SAR", "1000"))
 EXPOSURE_THRESHOLD_ESCALATE = float(os.getenv("EXPOSURE_THRESHOLD_ESCALATE", "500"))
 EXPOSURE_THRESHOLD_L2 = float(os.getenv("EXPOSURE_THRESHOLD_L2", "2500"))
 
-# Verify paths exist
 def ensure_dirs():
-    """Create required directories."""
     CASES_DIR.mkdir(parents=True, exist_ok=True)
     DATA_DIR.mkdir(parents=True, exist_ok=True)

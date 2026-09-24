@@ -78,14 +78,14 @@
       }
     ],
     "similar_prior_cases": [],
-    "summary": "Transaction T0007730 for $46.13 (online) on card C00256-K1 was flagged via risk_score. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Key evidence: Flagged transaction T0007730: $46.13, online channel, risk score 0.45; Transaction came from device: LG-H870 (iOS 14.0, samsung browser 6.2, 2436x1125). Verdict: uncertain (probability 0.80).",
+    "summary": "Transaction T0007730 for $46.13 (online) on card C00256-K1 was flagged via risk_score. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Evidence: Flagged transaction T0007730: $46.13, online channel, risk score 0.45; Transaction came from device: LG-H870 (iOS 14.0, samsung browser 6.2, 2436x1125). Verdict: uncertain (0.80).",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-012"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 5,
+      "asked_after_step": 6,
       "assumed_response": "Customer C00256 states they did not make this purchase"
     }
   ],

@@ -7,18 +7,53 @@
     "pattern": "card_not_present_new_device",
     "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
     "affected_txn_ids": [
-      "T0002803",
-      "T0003195",
-      "T0008092",
       "T0002991",
-      "T0007008",
-      "T0002088",
+      "T0000702",
       "T0000153",
-      "T0003446",
+      "T0006649",
+      "T0002803",
+      "T0000780",
+      "T0005615",
+      "T0001381",
+      "T0003271",
+      "T0004503",
+      "T0006031",
+      "T0000544",
+      "T0007836",
+      "T0000785",
+      "T0007568",
+      "T0003562",
+      "T0005216",
+      "T0006395",
+      "T0009971",
+      "T0005376",
+      "T0004406",
+      "T0005215",
+      "T0001840",
+      "T0003195",
+      "T0008210",
       "T0003772",
-      "T0005784"
+      "T0001092",
+      "T0008092",
+      "T0001102",
+      "T0008154",
+      "T0004659",
+      "T0003134",
+      "T0008534",
+      "T0002088",
+      "T0009553",
+      "T0003895",
+      "T0000852",
+      "T0006187",
+      "T0002822",
+      "T0001268",
+      "T0005784",
+      "T0009650",
+      "T0005575",
+      "T0003446",
+      "T0007008"
     ],
-    "first_suspicious_txn_id": "T0002803",
+    "first_suspicious_txn_id": "T0002991",
     "connected_card_ids": [],
     "connected_device_profiles": [
       "DCC6A2F"
@@ -93,14 +128,14 @@
     "similar_prior_cases": [
       "CC-0106"
     ],
-    "summary": "Transaction T0005784 for $47.12 (online) on card C00247-K1 was flagged via customer_report. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Key evidence: Flagged transaction T0005784: $47.12, online channel, risk score 0.43; Transaction came from device: SAMSUNG SM-G935F Build/NRD90M (iOS 13.0, chrome for android, 2220x1080). Similar prior cases: CC-0106. Verdict: fraud (probability 0.95).",
+    "summary": "Transaction T0005784 for $47.12 (online) on card C00247-K1 was flagged via customer_report. Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use. Evidence: Flagged transaction T0005784: $47.12, online channel, risk score 0.43; Transaction came from device: SAMSUNG SM-G935F Build/NRD90M (iOS 13.0, chrome for android, 2220x1080). Similar cases: CC-0106. Verdict: fraud (0.95).",
     "written_to_graph": true,
     "graph_case_id": "CASE-HHG-004"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 5,
+      "asked_after_step": 6,
       "assumed_response": "Customer C00247 states they did not make this purchase and still has the card"
     }
   ],
@@ -139,7 +174,7 @@
         "reason": "Shared device profile detected"
       }
     ],
-    "what_changed": "Added: MONITOR_CONNECTED_CARDS, FILE_REPORT"
+    "what_changed": "Added: FILE_REPORT, MONITOR_CONNECTED_CARDS"
   },
   "sar": {
     "file": true,
