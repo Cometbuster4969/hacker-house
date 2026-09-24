@@ -39,13 +39,13 @@
         ]
       },
       {
-        "claim": "Customer C00220 has 2 cards: C00220-K2, C00220-K1",
+        "claim": "Customer C00220 has 2 cards: C00220-K1, C00220-K2",
         "source": "graph",
         "ref": "query:customer_cards(C00220)",
         "entity_ids": [
           "C00220",
-          "C00220-K2",
-          "C00220-K1"
+          "C00220-K1",
+          "C00220-K2"
         ]
       },
       {

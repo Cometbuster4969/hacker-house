@@ -5,6 +5,7 @@ assess risk, and generate explanations.
 Supports:
 - OpenAI (direct) — no rate limiting (used by evaluators)
 - Anthropic (direct) — no rate limiting (used by evaluators)
+- Grok/xAI (direct) — no rate limiting
 - OpenRouter (free tier) — rate limited: 20 req/min, 50 req/day
 - Mock (rule-based fallback) — no LLM, rules only
 """
@@ -178,8 +179,11 @@ class LLMReasoner:
         self._rate_limiter = None
         self._rotation_index = 0
 
+        # ── Grok/xAI setup ──
+        if self.provider == "grok":
+            self._setup_grok()
         # ── OpenRouter setup ──
-        if self.provider == "openrouter":
+        elif self.provider == "openrouter":
             self._setup_openrouter()
         # ── Direct OpenAI ──
         elif self.provider == "openai":
@@ -189,6 +193,26 @@ class LLMReasoner:
             self._setup_anthropic()
         else:
             logger.info("LLM provider: mock (rule-based only)")
+
+    def _setup_grok(self):
+        """Setup Grok/xAI client — NO rate limiting."""
+        api_key = os.getenv("GROK_API_KEY", "")
+        if not api_key:
+            logger.warning("GROK_API_KEY not set, falling back to mock")
+            self.provider = "mock"
+            return
+
+        try:
+            import openai
+            self._client = openai.OpenAI(
+                base_url="https://api.x.ai/v1",
+                api_key=api_key,
+            )
+            self.model = self.model or "grok-3"
+            logger.info("Grok/xAI direct: %s (no rate limiting)", self.model)
+        except Exception as e:
+            logger.warning("Grok setup failed: %s, falling back to mock", e)
+            self.provider = "mock"
 
     def _setup_openrouter(self):
         """Setup OpenRouter client with rate limiting."""
@@ -457,7 +481,7 @@ JSON: {{"has_undocumented": <true|false>, "description": "<description or empty>
                     return None
 
         try:
-            if self.provider in ("openai", "openrouter"):
+            if self.provider in ("openai", "openrouter", "grok"):
                 response = self._client.chat.completions.create(
                     model=self.model,
                     messages=[
@@ -466,7 +490,7 @@ JSON: {{"has_undocumented": <true|false>, "description": "<description or empty>
                     ],
                     temperature=0.1,
                     max_tokens=2000,
-                    # Only request JSON for OpenAI direct (not all OpenRouter models support it)
+                    # Only request JSON format for OpenAI direct
                     **({"response_format": {"type": "json_object"}} if self.provider == "openai" else {}),
                 )
                 self._total_tokens += response.usage.total_tokens if response.usage else 0

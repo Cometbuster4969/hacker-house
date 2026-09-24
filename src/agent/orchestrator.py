@@ -53,6 +53,8 @@ class FraudInvestigationAgent:
                 llm_provider = "openai"
             elif os.getenv("ANTHROPIC_API_KEY"):
                 llm_provider = "anthropic"
+            elif os.getenv("GROK_API_KEY"):
+                llm_provider = "grok"
             elif OPENROUTER_API_KEY:
                 llm_provider = "openrouter"
 

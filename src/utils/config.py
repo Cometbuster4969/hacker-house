@@ -16,9 +16,10 @@ TG_TOKEN = os.getenv("TIGERGRAPH_TOKEN", "")
 TG_GRAPH = os.getenv("TIGERGRAPH_GRAPH", "FraudInvestigation")
 TG_USE_SAVANNA = os.getenv("TIGERGRAPH_USE_SAVANNA", "true").lower() == "true"
 
-# LLM — provider priority: openai > anthropic > openrouter > mock
+# LLM — provider priority: openai > anthropic > grok > openrouter > mock
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+GROK_API_KEY = os.getenv("GROK_API_KEY", "")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 
 def _detect_provider():
@@ -30,6 +31,8 @@ def _detect_provider():
         return "openai"
     if ANTHROPIC_API_KEY:
         return "anthropic"
+    if GROK_API_KEY:
+        return "grok"
     if OPENROUTER_API_KEY:
         return "openrouter"
     return "mock"

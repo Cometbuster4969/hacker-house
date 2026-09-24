@@ -142,21 +142,34 @@ export LLM_MODEL="llama-3.3-70b"
 # free models if one hits the limit.
 
 # ──────────────────────────────────────────────────────────────
-# Option B: OpenAI (NO rate limiting — for evaluators)
+# Option B: Grok/xAI (NO rate limiting)
+# ──────────────────────────────────────────────────────────────
+# 1. Go to https://console.x.ai/ → API Keys
+# 2. Create a key
+# 3. Set environment variables:
+
+# export GROK_API_KEY="xai-your-key-here"
+# export LLM_PROVIDER="grok"
+# export LLM_MODEL="grok-3"
+#
+# Models: grok-3 (best), grok-3-mini (faster), grok-2
+
+# ──────────────────────────────────────────────────────────────
+# Option C: OpenAI (NO rate limiting — for evaluators)
 # ──────────────────────────────────────────────────────────────
 # export OPENAI_API_KEY="sk-your-key-here"
 # export LLM_PROVIDER="openai"
 # export LLM_MODEL="gpt-4o"
 
 # ──────────────────────────────────────────────────────────────
-# Option C: Anthropic (NO rate limiting — for evaluators)
+# Option D: Anthropic (NO rate limiting — for evaluators)
 # ──────────────────────────────────────────────────────────────
 # export ANTHROPIC_API_KEY="sk-ant-your-key-here"
 # export LLM_PROVIDER="anthropic"
 # export LLM_MODEL="claude-sonnet-4-20250514"
 
 # ──────────────────────────────────────────────────────────────
-# Option D: No LLM (rule-based only)
+# Option E: No LLM (rule-based only)
 # ──────────────────────────────────────────────────────────────
 # Don't set any API key. The agent uses rules only.
 # This works but won't have LLM-powered pattern detection or explanations.
@@ -177,14 +190,27 @@ TIGERGRAPH_TOKEN=your_token_here
 TIGERGRAPH_GRAPH=FraudInvestigation
 TIGERGRAPH_USE_SAVANNA=true
 
-# LLM — OpenRouter free tier (your key)
+# LLM — Choose ONE provider:
+#
+# Option 1: OpenRouter free tier (your key)
 OPENROUTER_API_KEY=sk-or-your-key-here
 LLM_PROVIDER=openrouter
 LLM_MODEL=llama-3.3-70b
-
-# For evaluators, uncomment ONE of these instead:
+#
+# Option 2: Grok
+# GROK_API_KEY=xai-your-key-here
+# LLM_PROVIDER=grok
+# LLM_MODEL=grok-3
+#
+# Option 3: OpenAI (for evaluators)
 # OPENAI_API_KEY=sk-your-key-here
+# LLM_PROVIDER=openai
+# LLM_MODEL=gpt-4o
+#
+# Option 4: Anthropic (for evaluators)
 # ANTHROPIC_API_KEY=sk-ant-your-key-here
+# LLM_PROVIDER=anthropic
+# LLM_MODEL=claude-sonnet-4-20250514
 
 # App
 DATA_DIR=./data/HHGOA_IEEE
