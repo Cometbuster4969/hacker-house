@@ -100,7 +100,7 @@ Each completed investigation is written back to the graph as an `InvestigationCa
 
 ### Agentic Capabilities
 
-1. **Multi-step investigation workflow**: The agent follows an 8-step cycle, not a single-shot classification
+1. **Multi-step investigation workflow**: The agent follows a 10-step cycle, not a single-shot classification
 2. **Tool use via MCP**: 15 graph operation tools, callable through the Model Context Protocol
 3. **Policy compliance engine**: Rules R1-R10 enforced programmatically, with approval routing
 4. **Uncertainty-aware reasoning**: Calibrated probability with explicit stopping rules
