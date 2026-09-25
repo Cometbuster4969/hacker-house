@@ -1,4 +1,12 @@
-# Demo video script (≈3 min)
+# Demo video (≈3 min)
+
+**Recorded:** [`docs/demo/walkthrough.mp4`](demo/walkthrough.mp4) — 2:45, narrated, 1920×1080.
+It is a slide walkthrough rendered from the run artefacts (no browser was available to capture the
+live UI in the build environment). [`docs/demo/dashboard.html`](demo/dashboard.html) is the real
+dashboard with the real data, openable from disk; `python main.py serve` is the live version.
+Regenerate the snapshot with `python scripts/build_dashboard_snapshot.py`.
+
+Script followed by the recording (≈3 min):
 
 | Time | Screen | Voice-over |
 |---|---|---|
