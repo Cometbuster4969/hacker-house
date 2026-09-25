@@ -1,0 +1,87 @@
+{
+  "n_scored": 5565,
+  "n_confirmed_fraud": 4665,
+  "n_cleared": 900,
+  "auc": 0.5026956055734191,
+  "best_threshold": 0.15,
+  "best_accuracy": 0.846,
+  "anchors_detected_pattern": {
+    "card_not_present_fraud": {
+      "n": 105,
+      "p_confirmed_fraud": 0.8571,
+      "mean_score": 0.9424,
+      "proposed_anchor": 0.8505
+    },
+    "card_not_present_new_device": {
+      "n": 2485,
+      "p_confirmed_fraud": 0.7429,
+      "mean_score": 0.9542,
+      "proposed_anchor": 0.7427
+    },
+    "card_testing": {
+      "n": 53,
+      "p_confirmed_fraud": 0.8868,
+      "mean_score": 0.9953,
+      "proposed_anchor": 0.8727
+    },
+    "none": {
+      "n": 1939,
+      "p_confirmed_fraud": 0.9433,
+      "mean_score": 0.3298,
+      "proposed_anchor": 0.9428
+    },
+    "undocumented": {
+      "n": 983,
+      "p_confirmed_fraud": 0.8678,
+      "mean_score": 0.8935,
+      "proposed_anchor": 0.867
+    }
+  },
+  "anchors_labeled_pattern": {
+    "account_takeover": {
+      "n": 1205,
+      "p_confirmed_fraud": 1.0,
+      "mean_score": 0.4267,
+      "proposed_anchor": 0.9992
+    },
+    "card_not_present_fraud": {
+      "n": 1404,
+      "p_confirmed_fraud": 1.0,
+      "mean_score": 0.9508,
+      "proposed_anchor": 0.9993
+    },
+    "card_not_present_new_device": {
+      "n": 1076,
+      "p_confirmed_fraud": 1.0,
+      "mean_score": 0.9571,
+      "proposed_anchor": 0.9991
+    },
+    "card_testing": {
+      "n": 16,
+      "p_confirmed_fraud": 1.0,
+      "mean_score": 1.0,
+      "proposed_anchor": 0.9444
+    },
+    "none": {
+      "n": 900,
+      "p_confirmed_fraud": 0.0,
+      "mean_score": 0.7828,
+      "proposed_anchor": 0.0011
+    },
+    "out_of_region_use": {
+      "n": 955,
+      "p_confirmed_fraud": 1.0,
+      "mean_score": 0.454,
+      "proposed_anchor": 0.999
+    },
+    "undocumented": {
+      "n": 9,
+      "p_confirmed_fraud": 1.0,
+      "mean_score": 0.8556,
+      "proposed_anchor": 0.9091
+    }
+  },
+  "skipped": {},
+  "elapsed_s": 774.7,
+  "note": "rules-only replay; selected-sample caveat applies"
+}
