@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "cc967bf0dd38f7ef502cff8f50b492d3",
-  "response": "{\"summary\":\"The flagged transaction 3523199 ($100.07, online) with a risk score of 0.54 was initiated from an iOS device (iOS\u202f9.3.5, mobile Safari\u202f9.0) that differs from the cardholder\u2019s typical usage pattern. Card C02923\u2011K1 normally averages $149.92 across 30 historical transactions, making this lower\u2011value, atypical online purchase suspicious. Similar account\u2011takeover patterns were confirmed in prior cases CC\u20112400 and CC\u20112717, supporting a fraud verdict.\",\"verdict\":\"fraud\",\"probability\":1.00,\"pattern\":\"account_takeover\",\"evidence_ids\":[\"3523199\"],\"prior_cases\":[\"CC-2400\",\"CC-2717\"]}",
-  "cached_at": 1790266626.0362084
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "5065773bcf505179373316a7501c3b1b",
-  "response": "{\"verdict\":\"uncertain\",\"probability\":0.15,\"pattern\":\"card_testing\",\"summary\":\"The system flagged transaction 3553342 ($30.91, in\u2011person) with a risk score of 0.55, which is consistent with a card\u2011testing attempt (evidence 1). Card C05876\u2011K2 has only three historic transactions with an average amount of $71.17, indicating limited usage that can be typical of testing (evidence 2). The customer holds two cards (C05876\u2011K1 and C05876\u2011K2) and has no prior fraud history on this account (evidence 3). While the pattern resembles the confirmed fraud case CC\u20112370, differences in amount and channel lower the similarity, leading to an uncertain verdict.\"}",
-  "cached_at": 1790266768.4698746
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "7f411e6d1ba8fcfa0924eb0055e7e905",
-  "response": "{\"narrative\":\"The subject, customer C11923, used card C11923-K2 in a series of card-not-present transactions on a new device. The five recent transactions, identified by IDs 3520842 ($13.29), 3520870 ($14.56), 3520887 ($66.09), 3520897 ($28.91) and 3520925 ($14.38), together represent the activity under review. These transactions contribute to a total exposure of $973.85 for the card. The device used for the card was flagged as NEW for C11923-K2 and is shared among four different cards, a known fraud indicator. Card C11923-K2 exhibited high velocity, with 22 transactions in a 24-hour period totaling $752.43, far exceeding the card\u2019s historical average amount of $35.62. The customer has a history of 11 prior closed fraud cases, many involving card-not-present activity on new devices. The online channel and a moderate risk score of 0.39 further support suspicion of fraudulent use. Based on the combination of new device usage, high velocity, elevated transaction amounts relative to average spend, and the customer\u2019s fraud history, the activity is consistent with the card_not_present_new_device pattern.\"}",
-  "cached_at": 1790277265.910204
-}

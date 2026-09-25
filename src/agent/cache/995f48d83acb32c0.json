@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "a41316c234ac36c0ebffec7180f39234",
-  "response": "{\"verdict\":\"fraud\",\"fraud_probability\":1.00,\"pattern\":\"card_not_present_new_device\",\"evidence_ids\":[\"3583227\"],\"summary\":\"The flagged online transaction 3583227 for $128.33 (risk score 0.34) originated from an unidentified device showing only a generic Firefox 47.0 user\u2011agent, which is inconsistent with the card\u2019s historical usage (30 prior transactions averaging $50.15) [1][2][3]. This deviation, combined with a similar confirmed fraud case (CC\u20111736) involving card\u2011not\u2011present activity, leads to a high confidence of fraud.\"}",
-  "cached_at": 1790267461.1077242
-}

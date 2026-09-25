@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "d06679ee2620c33a0e5414bd1c33fbff",
-  "response": "{\n    \"fraud_probability\": 0.55,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"account_takeover\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"Customer C02354 reports unauthorized $39.08 transaction 3491361 (evidence 1). The flagged amount is below the card's average $159.70 (evidence 2), suggesting a low-value test or probe. The card exhibits high velocity with 8 transactions in 24h totaling $956.88 (evidence 6) and a burst of 4+ transactions same day (graph-level signals), indicative of compromised card use. Prior cases for this card/customer show multiple confirmed frauds with account_takeover pattern (CC-0255, CC-0454, CC-1450) (evidence 5/prior cases). Together, these signals support an account takeover fraud verdict.\"\n}",
-  "cached_at": 1790287319.5889812
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "44b4095ea390e77d3028c8206489c368",
-  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"account_takeover\",\"pattern_description\":\"\",\"reasoning\":\"The card C12265-K2 has two prior confirmed account\u2011takeover cases (CC-2277, CC-2447) on the same customer, indicating a compromised account. The flagged transaction 3509359 was made online, whereas the card\u2019s three historical transactions were all in\u2011person, showing a channel deviation. It originated from device DD3A0AF, a shared device linked to 254 other cards, a strong fraud indicator. The model\u2019s risk score of 0.52, while moderate, combined with these signals raises the likelihood of fraud. Consequently, the overall fraud probability is set high and the verdict is fraud.\"}",
-  "cached_at": 1790266997.5357404
-}

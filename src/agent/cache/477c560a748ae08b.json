@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "4d3bad7730f605237c3b8db8fe30e3d7",
-  "response": "{\n  \"verdict\": \"fraud\",\n  \"fraud_probability\": 0.85,\n  \"pattern\": \"card_not_present_fraud\",\n  \"investigation_summary\": \"The alert for transaction 3478782 ($292.36, online) triggered a risk score of 0.79, indicating suspicious card-not-present activity. Card C11891-K1 shows atypical behavior with this transaction amount far exceeding its historical average of $45.02 over 30 prior transactions. The customer\u2019s prior closed case CC-4160 was confirmed fraud (card_not_present_fraud) for $90.54, establishing a pattern of similar misuse. Given the high risk score, deviation from normal spend, and prior fraud history, the fraud probability is assessed at 0.85, supporting a verdict of fraud.\"\n}",
-  "cached_at": 1790285484.7311566
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "1d9bb3fb08491a6a858febd7a2443d54",
-  "response": "{\"fraud_probability\":0.78,\"verdict\":\"uncertain\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3506725) scored a high risk of 0.90 [1] and is 7.5\u00d7 the card's average spend, a notable deviation [graph-level]. It originated from device D9FD230, which is flagged as a new device for this card [7] and is shared among 209 other cards, indicating possible credential stuffing or account takeover risk [6]. While the amount and device signals raise concern, the customer's prior similar case was cleared and there is no clear out\u2011of\u2011region usage, so the evidence is not conclusive enough to label the transaction definitively fraudulent.\"}",
-  "cached_at": 1790265854.601095
-}

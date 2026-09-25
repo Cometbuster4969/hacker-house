@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "0f1e4a3957e0981c3472ace52c2a01ce",
-  "response": "{\"summary\":\"The flagged transaction 3530164 of $49.00 was made in\u2011person and carries a risk score of 0.40, which is lower than typical card\u2011testing thresholds but still notable. Card C08623\u2011K2 shows a modest transaction history of six payments with an average of $138.54, suggesting it is active but not unusually high\u2011frequency. The customer holds two cards, and while prior case CC\u20112817 involved confirmed fraud for out\u2011of\u2011region use, the current pattern aligns more with card\u2011testing behavior rather than confirmed fraud. Given the mixed signals and a fraud probability of 0.52, the case remains uncertain.\",\"verdict\":\"uncertain\",\"probability\":0.52,\"pattern\":\"card_testing\",\"evidence\":[{\"id\":3530164,\"amount\":49.00,\"channel\":\"in_person\",\"risk_score\":0.40},{\"card\":\"C08623-K2\",\"transaction_count\":6,\"average_amount\":138.54}],\"prior_cases\":[{\"id\":\"CC-1589\",\"outcome\":\"cleared\",\"amount\":0.00},{\"id\":\"CC-2817\",\"outcome\":\"confirmed_fraud\",\"reason\":\"out_of_region_use\",\"amount\":38.96}]}",
-  "cached_at": 1790277138.629011
-}

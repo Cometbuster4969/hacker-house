@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "b4ebd05b90324b21b7ae1193a65a78e0",
-  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer reported the $55.68 online purchase (ID 3558054) as unauthorized (evidence 5), which is a strong fraud indicator. The transaction originated from device DF89AEB, which is marked as NEW for this card (evidence 7) and is shared among 175 cards (evidence 6), a typical sign of card\u2011not\u2011present abuse. The cardholder has multiple prior confirmed fraud cases (CC-0056, CC-0467, CC-0772, CC-1293, CC-1715) all involving card\u2011not\u2011present activity on new devices (evidence 5). Combined with the moderate risk score of 0.38 (evidence 1) and the customer\u2019s explicit denial, the evidence points to fraud under the card_not_present_new_device pattern.\"}",
-  "cached_at": 1790265813.1532342
-}

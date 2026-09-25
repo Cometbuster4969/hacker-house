@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "474821987d2e4027bf3b7439acaacf37",
-  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer reported the transaction as unauthorized (evidence\u202f5). The transaction originated from a device marked as NEW for this card and shared among multiple cards (evidence\u202f6,\u202f7), a known fraud indicator. The card shows high velocity with 22 transactions in 24\u202fh totaling $752.43 (evidence\u202f8) and the amount is 3.7\u00d7 the average spend (evidence\u202f3). There are 11 prior confirmed\u2011fraud cases for the same customer, many involving card\u2011not\u2011present activity on new devices (evidence\u202f5). Combined with a moderate risk score of 0.39 (evidence\u202f1) the evidence strongly points to fraud.\"}",
-  "cached_at": 1790267793.7357633
-}

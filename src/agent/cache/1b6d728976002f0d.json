@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "fb7febff4e5a531843baff3da1211d5e",
-  "response": "{\"summary\":\"The flagged transaction 3583227, an online purchase of $128.33 with a risk score of 0.34, originated from a new device using Firefox 47.0 (evidence 1,2). This deviates from card C08106\u2011K1\u2019s typical pattern of 30 transactions averaging $50.15, matching the card_not_present_new_device pattern (evidence 3). Given the high fraud probability of 0.96 and the similarity to prior confirmed fraud case CC\u20111736, the transaction is assessed as fraudulent.\"}",
-  "cached_at": 1790277151.8905966
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "022d2331863674797d6af9fab1a7bf9d",
-  "response": "{\"fraud_probability\":0.92,\"verdict\":\"uncertain\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reports that they did not make the $30.02 online purchase (evidence 1, customer report). The transaction\u2019s risk score is modest (0.28) and the amount is well below the card\u2019s average spend ($77.35), which alone does not strongly indicate fraud. However, the transaction originated from device D2EDF29, which is listed as a shared device used by 1,023 different cards (evidence 5), and there is no record that this device has been previously associated with card C08299\u2011K1, suggesting a possible new device scenario. The billing region is common (203 has 415 cards), reducing geographic suspicion. Combining the strong customer claim with the unknown device usage raises concern, but the low risk score and typical amount keep the case from being a clear fraud, leading to an uncertain verdict with a high fraud probability.\"}",
-  "cached_at": 1790267702.0156145
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "7c43ce350ceb6fae8269975d35f4ee97",
-  "response": "{\"fraud_probability\":0.85,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction 3478561 was made online (evidence 1) using device DC72BD4, which is shared by 52 different cards (evidence 5), a classic indicator of card\u2011not\u2011present fraud on a new device. Although the amount $74.96 matches the card\u2019s average spend (evidence 3) and the risk score is low (0.05), the shared\u2011device signal outweighs these benign factors. The calculated fraud probability is 0.85 (rule\u2011calculated value), placing the case well above a neutral threshold. No prior similar cases or unusual graph\u2011level signals were found, reinforcing that the primary concern is the device profile. Therefore the transaction is assessed as fraudulent.\"}",
-  "cached_at": 1790267842.7684848
-}

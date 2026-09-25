@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "38d8a15f476474f7718e0c727674763b",
-  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged online transaction (ID 3503878, $99.92) received a high model risk score of 0.90 [1]. It was executed on a device (D8D1C12) that is marked as NEW for this card and is shared among five different cards, indicating a possible account takeover or testing scenario [7]. The amount is well below the card's historical average of $311.86, a common sign of card\u2011testing behavior [graph]. The cardholder has a history of confirmed fraud cases (CC-2011, CC-2860, CC-5026) involving out\u2011of\u2011region and card\u2011not\u2011present fraud, increasing the suspicion for this similar online purchase. Combined, these signals justify a fraud verdict.\"}",
-  "cached_at": 1790266946.6094806
-}

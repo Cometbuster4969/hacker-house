@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "69b2b0e7776a5ab9ff37ae052a5d379f",
-  "response": "{\n  \"investigation_summary\": \"The investigation concludes fraud with a probability of 0.65 based on a card\u2011testing pattern. Evidence includes flagged transaction 3450629 ($100.09, online channel, risk score 0.57) originating from a Windows device, and card C04570\u2011K1 showing 30 historical transactions averaging $427.76, which is inconsistent with the low\u2011value test. Prior case CC\u20111383 was cleared with no loss, providing no contradictory signal. These factors together support the fraud verdict.\"\n}",
-  "cached_at": 1790287221.3874958
-}

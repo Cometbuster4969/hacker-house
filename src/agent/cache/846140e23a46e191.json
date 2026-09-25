@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "8c47146f663bcd04cc27c6ec4c528b16",
-  "response": "{\n  \"sentences\": [\n    \"Customer C07671, card C07671-K2, exhibited a card-not-present-new-device pattern with total exposure of $81,932.43.\",\n    \"The suspicious activity includes five recent transactions: 3304626 ($58.93), 3305022 ($58.86), 3305132 ($107.88), 3517519 ($43.90), and 3517689 ($116.99).\",\n    \"Additionally, a flagged transaction 3526826 for $35.66 was identified as an online purchase from a new device.\",\n    \"The flagged transaction originated from device D12CA02, which is shared by 266 other cards and marked as new for this card.\",\n    \"Card C07671-K2 historically had eight in-person transactions averaging $113.94, showing a deviation in channel and amount.\",\n    \"The card displayed high velocity, with five transactions occurring within a 24\u2011hour period.\",\n    \"Prior closed cases for this card/customer (CC-1475, CC-3216, CC-3761, CC-4294) indicate a history of account takeover fraud.\",\n    \"Based on the deviation from historical behavior, use of a high-risk device farm, and prior fraud patterns, the activity is consistent with card-not-present fraud on a new device.\"\n  ]\n}",
-  "cached_at": 1790286804.1243608
-}

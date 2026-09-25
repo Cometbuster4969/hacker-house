@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "6acc368211b0f57587b86eb5c6f85d8f",
-  "response": "{\"fraud_probability\":0.88,\"verdict\":\"fraud\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The real\u2011time model gave the transaction a risk score of 0.57 (evidence 1) and the rule\u2011calculated fraud probability is 0.90, indicating a strong fraud signal. The transaction amount ($100.09) is well below the card's average spend of $427.76 (evidence 3), a pattern often seen in testing. It originated from device D06A9AB, which is shared by 302 different cards (evidence 6), raising the likelihood of a compromised or shared device used for fraudulent activity. No prior fraud cases exist for this card (evidence 5), but the combination of a low\u2011value online purchase, high\u2011risk device sharing, and the model's high probability leads to a fraud verdict.\"}",
-  "cached_at": 1790267951.776352
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "ae7dc608de747da31a5e9433da1e39dc",
-  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reported the $59.67 online purchase (ID 3534820) as unauthorized [1]. The transaction originated from device DC7DD64, which is marked as NEW for this card and is shared among 163 other cards, indicating a suspicious new device usage [5][4]. The card shows high velocity with four transactions in the past 24\u202fhours totaling $236.15, further raising risk [6]. Combined with a moderate risk score (0.37) and the customer\u2019s claim, the evidence points to a likely card\u2011not\u2011present fraud on a new device.\"}",
-  "cached_at": 1790266883.548238
-}

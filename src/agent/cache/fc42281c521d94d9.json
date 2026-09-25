@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "fcc17ce748f70899933bad66fd845143",
-  "response": "{\"fraud_probability\":0.90,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction $599.94 is 6.8\u00d7 the card\u2019s average $88.22, a significant outlier [1]. It originated from device D8A3375, which is new for this card and is shared with eight other cards, a known risk indicator [6][7]. Two prior cases (CC-0615 and CC-3886) involving the same card and a new device were confirmed fraud with the same pattern [5]. Combined with the high model risk score of 0.77 and the calculated fraud probability of 0.90, the evidence strongly suggests fraudulent activity.\"}",
-  "cached_at": 1790265976.351755
-}

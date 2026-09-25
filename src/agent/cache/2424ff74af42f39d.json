@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "699b4ef8eb5294f5bdac8ac9d7d5f3de",
-  "response": "{\n  \"fraud_probability\": 1.00,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_new_device\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The customer C08106 explicitly denied making the $128.33 online purchase (transaction 3583227), which is a strong indicator of unauthorized activity. This transaction amount exceeds the card's historical maximum of $96.45 and occurs on a device (D1C3672) that is new for this card and shared with five other cards, suggesting possible device compromise. Prior cases for the same card (CC-1736, CC-2121, CC-3778) were confirmed fraud with the same card_not_present_fraud pattern, reinforcing the likelihood of fraud. The combination of a customer report, anomalous amount, new/shared device, and historical fraud pattern supports a fraud verdict.\"\n}",
-  "cached_at": 1790285635.9807868
-}

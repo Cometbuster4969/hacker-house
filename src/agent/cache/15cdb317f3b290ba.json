@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "d37f41e7949ca1fbc16b1151615b31db",
-  "response": "{\n  \"investigation_summary\": \"The alert for transaction 3583368 ($131.30, online) originated from a new device (SM-G610F) not previously seen on card C11923-K2, which typically sees 29 transactions averaging $35.62. The transaction amount is substantially higher than the card's historical average, matching the card_not_present_new_device pattern observed in prior confirmed fraud cases CC-0031 and CC-0290. Given the high fraud probability (1.00) and the evidence of a new device coupled with an atypical transaction size, the activity is deemed fraudulent.\"\n}",
-  "cached_at": 1790286605.1749606
-}

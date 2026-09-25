@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "5585600949eb993d0e8d22e0ecc260b9",
-  "response": "{\"fraud_probability\":0.15,\"verdict\":\"uncertain\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The flagged in\u2011person transaction (ID 3553342, $30.91) has a moderate risk score of 0.55 [1] but its amount is below the card\u2019s average ($71.17) [2], a pattern often seen in testing behavior. The card has a prior confirmed fraud case (CC-2370) involving card\u2011not\u2011present activity, indicating the card may have been compromised previously [5]. However, the calculated fraud probability is low at 0.15 and the transaction amount is small, providing no strong evidence of fraud. Given the mixed signals, the case remains uncertain and warrants monitoring rather than an immediate fraud verdict.\"}",
-  "cached_at": 1790265888.9742312
-}

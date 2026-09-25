@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "gemini-flash-latest",
-  "prompt_hash": "81f24a3932a5777460b752cee8ddd20a",
-  "response": "{\n  \"verdict\": \"uncertain\",\n  \"fraud_probability\": 0.40,\n  \"pattern\": \"none\",\n  \"summary\": \"Flagged transaction 3514030 for $77.07 on card C12382-K1 generated an alert due to a risk score of 0.61. However, the in-person transaction amount is consistent with account norms, sitting below the cardholder's average spend of $110.83 across 30 historical transactions. Additionally, billing region 444 shows broad legitimate utility with 321 cards transacting, differing from the specific risk vectors observed in prior fraud cases CC-1066 and CC-1673. Due to the lack of anomalous behavior or definitive indicators of compromise, the verdict remains uncertain with a fraud probability of 0.40.\"\n}",
-  "cached_at": 1790283788.2223737
-}

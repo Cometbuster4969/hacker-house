@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "e526f023ecce76f0fb7473c709425d65",
-  "response": "{\n  \"narrative\": \"Customer C07297, card C07297-K1, exhibited a card_not_present_new_device pattern. The total exposure associated with this activity is $417661.18. Five specific transactions were identified: 3096460 ($107.98), 3097523 ($171.08), 3101082 ($141.07), 3108213 ($141.06), and 3113298 ($48.01). An additional flagged transaction, 3476682, occurred for $482.12 via an online channel. Transaction 3476682 originated from device D7059DC, which is marked as new for card C07297-K1. Device D7059DC has been used by 547 distinct cards, indicating a highly shared device. Card C07297-K1\u2019s historical average transaction amount is $91.52, with a prior maximum of $210.03, making the $482.12 transaction more than double the historical maximum. The customer has denied authorizing the $482.12 purchase, providing an external signal of unauthorized use.\"\n}",
-  "cached_at": 1790285853.000476
-}

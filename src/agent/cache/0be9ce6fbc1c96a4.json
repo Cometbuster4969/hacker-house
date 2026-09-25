@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "266f7963cac70e82f7ecb780bba30dd6",
-  "response": "{\n  \"fraud_probability\": 0.85,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_fraud\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3478782 for $292.36 is 6.5 times the card's historical average of $45.02 and carries a high risk score of 0.79, indicating anomalous activity. It occurs within a burst of six transactions in 24 hours totaling $161.39, showing unusual velocity. Prior case CC-4160 on the same card was confirmed fraud (card_not_present_fraud), and similar retrieved cases (CC-2480, CC-2295, CC-2470, CC-5052) all resulted in confirmed fraud with comparable patterns. Together, these signals strongly suggest the transaction is fraudulent.\"\n}",
-  "cached_at": 1790285472.8074048
-}

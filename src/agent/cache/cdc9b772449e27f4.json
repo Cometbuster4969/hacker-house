@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "dcbbf63853f1455b1c539851cd7585c3",
-  "response": "{\"narrative\":\"Customer C12265's card C12265-K2 was used for three recent transactions identified as IDs 3322761 ($49.07), 3532036 ($226.09) and 3532309 ($67.89). All three transactions occurred online, deviating from the card\u2019s historical pattern of three in-person transactions with an average amount of $114.35. The transactions originated from device identifier DD3A0AF, which is flagged as a new device for this card and is shared among 254 other cards. The same device has been linked to numerous other accounts, a recognized fraud indicator. The customer has two cards, C12265-K1 and C12265-K2, and no connected cards were involved in these events. Prior closed cases CC-2277 and CC-2447 for this customer were confirmed account\u2011takeover incidents, indicating a compromised account. The risk score associated with the activity is 0.52, which combined with the device sharing and channel deviation raises suspicion. Billing region 264 contains over 2,000 cards, providing a broad pool for device reuse. The total exposure related to this activity is $202215.40. Given the pattern of account takeover, prior confirmed cases, new shared device, and risk score, the activity meets the criteria for a suspicious activity report.\"}",
-  "cached_at": 1790267029.056662
-}

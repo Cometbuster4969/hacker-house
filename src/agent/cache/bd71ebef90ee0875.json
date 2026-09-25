@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "7edc6868f1b80f176778ecc577630468",
-  "response": "{\"ok\": true, \"note\": \"Analysis complete; awaiting further evidence.\"}",
-  "cached_at": 1790285135.1756551
-}

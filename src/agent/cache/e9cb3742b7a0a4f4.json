@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "a9089315845adb5d316bc69f51bca9e8",
-  "response": "{\"investigation_summary\":\"A flagged online transaction (ID 3503878) of $99.92 was made from a new Windows/Chrome device and carries a high risk score of 0.90. The card (C07987\u2011K2) has only one prior transaction with an average amount of $311.86, matching the card_not_present_new_device pattern and resembling prior confirmed fraud case CC\u20112011. Given the limited transaction history and modest amount, the activity warrants further review rather than a definitive fraud determination.\",\"verdict\":\"potential_fraud\",\"fraud_probability\":1.00,\"pattern\":\"card_not_present_new_device\",\"evidence\":[\"Flagged transaction 3503878: $99.92, online channel, risk score 0.90\",\"Device: Windows (other, Chrome 61.0, 1280x720)\",\"Card C07987\u2011K2 has 1 transaction in history, average amount $311.86\"]}",
-  "cached_at": 1790277283.3366637
-}

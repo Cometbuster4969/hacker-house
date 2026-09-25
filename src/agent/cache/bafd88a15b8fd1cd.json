@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "0398ac3b17e202b6f62e5a2fb2d2f9d3",
-  "response": "{\"narrative\":\"Customer C02923, card C02923\u2011K1, exhibited an account\u2011takeover pattern as indicated by three prior confirmed takeover cases (CC\u20112400, CC\u20112717, CC\u20112857) [5][6]. The recent activity includes five transactions with IDs 3087117 ($34.04), 3105761 ($106.54), 3112142 ($117.03), 3119579 ($108.41), and 3121093 ($389.95) [facts]. All five transactions were executed on a new iOS device (iOS 9.3.5, mobile Safari 9.0) identified as D5B64CE, which is flagged as NEW for this card and is shared with 112 other cards [2][7][6]. The card\u2019s historical profile shows 30 prior transactions with an average amount of $149.92, making the recent amounts within the normal range but the device anomaly raises concern [3][2]. The shared device usage across many unrelated cards is a strong indicator of credential compromise and aligns with the prior takeover history [6][5]. No other cards are connected to C02923\u2011K1, limiting the fraud surface to this single account [facts]. Given the combination of a new shared device, multiple prior takeover cases, and the recent transaction pattern, the fraud probability is assessed at the maximum level of 1.00 [8]. The regulator should be advised that the exposure associated with this account is $81,960.23 and that further monitoring and remediation are warranted [facts].\",\"fraud_probability\":1.00,\"exposure_usd\":81960.23}",
-  "cached_at": 1790266629.4826074
-}

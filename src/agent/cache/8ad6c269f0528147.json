@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "e9f76492fed75a71960aad552a4d67e9",
-  "response": "{\"narrative\":\"Customer C07671, using card C07671\u2011K2, executed five transactions within a 24\u2011hour period totaling $386.56, which represents a high\u2011velocity pattern (evidence 8). The transactions, identified by IDs 3304626 ($58.93), 3305022 ($58.86), 3305132 ($107.88), 3517519 ($43.90), and 3517689 ($116.99), were all conducted online (evidence 8). Card C07671\u2011K2 has a historical profile of eight in\u2011person purchases with an average amount of $113.94, making the recent online activity atypical (evidence 3). The card was accessed from device D12CA02, which is associated with 266 other cards, indicating possible credential compromise (evidence 6). Device D12CA02 is flagged as NEW for this card, further supporting the likelihood of unauthorized use (evidence 7). The customer and card have a history of four prior closed account\u2011takeover cases (CC\u20111475, CC\u20113216, CC\u20113761, CC\u20114294), demonstrating a pattern of similar fraud (evidence 5). The total exposure from the five transactions is $386.56, contributing to the overall exposure of $81,932.43 for the account (derived from provided totals).\"}",
-  "cached_at": 1790266832.121766
-}

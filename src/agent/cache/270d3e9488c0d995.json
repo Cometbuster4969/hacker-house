@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "1a28a4d4a2cc7398d87c34842a1b8674",
-  "response": "{\n    \"fraud_probability\": 0.80,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"card_not_present_fraud\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"The customer explicitly denies authorizing the $30.02 online purchase (transaction 3581141), indicating unauthorized activity. The transaction was processed through device D2EDF29, which is linked to 1,023 distinct cards, suggesting a compromised or shared device used for fraudulent card-not-present activity. Although the risk score is low (0.28), the card's average transaction size is $77.35 and the recent history includes many small online charges, making a $30.02 charge consistent with low-value fraud or card testing. The combination of a customer dispute, a heavily shared device, and an online channel supports a card-not-present fraud conclusion.\"\n}",
-  "cached_at": 1790286151.3556397
-}

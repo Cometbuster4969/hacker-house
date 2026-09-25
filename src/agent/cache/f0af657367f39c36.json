@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "0d9e21cc4990ad0f66f67e44b5a6fd8a",
-  "response": "{\"narrative\":\"Customer C13171 reported an unauthorized online purchase of $55.68 (transaction ID 3558054) on card C13171-K2 [evidence 1,8]. The transaction was processed through an online channel using device DF89AEB, which is flagged as a new device for this card [evidence 2,7]. Device DF89AEB is shared among 175 other cards, a known risk factor for card\u2011not\u2011present fraud [evidence 6]. Card C13171-K2 has only one prior transaction in its history with an average amount of $72.44, making the $55.68 transaction atypical [evidence 3]. The customer holds two cards, C13171-K2 and C13171-K1, and no other connected cards were identified [evidence 4]. Historical data shows 19 prior closed fraud cases associated with this card or customer, many classified under card_not_present_new_device [evidence 5]. The risk score assigned to the flagged transaction was 0.38, which is moderate but must be considered alongside the customer report and device risk [evidence 1]. The total exposure related to this activity is $57,658.51. Given the combination of a customer report, use of a new shared device, and extensive fraud history, the activity is consistent with fraudulent behavior [evidence 8].\"}",
-  "cached_at": 1790267668.759366
-}

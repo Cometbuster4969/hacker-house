@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "c24fc2319755759489789f27ae5fea35",
-  "response": "{\n  \"investigation_summary\": \"The alert for transaction 3581141 ($30.02, online) was investigated as a potential card-not-present fraud. The transaction's low risk score (0.28) and the card's typical higher average spend ($77.35 over 30 historical transactions) raised suspicion. No prior similar cases were found for this card. Based on the evidence, the fraud probability is assessed at 0.80, leading to a verdict of fraud.\"\n}",
-  "cached_at": 1790286165.5756779
-}

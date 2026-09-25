@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "cfc1efd2041aac08646184024d1995b8",
-  "response": "{\"fraud_probability\":0.55,\"verdict\":\"uncertain\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The customer reports an unrecognized $49.00 in\u2011person purchase (evidence\u202f1) which is below the card\u2019s average transaction amount of $138.54 (evidence\u202f2), a common sign of testing behavior. The risk score of 0.40 is moderate and the transaction amount is low, matching a card\u2011testing pattern rather than a high\u2011value fraud attempt. However, the cardholder has a history of confirmed fraud cases (evidence\u202f5) and the model\u2011calculated fraud probability is 0.50, so the signal is not definitive. Given the mixed indicators, the case remains uncertain pending further investigation.\"}",
-  "cached_at": 1790266615.2517464
-}

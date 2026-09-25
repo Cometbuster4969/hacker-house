@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "9ba3d9aa96ba392fbb0139cd0d444b10",
-  "response": "{\"verdict\":\"fraud\",\"fraud_probability\":0.88,\"pattern\":\"card_not_present_new_device\",\"summary\":\"The flagged online transaction 3450629 for $100.09 (risk score 0.57) originated from a Windows 10 Chrome device, which is a new device for this card. Card C04570-K1 normally shows 30 transactions with an average amount of $427.76, making this lower\u2011value, new\u2011device transaction atypical. With a fraud probability of 0.88 and the card\u2011not\u2011present new\u2011device pattern, the activity is assessed as fraud.\"}",
-  "cached_at": 1790267954.174343
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "1e332ca119d62163c2bc6acfb578dfc0",
-  "response": "{\"fraud_probability\":0.45,\"verdict\":\"uncertain\",\"pattern\":\"account_takeover\",\"pattern_description\":\"\",\"reasoning\":\"The flagged in\u2011person transaction (ID 3514948, $111.92) received a high model score of 0.87 [evidence 1] and occurs amid a burst of activity \u2013 three transactions in the prior 24\u202fhours totaling $404.85, indicating high velocity [evidence 6]. The card has a modest history of four transactions with an average amount of $115.98, so the amount itself is not anomalous [evidence 2]. However, the cardholder\u2019s history includes multiple confirmed fraud cases (e.g., CC\u20110104, CC\u20110765, CC\u20111228, CC\u20111524) showing patterns of out\u2011of\u2011region use and account takeover [evidence 5], raising concern. No device data or explicit customer dispute is available, so while fraud risk is elevated, the evidence is not definitive, leading to an uncertain verdict.\"}",
-  "cached_at": 1790265773.9552517
-}
