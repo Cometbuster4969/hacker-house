@@ -1,0 +1,369 @@
+{
+  "window": [
+    "2016-11-01",
+    "2017-01-01"
+  ],
+  "n_alerts": 15,
+  "alerts": [
+    {
+      "type": "structuring",
+      "element": "C05851-K1",
+      "n_txns": 4,
+      "total": 1911.84,
+      "first": "2016-11-21 10:00:00",
+      "last": "2016-11-21 10:30:00",
+      "cards": [
+        "C05851-K1"
+      ],
+      "seed_txn": "3475414",
+      "as_of": "2016-11-21 11:30:00",
+      "case_file": "cases/MON-001.json",
+      "verdict": "fraud",
+      "p": 0.91,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C10990-K1",
+      "n_txns": 4,
+      "total": 1926.93,
+      "first": "2016-11-21 16:00:00",
+      "last": "2016-11-21 16:24:00",
+      "cards": [
+        "C10990-K1"
+      ],
+      "seed_txn": "3476008",
+      "as_of": "2016-11-21 17:24:00",
+      "case_file": "cases/MON-002.json",
+      "verdict": "fraud",
+      "p": 0.88,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C00466-K1",
+      "n_txns": 4,
+      "total": 1860.43,
+      "first": "2016-11-21 20:00:00",
+      "last": "2016-11-21 20:24:00",
+      "cards": [
+        "C00466-K1"
+      ],
+      "seed_txn": "3476664",
+      "as_of": "2016-11-21 21:24:00",
+      "case_file": "cases/MON-003.json",
+      "verdict": "fraud",
+      "p": 0.93,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C07297-K1",
+      "n_txns": 4,
+      "total": 1906.07,
+      "first": "2016-11-21 20:00:00",
+      "last": "2016-11-21 20:30:00",
+      "cards": [
+        "C07297-K1"
+      ],
+      "seed_txn": "3476682",
+      "as_of": "2016-11-21 21:30:00",
+      "case_file": "cases/MON-004.json",
+      "verdict": "fraud",
+      "p": 0.98,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C01890-K1",
+      "n_txns": 4,
+      "total": 1921.59,
+      "first": "2016-11-23 18:00:00",
+      "last": "2016-11-23 18:27:00",
+      "cards": [
+        "C01890-K1"
+      ],
+      "seed_txn": "3481444",
+      "as_of": "2016-11-23 19:27:00",
+      "case_file": "cases/MON-005.json",
+      "verdict": "fraud",
+      "p": 0.95,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C10751-K2",
+      "n_txns": 4,
+      "total": 1906.11,
+      "first": "2016-11-24 17:00:00",
+      "last": "2016-11-24 17:21:00",
+      "cards": [
+        "C10751-K2"
+      ],
+      "seed_txn": "3483895",
+      "as_of": "2016-11-24 18:21:00",
+      "case_file": "cases/MON-006.json",
+      "verdict": "fraud",
+      "p": 0.92,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "device_ring",
+      "element": "Windows | Windows 7 | chrome 65.0 | 1916x901",
+      "n_customers": 3,
+      "n_txns": 3,
+      "first": "2016-11-20 18:00:02",
+      "last": "2016-11-25 07:39:35",
+      "cards": [
+        "C00768-K2",
+        "C04776-K1",
+        "C09149-K1"
+      ],
+      "seed_txn": "3485757",
+      "as_of": "2016-11-25 08:39:35",
+      "case_file": "cases/MON-007.json",
+      "verdict": "fraud",
+      "p": 0.95,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "MONITOR_CONNECTED_CARDS",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C03633-K1",
+      "n_txns": 4,
+      "total": 1935.29,
+      "first": "2016-11-25 21:00:00",
+      "last": "2016-11-25 21:21:00",
+      "cards": [
+        "C03633-K1"
+      ],
+      "seed_txn": "3487348",
+      "as_of": "2016-11-25 22:21:00",
+      "case_file": "cases/MON-008.json",
+      "verdict": "fraud",
+      "p": 0.98,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "card_testing",
+      "element": "C08962-K2",
+      "n_txns": 11,
+      "model_p_purchase": 0.168,
+      "first": "2016-11-27 19:05:08",
+      "last": "2016-11-28 19:46:31",
+      "cards": [
+        "C08962-K2"
+      ],
+      "seed_txn": "3492921",
+      "as_of": "2016-11-28 20:46:31",
+      "case_file": "cases/MON-009.json",
+      "verdict": "fraud",
+      "p": 0.9,
+      "final_actions": [
+        "DECLINE_TRANSACTION",
+        "BLOCK_CARD",
+        "STEP_UP_AUTH",
+        "CREATE_CASE"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C12641-K2",
+      "n_txns": 4,
+      "total": 1922.43,
+      "first": "2016-11-29 19:00:00",
+      "last": "2016-11-29 19:36:00",
+      "cards": [
+        "C12641-K2"
+      ],
+      "seed_txn": "3498092",
+      "as_of": "2016-11-29 20:36:00",
+      "case_file": "cases/MON-010.json",
+      "verdict": "fraud",
+      "p": 0.93,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C02265-K1",
+      "n_txns": 4,
+      "total": 1904.86,
+      "first": "2016-12-02 19:00:00",
+      "last": "2016-12-02 19:30:00",
+      "cards": [
+        "C02265-K1"
+      ],
+      "seed_txn": "3507670",
+      "as_of": "2016-12-02 20:30:00",
+      "case_file": "cases/MON-011.json",
+      "verdict": "fraud",
+      "p": 0.92,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C05423-K1",
+      "n_txns": 4,
+      "total": 1884.76,
+      "first": "2016-12-03 12:00:00",
+      "last": "2016-12-03 12:30:00",
+      "cards": [
+        "C05423-K1"
+      ],
+      "seed_txn": "3509576",
+      "as_of": "2016-12-03 13:30:00",
+      "case_file": "cases/MON-012.json",
+      "verdict": "fraud",
+      "p": 0.94,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C05766-K1",
+      "n_txns": 4,
+      "total": 1908.26,
+      "first": "2016-12-03 13:00:00",
+      "last": "2016-12-03 13:30:00",
+      "cards": [
+        "C05766-K1"
+      ],
+      "seed_txn": "3509706",
+      "as_of": "2016-12-03 14:30:00",
+      "case_file": "cases/MON-013.json",
+      "verdict": "fraud",
+      "p": 0.98,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "structuring",
+      "element": "C06881-K1",
+      "n_txns": 4,
+      "total": 1880.16,
+      "first": "2016-12-03 20:00:00",
+      "last": "2016-12-03 20:30:00",
+      "cards": [
+        "C06881-K1"
+      ],
+      "seed_txn": "3511062",
+      "as_of": "2016-12-03 21:30:00",
+      "case_file": "cases/MON-014.json",
+      "verdict": "fraud",
+      "p": 0.98,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ]
+    },
+    {
+      "type": "device_ring",
+      "element": "SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080",
+      "n_customers": 28,
+      "n_txns": 60,
+      "first": "2016-11-14 16:54:00",
+      "last": "2016-12-04 11:47:00",
+      "cards": [
+        "C01289-K2",
+        "C01996-K2",
+        "C02910-K1",
+        "C02975-K1",
+        "C03676-K2",
+        "C04108-K2",
+        "C04274-K1",
+        "C05448-K2",
+        "C06031-K2",
+        "C06650-K2",
+        "C06710-K1",
+        "C07472-K1",
+        "C08168-K1",
+        "C08972-K2",
+        "C09049-K1",
+        "C09195-K1",
+        "C09906-K1",
+        "C09975-K1",
+        "C10020-K1",
+        "C10193-K2",
+        "C10326-K1",
+        "C11082-K1",
+        "C11670-K2",
+        "C11702-K1",
+        "C12645-K1",
+        "C12796-K2",
+        "C13291-K1",
+        "C13487-K1"
+      ],
+      "seed_txn": "3512563",
+      "as_of": "2016-12-04 12:47:00",
+      "case_file": "cases/MON-015.json",
+      "verdict": "fraud",
+      "p": 0.89,
+      "final_actions": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "MONITOR_CONNECTED_CARDS",
+        "ESCALATE_TO_ANALYST"
+      ]
+    }
+  ]
+}

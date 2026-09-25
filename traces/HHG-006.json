@@ -1,0 +1,222 @@
+{
+  "case_id": "HHG-006",
+  "as_of": "2016-11-22 02:30:00",
+  "steps": [
+    {
+      "step": 1,
+      "tool": "intake",
+      "why": "every investigation starts from the alert",
+      "result": "customer_report: Customer C07297 message: 'I never made this $482.12 purchase. Please check my card.' Refers to 3476682.",
+      "p_fraud": null,
+      "params": {
+        "as_of": "2016-11-22 02:30:00"
+      },
+      "entity_ids": []
+    },
+    {
+      "step": 2,
+      "tool": "txn_context",
+      "why": "read the flagged transaction and its device/region attributes",
+      "result": "$482.12 online product C at 2016-11-21 20:30, region 264, device Trident/7.0 | Windows 7 | ie 11.0 for desktop | 1920x1080 (New), risk_score 0.25",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3476682"
+      ]
+    },
+    {
+      "step": 3,
+      "tool": "cardholder_baseline",
+      "why": "establish what normal looks like before judging the alert",
+      "result": "173 customer transactions in 120 days (1 by this cardholder key); region seen for the customer; device new",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "C07297"
+      ]
+    },
+    {
+      "step": 4,
+      "tool": "score_window",
+      "why": "score every transaction on the customer's cards in the look-back window with the calibrated model (trained on the bank's own closed cases)",
+      "result": "22 transactions scored; 2 at or above 0.35; flagged transaction 0.134",
+      "p_fraud": 0.134,
+      "params": {},
+      "entity_ids": [
+        "3476633",
+        "3476665"
+      ]
+    },
+    {
+      "step": 5,
+      "tool": "structuring_scan",
+      "why": "amounts just under $500 suggest threshold avoidance; look for a burst",
+      "result": "4 online purchases on C07297-K1 within 30.0 minutes totalling $1,906.07, each just under $500",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3476602",
+        "3476633",
+        "3476665",
+        "3476682"
+      ]
+    },
+    {
+      "step": 6,
+      "tool": "population_structuring_sweep",
+      "why": "is the same modus operandi hitting other customers?",
+      "result": "same burst shape on 3 other card(s): C00466-K1, C05851-K1, C10990-K1; closed precedents CC-3748, CC-3841, CC-3907, CC-4086, CC-4124",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "C00466-K1",
+        "C05851-K1",
+        "C07297-K1",
+        "C10990-K1"
+      ]
+    },
+    {
+      "step": 7,
+      "tool": "recurring_check",
+      "why": "R7: a disputed charge may be the customer's own monthly charge",
+      "result": "no monthly recurring charge of this product and amount",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 8,
+      "tool": "reconstruct_episode",
+      "why": "chain model-flagged transactions across the customer's cards with gaps <= 48 h (the rule the bank's own closed cases follow)",
+      "result": "4 transaction(s) on 2016-11-21 between 20:00 and 20:30, exposure $1,906.07",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3476602",
+        "3476633",
+        "3476665",
+        "3476682"
+      ]
+    },
+    {
+      "step": 9,
+      "tool": "assess_model",
+      "why": "combine flagged score, episode strength and cardholder history into a case probability (logistic calibrator fitted on replayed closed cases, prior shifted to 50/50)",
+      "result": "case probability 0.70",
+      "p_fraud": 0.704,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 10,
+      "tool": "assess_structure",
+      "why": "structural findings are independent of the transaction model",
+      "result": "structuring -> probability 0.96",
+      "p_fraud": 0.96,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 11,
+      "tool": "assess_report",
+      "why": "the customer's own report is evidence, but reports can be mistaken",
+      "result": "probability 0.98 with the dispute",
+      "p_fraud": 0.979,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 12,
+      "tool": "retrieve_memory",
+      "why": "GraphRAG: graph-linked closed cases plus behavioural nearest neighbours",
+      "result": "0 graph-linked closed case(s); 5 nearest precedents: CC-4785 (confirmed fraud, card_not_present_new_device), CC-1813 (confirmed fraud, card_not_present_new_device), CC-3302 (confirmed fraud, card_not_present_new_device), CC-4444 (confirmed fraud, card_not_present_new_device), CC-2591 (cleared, none)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "CC-3748",
+        "CC-3841",
+        "CC-3907",
+        "CC-4086",
+        "CC-4785",
+        "CC-1813"
+      ]
+    },
+    {
+      "step": 13,
+      "tool": "policy_initial",
+      "why": "the policy engine is the only writer of actions",
+      "result": "BLOCK_CARD, CREATE_CASE, FILE_REPORT, ESCALATE_TO_ANALYST",
+      "p_fraud": 0.979,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 14,
+      "tool": "policy_final",
+      "why": "re-run the policy on the updated state (3b)",
+      "result": "BLOCK_CARD, CREATE_CASE, FILE_REPORT, ESCALATE_TO_ANALYST",
+      "p_fraud": 0.979,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 15,
+      "tool": "write_case",
+      "why": "3a: a case written to the graph becomes evidence for the next investigation",
+      "result": "CASE-HHG-006 stored in agent memory (TigerGraph not configured: memory file only)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    }
+  ],
+  "queries": [
+    {
+      "query": "txn_context",
+      "params": {
+        "txn_id": "3476682"
+      }
+    },
+    {
+      "query": "cardholder_baseline",
+      "params": {
+        "customer_id": "C07297",
+        "as_of": "2016-11-21 20:30:00",
+        "days": "120"
+      }
+    },
+    {
+      "query": "card_window",
+      "params": {
+        "customer_id": "C07297",
+        "start": "2016-11-11 20:30:00",
+        "end": "2016-11-22 02:30:00"
+      }
+    },
+    {
+      "query": "prior_cases",
+      "params": {
+        "customer_id": "C07297",
+        "as_of": "2016-11-22 02:30:00"
+      }
+    },
+    {
+      "query": "population_window",
+      "params": {
+        "start": "2016-10-23 02:30:00",
+        "end": "2016-11-22 02:30:00"
+      }
+    }
+  ],
+  "signals": [
+    "episode",
+    "device",
+    "structuring",
+    "customer_report"
+  ],
+  "legit_signals": [
+    "familiar region/device"
+  ],
+  "p_model": 0.704,
+  "p_initial": 0.979,
+  "p_final": 0.979
+}

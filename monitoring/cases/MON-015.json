@@ -1,0 +1,278 @@
+{
+  "case_id": "MON-015",
+  "case": {
+    "status": "escalated",
+    "verdict": "fraud",
+    "fraud_probability": 0.89,
+    "pattern": "undocumented",
+    "pattern_description": "Shared-device ring: one device profile (SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080), marked New for every account, behind a proxy (anonymous), made purchases on 28 cards belonging to 28 different customers within 30 days. No single cardholder's behaviour explains it; the common element is the device. Found by expanding from the flagged transaction's device to every card that used it.",
+    "affected_txn_ids": [
+      "3500431",
+      "3512563"
+    ],
+    "first_suspicious_txn_id": "3500431",
+    "connected_card_ids": [
+      "C01289-K2",
+      "C01996-K2",
+      "C02910-K1",
+      "C02975-K1",
+      "C03676-K2",
+      "C04108-K2",
+      "C04274-K1",
+      "C05448-K2",
+      "C06031-K2",
+      "C06650-K2",
+      "C06710-K1",
+      "C08168-K1",
+      "C08972-K2",
+      "C09049-K1",
+      "C09195-K1",
+      "C09906-K1",
+      "C09975-K1",
+      "C10020-K1",
+      "C10193-K2",
+      "C10326-K1",
+      "C11082-K1",
+      "C11670-K2",
+      "C11702-K1",
+      "C12645-K1",
+      "C12796-K2",
+      "C13291-K1",
+      "C13487-K1"
+    ],
+    "connected_device_profiles": [
+      "SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080"
+    ],
+    "exposure_usd": 265.85,
+    "evidence": [
+      {
+        "claim": "Flagged $209.66 online purchase (product C) in billing region 315 on 2016-12-04 11:47; bank risk score 0.10, our transaction model 0.27 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
+        "source": "graph",
+        "ref": "query:txn_context(txn_id=3512563)",
+        "entity_ids": [
+          "3512563",
+          "C07472-K1"
+        ]
+      },
+      {
+        "claim": "Customer has 59 transactions in the prior 120 days; billing region 315 is familiar for the customer; device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080 is not established and marked New for the account, connection through anonymous proxy",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C07472, days=120)",
+        "entity_ids": [
+          "C07472"
+        ]
+      },
+      {
+        "claim": "2 transaction(s) between 2016-11-30 and 2016-12-04 on card(s) C07472-K1 form one episode (gaps <= 48 h); 0 of them score >= 0.35 on the model; the rest are tied in by the structural finding below",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C07472, days=10)",
+        "entity_ids": [
+          "3500431",
+          "3512563"
+        ]
+      },
+      {
+        "claim": "Device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080 (marked New for every account, behind a proxy (anonymous)) was used on 28 cards of 28 customers in the prior 30 days; closed cases CC-2649, CC-2971, CC-2985, CC-3035 involve the same device",
+        "source": "graph",
+        "ref": "query:device_neighbors(days=30)",
+        "entity_ids": [
+          "C01289-K2",
+          "C01996-K2",
+          "C02910-K1",
+          "C02975-K1",
+          "C03676-K2",
+          "C04108-K2",
+          "C04274-K1",
+          "C05448-K2",
+          "C06031-K2",
+          "C06650-K2",
+          "C06710-K1",
+          "C07472-K1",
+          "C08168-K1",
+          "C08972-K2",
+          "C09049-K1",
+          "CC-2649",
+          "CC-2971",
+          "CC-2985",
+          "CC-3035"
+        ]
+      },
+      {
+        "claim": "Behavioural nearest neighbours among closed cases: 5 of 5 confirmed fraud (CC-2971 undocumented, d=1.8, CC-4785 card_not_present_new_device, d=2.0, CC-3302 card_not_present_new_device, d=2.1, CC-0649 card_not_present_new_device, d=2.3, CC-3035 undocumented, d=2.3); closest cleared look-alikes: CC-0470 d=2.4, CC-3096 d=2.4, CC-1238 d=2.4",
+        "source": "graph",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
+        "entity_ids": [
+          "CC-2971",
+          "CC-4785",
+          "CC-3302",
+          "CC-0649",
+          "CC-3035",
+          "CC-0470",
+          "CC-3096",
+          "CC-1238"
+        ]
+      },
+      {
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
+        "source": "document",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-2649",
+      "CC-2971",
+      "CC-2985",
+      "CC-3035",
+      "CC-4785",
+      "CC-3302"
+    ],
+    "summary": "An undocumented coordinated pattern: 2 transaction(s) between 2016-11-30 and 2016-12-04 on C07472-K1 totalling $265.85 (probability 0.89). Evidence: new device / proxy, device shared by 28 customers. 27 connected card(s) identified.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.89 on 2 independent signals) and 3b: exposure $265.85 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: several cards show fraud from the same device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; R9: coordinated abuse outside the five documented patterns; 3a: fraud probability 0.89 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: shared origin named: device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; R9: undocumented pattern repeated across customers; 3a: fraud confirmed and activity connects to a shared device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; activity connects to another customer's fraud; coordinated undocumented pattern (R9)"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: monitor the 27 other card(s) sharing the device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: undocumented pattern handed to an analyst with the evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.89 on 2 independent signals) and 3b: exposure $265.85 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: several cards show fraud from the same device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; R9: coordinated abuse outside the five documented patterns; 3a: fraud probability 0.89 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: shared origin named: device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; R9: undocumented pattern repeated across customers; 3a: fraud confirmed and activity connects to a shared device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; activity connects to another customer's fraud; coordinated undocumented pattern (R9)"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: monitor the 27 other card(s) sharing the device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: undocumented pattern handed to an analyst with the evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "3a/R6/R9: fraud confirmed and activity connects to a shared device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080; activity connects to another customer's fraud; coordinated undocumented pattern (R9)",
+    "narrative": "Between 2016-11-30 15:47 and 2016-12-04 11:47, 2 transaction(s) totalling $265.85 were made on card(s) C07472-K1 belonging to customer C07472. The activity comprised 2 online transaction(s) under product code(s) C, in billing region 315. Online transactions came from device profile(s) SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080. All came from device profile SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080, marked New for every account, behind a proxy (anonymous). That device was used on 28 cards of 28 customers within 30 days, which no legitimate cardholder explains (policy R6). Total suspicious amount: $265.85. Actions recommended: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
+    "subjects": [
+      "C01289-K2",
+      "C01996-K2",
+      "C02910-K1",
+      "C02975-K1",
+      "C03676-K2",
+      "C04108-K2",
+      "C04274-K1",
+      "C05448-K2",
+      "C06031-K2",
+      "C06650-K2",
+      "C06710-K1",
+      "C07472",
+      "C07472-K1",
+      "C08168-K1",
+      "C08972-K2",
+      "C09049-K1",
+      "C09195-K1",
+      "C09906-K1",
+      "C09975-K1",
+      "C10020-K1",
+      "C10193-K2",
+      "C10326-K1",
+      "C11082-K1",
+      "C11670-K2",
+      "C11702-K1",
+      "C12645-K1",
+      "C12796-K2",
+      "C13291-K1",
+      "C13487-K1",
+      "SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080"
+    ],
+    "total_amount_usd": 265.85,
+    "activity_dates": [
+      "2016-11-30",
+      "2016-12-04"
+    ]
+  },
+  "stop_reason": "Probability 0.89 >= 0.85 on 2 independent signals (device, device_ring); stopping rule met.",
+  "tool_calls": 10,
+  "tokens": 0,
+  "latency_s": 0.27,
+  "monitoring_alert": {
+    "type": "device_ring",
+    "element": "SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080",
+    "n_customers": 28,
+    "n_txns": 60,
+    "first": "2016-11-14 16:54:00",
+    "last": "2016-12-04 11:47:00",
+    "cards": [
+      "C01289-K2",
+      "C01996-K2",
+      "C02910-K1",
+      "C02975-K1",
+      "C03676-K2",
+      "C04108-K2",
+      "C04274-K1",
+      "C05448-K2",
+      "C06031-K2",
+      "C06650-K2",
+      "C06710-K1",
+      "C07472-K1",
+      "C08168-K1",
+      "C08972-K2",
+      "C09049-K1",
+      "C09195-K1",
+      "C09906-K1",
+      "C09975-K1",
+      "C10020-K1",
+      "C10193-K2",
+      "C10326-K1",
+      "C11082-K1",
+      "C11670-K2",
+      "C11702-K1",
+      "C12645-K1",
+      "C12796-K2",
+      "C13291-K1",
+      "C13487-K1"
+    ],
+    "seed_txn": "3512563",
+    "as_of": "2016-12-04 12:47:00"
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "case_id": "HHG-014",
+  "as_of": "2016-11-22 20:11:00",
+  "steps": [
+    {
+      "step": 1,
+      "tool": "intake",
+      "why": "every investigation starts from the alert",
+      "result": "analyst_request: Analyst request: several cards this month show purchases from the same unusual device profile. Review transaction 3478561 on card C13487-K1 and look for related activity.",
+      "p_fraud": null,
+      "params": {
+        "as_of": "2016-11-22 20:11:00"
+      },
+      "entity_ids": []
+    },
+    {
+      "step": 2,
+      "tool": "txn_context",
+      "why": "read the flagged transaction and its device/region attributes",
+      "result": "$74.96 online product C at 2016-11-22 16:11, region 191, device SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080 (New), risk_score 0.05",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3478561"
+      ]
+    },
+    {
+      "step": 3,
+      "tool": "cardholder_baseline",
+      "why": "establish what normal looks like before judging the alert",
+      "result": "63 customer transactions in 120 days (0 by this cardholder key); region seen for the customer; device new",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "C13487"
+      ]
+    },
+    {
+      "step": 4,
+      "tool": "score_window",
+      "why": "score every transaction on the customer's cards in the look-back window with the calibrated model (trained on the bank's own closed cases)",
+      "result": "8 transactions scored; 0 at or above 0.35; flagged transaction 0.189",
+      "p_fraud": 0.189,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 5,
+      "tool": "device_neighbors",
+      "why": "devices connect people: who else used this device profile in the last 30 days?",
+      "result": "SM-G935F Build/NRD90M | Android 7.0 | chrome 62.0 for android | 1920x1080 used by 20 customers / 20 cards in 30 days, marked New for every account, behind a proxy (anonymous); closed precedents CC-2649, CC-2971, CC-2985, CC-3035",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "C01289-K2",
+        "C01996-K2",
+        "C02910-K1",
+        "C02975-K1",
+        "C03676-K2",
+        "C04108-K2",
+        "C04274-K1",
+        "C05448-K2",
+        "C06710-K1",
+        "C08168-K1"
+      ]
+    },
+    {
+      "step": 6,
+      "tool": "reconstruct_episode",
+      "why": "chain model-flagged transactions across the customer's cards with gaps <= 48 h (the rule the bank's own closed cases follow)",
+      "result": "2 transaction(s) between 2016-11-15 and 2016-11-22, exposure $187.33",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3460634",
+        "3478561"
+      ]
+    },
+    {
+      "step": 7,
+      "tool": "assess_model",
+      "why": "combine flagged score, episode strength and cardholder history into a case probability (logistic calibrator fitted on replayed closed cases, prior shifted to 50/50)",
+      "result": "case probability 0.42",
+      "p_fraud": 0.418,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 8,
+      "tool": "assess_structure",
+      "why": "structural findings are independent of the transaction model",
+      "result": "device_ring -> probability 0.88",
+      "p_fraud": 0.878,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 9,
+      "tool": "retrieve_memory",
+      "why": "GraphRAG: graph-linked closed cases plus behavioural nearest neighbours",
+      "result": "0 graph-linked closed case(s); 5 nearest precedents: CC-2971 (confirmed fraud, undocumented), CC-2985 (confirmed fraud, undocumented), CC-3302 (confirmed fraud, card_not_present_new_device), CC-2649 (confirmed fraud, undocumented), CC-2722 (confirmed fraud, card_not_present_new_device)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "CC-2649",
+        "CC-2971",
+        "CC-2985",
+        "CC-3035",
+        "CC-3302",
+        "CC-2722"
+      ]
+    },
+    {
+      "step": 10,
+      "tool": "policy_initial",
+      "why": "the policy engine is the only writer of actions",
+      "result": "BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST",
+      "p_fraud": 0.878,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 11,
+      "tool": "policy_final",
+      "why": "re-run the policy on the updated state (3b)",
+      "result": "BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST",
+      "p_fraud": 0.878,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 12,
+      "tool": "write_case",
+      "why": "3a: a case written to the graph becomes evidence for the next investigation",
+      "result": "CASE-HHG-014 stored in agent memory (TigerGraph not configured: memory file only)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    }
+  ],
+  "queries": [
+    {
+      "query": "txn_context",
+      "params": {
+        "txn_id": "3478561"
+      }
+    },
+    {
+      "query": "cardholder_baseline",
+      "params": {
+        "customer_id": "C13487",
+        "as_of": "2016-11-22 16:11:00",
+        "days": "120"
+      }
+    },
+    {
+      "query": "card_window",
+      "params": {
+        "customer_id": "C13487",
+        "start": "2016-11-12 16:11:00",
+        "end": "2016-11-22 20:11:00"
+      }
+    },
+    {
+      "query": "prior_cases",
+      "params": {
+        "customer_id": "C13487",
+        "as_of": "2016-11-22 20:11:00"
+      }
+    },
+    {
+      "query": "device_neighbors",
+      "params": {
+        "device_profile": "SM-G935F Build/NRD90M|Android 7.0|chrome 62.0 for android|1920x1080",
+        "start": "2016-10-23 20:11:00",
+        "end": "2016-11-22 20:11:00"
+      }
+    },
+    {
+      "query": "device_neighbors",
+      "params": {
+        "device_profile": "SM-G935F Build/NRD90M|Android 7.0|chrome 62.0 for android|1920x1080",
+        "start": "2016-06-25 20:11:00",
+        "end": "2016-11-22 20:11:00"
+      }
+    }
+  ],
+  "signals": [
+    "device",
+    "device_ring"
+  ],
+  "legit_signals": [
+    "familiar region/device"
+  ],
+  "p_model": 0.418,
+  "p_initial": 0.878,
+  "p_final": 0.878
+}

@@ -1,117 +1,85 @@
 {
   "case_id": "HHG-004",
   "case": {
-    "status": "closed_fraud",
-    "verdict": "fraud",
-    "fraud_probability": 1.0,
+    "status": "escalated",
+    "verdict": "uncertain",
+    "fraud_probability": 0.41,
     "pattern": "card_not_present_new_device",
-    "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
+    "pattern_description": "",
     "affected_txn_ids": [
-      "3006475",
-      "3031415",
-      "3087647",
-      "3087652",
-      "3002860",
-      "3006707",
-      "3092419",
-      "3221596",
-      "3583227",
-      "3014411",
-      "3028531",
-      "3002894",
-      "3135394",
-      "3014569",
-      "3089037",
-      "3013930",
-      "3126377",
-      "3031191",
-      "3012785",
-      "3006128",
-      "3087672",
-      "3007291",
-      "3020656",
-      "3088788",
-      "3087605",
-      "3087613",
-      "3087743",
-      "3023797",
-      "3005851",
-      "3006602",
-      "3123322",
-      "3001647",
-      "3013592",
-      "3014654",
-      "3012849",
-      "3087548"
+      "3583227"
     ],
-    "first_suspicious_txn_id": "3006475",
+    "first_suspicious_txn_id": "3583227",
     "connected_card_ids": [],
-    "connected_device_profiles": [
-      "D1C3672"
-    ],
-    "exposure_usd": 891.85,
+    "connected_device_profiles": [],
+    "exposure_usd": 128.33,
     "evidence": [
       {
-        "claim": "Flagged transaction 3583227: $128.33, online channel, risk score 0.34",
+        "claim": "Flagged $128.33 online purchase (product C) on 2016-12-29 01:53; bank risk score 0.34, our transaction model 0.01 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
         "source": "graph",
-        "ref": "query:get_transaction(3583227)",
+        "ref": "query:txn_context(txn_id=3583227)",
+        "entity_ids": [
+          "3583227",
+          "C08106-K1"
+        ]
+      },
+      {
+        "claim": "Customer has 130 transactions in the prior 120 days; no billing region on the flagged transaction; device profile UNK | UNK | firefox 47.0 | UNK is not established and marked New for the account",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C08106, days=120)",
+        "entity_ids": [
+          "C08106"
+        ]
+      },
+      {
+        "claim": "No other transaction on the customer's cards in the 10-day window scores as likely fraud; the flagged transaction is isolated",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C08106, days=10)",
         "entity_ids": [
           "3583227"
         ]
       },
       {
-        "claim": "Transaction came from device:  (, firefox 47.0, )",
+        "claim": "No monthly recurring charge of the same product and amount in the customer's history (R7 does not apply)",
         "source": "graph",
-        "ref": "query:get_device(D1C3672)",
-        "entity_ids": [
-          "D1C3672"
-        ]
-      },
-      {
-        "claim": "Card C08106-K1 has 30 transactions in history, average amount $50.15",
-        "source": "graph",
-        "ref": "query:card_transactions(C08106-K1)",
+        "ref": "query:recurring_check",
         "entity_ids": [
           "C08106-K1"
         ]
       },
       {
-        "claim": "Found 4 prior closed cases for this card/customer: CC-0696, CC-1736, CC-2121, CC-3778",
+        "claim": "Behavioural nearest neighbours among closed cases: 3 of 5 confirmed fraud (CC-3683 card_not_present_new_device, d=0.1, CC-1139 none, d=0.1, CC-3407 none, d=0.2, CC-2494 card_not_present_new_device, d=0.2, CC-2667 card_not_present_new_device, d=0.2); closest cleared look-alikes: CC-1139 d=0.1, CC-3407 d=0.2, CC-0991 d=0.2",
         "source": "graph",
-        "ref": "query:closed_cases(C08106-K1, C08106)",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
         "entity_ids": [
-          "CC-0696",
-          "CC-1736",
-          "CC-2121",
-          "CC-3778"
+          "CC-3683",
+          "CC-1139",
+          "CC-3407",
+          "CC-2494",
+          "CC-2667",
+          "CC-1139",
+          "CC-3407",
+          "CC-0991"
         ]
       },
       {
-        "claim": "Device D1C3672 used by 6 cards: C05031-K1, C07518-K1, C03095-K1, C04248-K1, C02222-K1, C08106-K1",
-        "source": "graph",
-        "ref": "query:device_cards(D1C3672)",
+        "claim": "Customer reported the charge as not made by them: 'I never made this $128.33 purchase. Please check my card.' Refers to 3583227.",
+        "source": "customer",
+        "ref": "case_pack:trigger_text",
         "entity_ids": [
-          "D1C3672",
-          "C05031-K1",
-          "C07518-K1",
-          "C03095-K1",
-          "C04248-K1",
-          "C02222-K1",
-          "C08106-K1"
+          "C08106"
         ]
       },
       {
-        "claim": "Device D1C3672 is marked as NEW for card C08106-K1",
-        "source": "graph",
-        "ref": "query:new_device_check(C08106-K1, D1C3672)",
-        "entity_ids": [
-          "D1C3672"
-        ]
-      },
-      {
-        "claim": "LLM analysis: The customer C08106 explicitly denied making the $128.33 online purchase (transaction 3583227), which is a strong indicator of unauthorized activity. This transaction amount exceeds the card's historical maximum of $96.45 and occurs on a device (D1C3672) that is new for this card and shared with five other cards, suggesting possible device compromise. Prior cases for the same card (CC-1736, CC-2121, CC-3778) were confirmed fraud with the same card_not_present_fraud pattern, reinforcing the likelihood of fraud. The combination of a customer report, anomalous amount, new/shared device, and historical fraud pattern supports a fraud verdict.",
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
         "source": "document",
-        "ref": "llm:assess_evidence",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      },
+      {
+        "claim": "Customer did not reply to the follow-up within 24 hours (simulated reply; assumption recorded in evidence_requests)",
+        "source": "customer",
+        "ref": "evidence_request:1",
         "entity_ids": []
       }
     ],
@@ -119,73 +87,73 @@
       "CC-0696",
       "CC-1736",
       "CC-2121",
-      "CC-3778"
+      "CC-3683",
+      "CC-2494",
+      "CC-2667"
     ],
-    "summary": "{\n  \"investigation_summary\": \"The alert involves a card-not-present transaction on a new device, matching the pattern card_not_present_new_device. Flagged transaction 3583227 for $128.33 online had a low risk score 0.34 but originated from an unfamiliar device (Firefox 47.0) with no prior association. Card C08106-K1 shows 30 historical transactions averaging $50.15, making the $128.33 amount atypical. Prior similar case CC-1736 was confirmed fraud for card-not-present fraud, while CC-0696 was cleared, supporting a fraud assessment. Given the pattern, anomalous amount, new device, and historical precedent, the fraud probability is assessed at 1.00.\",\n  \"verdict\": \"fraud\",\n  \"fraud_probability\": 1.00,\n  \"pattern\": \"card_not_present_new_device\",\n  \"evidence\": [\n    \"Flagged transaction 3583227: $128.33, online channel, risk score 0.34\",\n    \"Transaction came from device: (, firefox 47.0, )\",\n    \"Card C08106-K1 has 30 transactions in history, average amount $50.15\"\n  ],\n  \"prior_cases\": [\n    \"CC-0696: cleared (none), $0.00\",\n    \"CC-1736: confirmed_fraud (card_not_present_fraud), $9.90\"\n  ]\n}",
-    "written_to_graph": true,
-    "graph_case_id": "CASE-HHG-004"
+    "summary": "Card-not-present fraud from a new device: 1 transaction(s) on 2016-12-29 at 01:53 on C08106-K1 totalling $128.33 (probability 0.41). No reply was assumed, so the card is monitored and pending authorizations declined.",
+    "written_to_graph": false,
+    "graph_case_id": ""
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 6,
-      "assumed_response": "Customer C08106 states they did not make this purchase and still has the card"
+      "asked_after_step": 9,
+      "assumed_response": "Customer did not reply to the follow-up within 24 hours"
     }
   ],
   "next_best_actions": {
     "initial": [
       {
-        "action": "BLOCK_CARD",
-        "route": "L1",
-        "reason": "R2: High confidence fraud with exposure $128.33"
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: probability 0.41 rests on a single signal; verify before any block"
       },
       {
         "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "R2: Confirmed fraud requires case"
+        "reason": "3a: fraud probability 0.41 reaches 0.30; 3a: evidence requested; 3a: the customer disputes a charge"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: verdict uncertain and the evidence conflicts"
       }
     ],
     "final": [
       {
-        "action": "BLOCK_CARD",
+        "action": "DECLINE_TRANSACTION",
         "route": "L1",
-        "reason": "High confidence fraud, exposure $2397.71"
+        "reason": "R4: decline pending authorizations while the customer is unreachable"
+      },
+      {
+        "action": "MONITOR_CARD",
+        "route": "auto",
+        "reason": "R4: no reply within 24 hours; monitoring raised for 72 hours"
       },
       {
         "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "Confirmed fraud requires case creation"
+        "reason": "3a: evidence was requested, so a case is open; 3a: fraud probability 0.41 reaches 0.30; 3a: evidence requested; 3a: the customer disputes a charge"
       },
       {
-        "action": "FILE_REPORT",
-        "route": "L2",
-        "reason": "SAR required: exposure $2397.71 or shared connections"
-      },
-      {
-        "action": "MONITOR_CONNECTED_CARDS",
+        "action": "ESCALATE_TO_ANALYST",
         "route": "auto",
-        "reason": "Shared device profile detected"
+        "reason": "R8: verdict uncertain and the evidence conflicts"
       }
     ],
-    "what_changed": "Added: FILE_REPORT, MONITOR_CONNECTED_CARDS"
+    "what_changed": "Assumed reply (no reply) moved the probability from 0.41 to 0.41; R4 applies: monitor the card and decline pending authorizations."
   },
   "sar": {
-    "file": true,
-    "reason": "Shared device profile linking multiple cards",
-    "narrative": "{\n  \"sar_narrative\": \"Customer C08106, card C08106-K1, exhibited a card_not_present_new_device pattern with total exposure of $2,397.\"\n}",
-    "subjects": [
-      "C08106",
-      "C08106-K1",
-      "D1C3672"
-    ],
-    "total_amount_usd": 2397.71,
-    "activity_dates": [
-      "2016-07-02",
-      "2016-12-29"
-    ]
+    "file": false,
+    "reason": "3a: no report \u2014 fraud is neither confirmed nor strongly suspected (p=0.41)",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
   },
-  "stop_reason": "Fraud probability 1.00 \u2265 0.85 supported by 6 independent pieces of evidence",
-  "tool_calls": 11,
-  "tokens": 11378,
-  "latency_s": 48.6
+  "stop_reason": "Customer unreachable (assumed no reply); probability stays 0.41. R4 actions protect the card; the analyst takes over with the evidence.",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.17
 }

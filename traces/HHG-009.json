@@ -1,0 +1,166 @@
+{
+  "case_id": "HHG-009",
+  "as_of": "2016-12-28 17:10:53",
+  "steps": [
+    {
+      "step": 1,
+      "tool": "intake",
+      "why": "every investigation starts from the alert",
+      "result": "customer_report: Customer C08299 message: 'I never made this $30.02 purchase. Please check my card.' Refers to 3581141.",
+      "p_fraud": null,
+      "params": {
+        "as_of": "2016-12-28 17:10:53"
+      },
+      "entity_ids": []
+    },
+    {
+      "step": 2,
+      "tool": "txn_context",
+      "why": "read the flagged transaction and its device/region attributes",
+      "result": "$30.02 online product S at 2016-12-28 12:10, region 203, device none (Found), risk_score 0.28",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3581141"
+      ]
+    },
+    {
+      "step": 3,
+      "tool": "cardholder_baseline",
+      "why": "establish what normal looks like before judging the alert",
+      "result": "22 customer transactions in 120 days (0 by this cardholder key); region new for the customer; device n/a",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "C08299"
+      ]
+    },
+    {
+      "step": 4,
+      "tool": "score_window",
+      "why": "score every transaction on the customer's cards in the look-back window with the calibrated model (trained on the bank's own closed cases)",
+      "result": "2 transactions scored; 1 at or above 0.35; flagged transaction 0.908",
+      "p_fraud": 0.908,
+      "params": {},
+      "entity_ids": [
+        "3581141"
+      ]
+    },
+    {
+      "step": 5,
+      "tool": "recurring_check",
+      "why": "R7: a disputed charge may be the customer's own monthly charge",
+      "result": "no monthly recurring charge of this product and amount",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 6,
+      "tool": "reconstruct_episode",
+      "why": "chain model-flagged transactions across the customer's cards with gaps <= 48 h (the rule the bank's own closed cases follow)",
+      "result": "1 transaction(s) on 2016-12-28 at 12:10, exposure $30.02",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3581141"
+      ]
+    },
+    {
+      "step": 7,
+      "tool": "assess_model",
+      "why": "combine flagged score, episode strength and cardholder history into a case probability (logistic calibrator fitted on replayed closed cases, prior shifted to 50/50)",
+      "result": "case probability 0.80",
+      "p_fraud": 0.803,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 8,
+      "tool": "assess_report",
+      "why": "the customer's own report is evidence, but reports can be mistaken",
+      "result": "probability 0.89 with the dispute",
+      "p_fraud": 0.891,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 9,
+      "tool": "retrieve_memory",
+      "why": "GraphRAG: graph-linked closed cases plus behavioural nearest neighbours",
+      "result": "0 graph-linked closed case(s); 5 nearest precedents: CC-0309 (confirmed fraud, card_not_present_fraud), CC-4986 (confirmed fraud, card_not_present_fraud), CC-4551 (confirmed fraud, card_not_present_fraud), CC-0434 (confirmed fraud, card_not_present_fraud), CC-3789 (confirmed fraud, card_not_present_fraud)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 10,
+      "tool": "policy_initial",
+      "why": "the policy engine is the only writer of actions",
+      "result": "BLOCK_CARD, CREATE_CASE",
+      "p_fraud": 0.891,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 11,
+      "tool": "policy_final",
+      "why": "re-run the policy on the updated state (3b)",
+      "result": "BLOCK_CARD, CREATE_CASE",
+      "p_fraud": 0.891,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 12,
+      "tool": "write_case",
+      "why": "3a: a case written to the graph becomes evidence for the next investigation",
+      "result": "CASE-HHG-009 stored in agent memory (TigerGraph not configured: memory file only)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    }
+  ],
+  "queries": [
+    {
+      "query": "txn_context",
+      "params": {
+        "txn_id": "3581141"
+      }
+    },
+    {
+      "query": "cardholder_baseline",
+      "params": {
+        "customer_id": "C08299",
+        "as_of": "2016-12-28 12:10:53",
+        "days": "120"
+      }
+    },
+    {
+      "query": "card_window",
+      "params": {
+        "customer_id": "C08299",
+        "start": "2016-12-18 12:10:53",
+        "end": "2016-12-28 17:10:53"
+      }
+    },
+    {
+      "query": "prior_cases",
+      "params": {
+        "customer_id": "C08299",
+        "as_of": "2016-12-28 17:10:53"
+      }
+    }
+  ],
+  "signals": [
+    "model",
+    "region",
+    "customer_report"
+  ],
+  "legit_signals": [
+    "isolated"
+  ],
+  "p_model": 0.803,
+  "p_initial": 0.891,
+  "p_final": 0.891
+}

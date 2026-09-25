@@ -248,6 +248,27 @@ class TigerGraphClient:
 
         logger.info("Investigation case %s written to TigerGraph", case_id)
 
+    def upsert_agent_case(self, rec: dict) -> bool:
+        """Write an engine case (src/engine) as an InvestigationCase vertex with edges.
+
+        Returns True only when TigerGraph acknowledged the upsert; the answer file's
+        written_to_graph flag is taken from this return value, never assumed."""
+        if not self._connected and not self.connect():
+            return False
+        try:
+            self.write_investigation_case(
+                rec["graph_case_id"],
+                {"customer_id": rec["customer_id"], "card_id": (rec["cards"] or [""])[0],
+                 "opened_at": rec["opened_at"], "verdict": rec["verdict"], "pattern": rec["pattern"],
+                 "status": "closed_fraud" if rec["verdict"] == "fraud" else
+                 ("closed_legitimate" if rec["verdict"] == "legitimate" else "open")},
+                linked_txns=rec.get("txn_ids"), linked_cards=rec.get("cards"),
+                linked_devices=rec.get("devices"))
+            return self.get_vertex("InvestigationCase", rec["graph_case_id"]) is not None
+        except Exception as e:  # noqa: BLE001
+            logger.warning("upsert_agent_case failed: %s", e)
+            return False
+
     def _run_interpret_or_rest(self, query: str, params: dict) -> Any:
         """Run an interpret query, falling back to REST if needed."""
         if not self._connected:

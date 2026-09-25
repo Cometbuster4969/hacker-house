@@ -3,123 +3,67 @@
   "case": {
     "status": "closed_fraud",
     "verdict": "fraud",
-    "fraud_probability": 0.95,
+    "fraud_probability": 0.85,
     "pattern": "card_not_present_new_device",
-    "pattern_description": "Card-not-present fraud from a new device. Device is marked as New for this account, indicating first-time use.",
+    "pattern_description": "",
     "affected_txn_ids": [
-      "3013819",
-      "3002526",
-      "3002278",
-      "3000306",
-      "3013622",
-      "3007932",
-      "3014406",
-      "3001078",
-      "3021740",
-      "3002249",
-      "3002542",
-      "3002221",
-      "3000893",
-      "3020070",
-      "3022596",
-      "3012938",
-      "3006150",
-      "3001274",
-      "3014918",
-      "3013306",
-      "3006178",
-      "3010126",
-      "3001123",
-      "3013197",
-      "3002288",
-      "3503878",
-      "3314748"
+      "3503878"
     ],
-    "first_suspicious_txn_id": "3013819",
+    "first_suspicious_txn_id": "3503878",
     "connected_card_ids": [],
-    "connected_device_profiles": [
-      "D8D1C12"
-    ],
-    "exposure_usd": 311.86,
+    "connected_device_profiles": [],
+    "exposure_usd": 99.92,
     "evidence": [
       {
-        "claim": "Flagged transaction 3503878: $99.92, online channel, risk score 0.90",
+        "claim": "Flagged $99.92 online purchase (product R) in billing region 264 on 2016-12-01 17:28; bank risk score 0.90, our transaction model 0.45 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
         "source": "graph",
-        "ref": "query:get_transaction(3503878)",
+        "ref": "query:txn_context(txn_id=3503878)",
+        "entity_ids": [
+          "3503878",
+          "C07987-K2"
+        ]
+      },
+      {
+        "claim": "Customer has 151 transactions in the prior 120 days; billing region 264 is familiar for the customer; device profile Windows | other | chrome 61.0 | 1280x720 is not established and marked New for the account",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C07987, days=120)",
+        "entity_ids": [
+          "C07987"
+        ]
+      },
+      {
+        "claim": "No other transaction on the customer's cards in the 10-day window scores as likely fraud; the flagged transaction is isolated",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C07987, days=10)",
         "entity_ids": [
           "3503878"
         ]
       },
       {
-        "claim": "Transaction came from device: Windows (other, chrome 61.0, 1280x720)",
+        "claim": "Behavioural nearest neighbours among closed cases: 4 of 5 confirmed fraud (CC-0521 card_not_present_new_device, d=0.0, CC-3051 card_not_present_new_device, d=0.0, CC-0977 none, d=0.0, CC-0663 card_not_present_new_device, d=0.0, CC-3937 card_not_present_new_device, d=0.0); closest cleared look-alikes: CC-0977 d=0.0, CC-1246 d=0.0, CC-2452 d=0.0",
         "source": "graph",
-        "ref": "query:get_device(D8D1C12)",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
         "entity_ids": [
-          "D8D1C12"
+          "CC-0521",
+          "CC-3051",
+          "CC-0977",
+          "CC-0663",
+          "CC-3937",
+          "CC-0977",
+          "CC-1246",
+          "CC-2452"
         ]
       },
       {
-        "claim": "Card C07987-K2 has 1 transactions in history, average amount $311.86",
-        "source": "graph",
-        "ref": "query:card_transactions(C07987-K2)",
-        "entity_ids": [
-          "C07987-K2"
-        ]
-      },
-      {
-        "claim": "Customer C07987 has 2 cards: C07987-K1, C07987-K2",
-        "source": "graph",
-        "ref": "query:customer_cards(C07987)",
-        "entity_ids": [
-          "C07987",
-          "C07987-K1",
-          "C07987-K2"
-        ]
-      },
-      {
-        "claim": "Billing region 264 has 2033 cards transacting in it",
-        "source": "graph",
-        "ref": "query:region_cards(264)",
-        "entity_ids": [
-          "264"
-        ]
-      },
-      {
-        "claim": "Found 4 prior closed cases for this card/customer: CC-2011, CC-2087, CC-2860, CC-5026",
-        "source": "graph",
-        "ref": "query:closed_cases(C07987-K2, C07987)",
-        "entity_ids": [
-          "CC-2011",
-          "CC-2087",
-          "CC-2860",
-          "CC-5026"
-        ]
-      },
-      {
-        "claim": "Device D8D1C12 used by 5 cards: C11309-K1, C07987-K1, C06224-K1, C01983-K1, C01104-K1",
-        "source": "graph",
-        "ref": "query:device_cards(D8D1C12)",
-        "entity_ids": [
-          "D8D1C12",
-          "C11309-K1",
-          "C07987-K1",
-          "C06224-K1",
-          "C01983-K1",
-          "C01104-K1"
-        ]
-      },
-      {
-        "claim": "Device D8D1C12 is marked as NEW for card C07987-K2",
-        "source": "graph",
-        "ref": "query:new_device_check(C07987-K2, D8D1C12)",
-        "entity_ids": [
-          "D8D1C12"
-        ]
-      },
-      {
-        "claim": "LLM analysis: The flagged transaction is online for $99.92, which is below the card's historical average of $311.86, suggesting a low-value test ([evidence 1], [evidence 3]). It occurred on device D8D1C12 that is new for this card and shared by five different cards, indicating a potentially compromised device ([evidence 2], [evidence 7], [evidence 8]). Prior cases for this cardholder show confirmed fraud for similar out-of-region or card-not-present activity (CC-2011, CC-2860, CC-5026) ([evidence 4], [evidence 6]). The combination of a low-value online transaction on a new, shared device matches the card_not_present_new_device pattern. Therefore, the fraud probability remains high, consistent with the model score of 0.90.",
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
         "source": "document",
-        "ref": "llm:assess_evidence",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      },
+      {
+        "claim": "Customer states they did not make the $99.92 transaction and still has the card (simulated reply; assumption recorded in evidence_requests)",
+        "source": "customer",
+        "ref": "evidence_request:1",
         "entity_ids": []
       }
     ],
@@ -127,67 +71,58 @@
       "CC-2011",
       "CC-2087",
       "CC-2860",
-      "CC-5026"
+      "CC-0521",
+      "CC-3051",
+      "CC-0663"
     ],
-    "summary": "{\n  \"investigation_summary\": \"The alert indicates a high\u2011risk card\u2011not\u2011present transaction on a new device, with a fraud probability of 0.95. Evidence shows flagged transaction 3503878 ($99.92, online, risk score 0.90) originated from a Windows device (Chrome 61.0, 1280x720) never seen before on card C07987\u2011K2, which has only one prior transaction averaging $311.86. Historical cases show a similar out\u2011of\u2011region pattern in CC\u20112011 (confirmed fraud, $3,059.89) while CC\u20112087 was cleared, reinforcing the suspicion. Based on the device novelty, low historical usage, and strong risk score, the transaction is assessed as fraudulent.\"\n}",
-    "written_to_graph": true,
-    "graph_case_id": "CASE-HHG-019"
+    "summary": "Card-not-present fraud from a new device: 1 transaction(s) on 2016-12-01 at 17:28 on C07987-K2 totalling $99.92 (probability 0.85). Evidence: new device / proxy. The (simulated) customer denial settles the verdict.",
+    "written_to_graph": false,
+    "graph_case_id": ""
   },
-  "evidence_requests": [],
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 7,
+      "assumed_response": "Customer states they did not make the $99.92 transaction and still has the card"
+    }
+  ],
   "next_best_actions": {
     "initial": [
       {
-        "action": "BLOCK_CARD",
-        "route": "L1",
-        "reason": "R2: High confidence fraud with exposure $99.92"
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: probability 0.69 rests on a single signal; verify before any block"
       },
       {
         "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "R2: Confirmed fraud requires case"
+        "reason": "3a: fraud probability 0.69 reaches 0.30; 3a: evidence requested"
       }
     ],
     "final": [
       {
         "action": "BLOCK_CARD",
-        "route": "L2",
-        "reason": "High confidence fraud, exposure $2875.51 > $2,500"
+        "route": "L1",
+        "reason": "R2: customer denied the transaction; exposure $99.92 <= $2,500"
       },
       {
         "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "Confirmed fraud requires case creation"
-      },
-      {
-        "action": "FILE_REPORT",
-        "route": "L2",
-        "reason": "SAR required: exposure $2875.51 or shared connections"
-      },
-      {
-        "action": "MONITOR_CONNECTED_CARDS",
-        "route": "auto",
-        "reason": "Shared device profile detected"
+        "reason": "R2: customer denied the transaction; 3a: fraud probability 0.85 reaches 0.30; 3a: evidence requested"
       }
     ],
-    "what_changed": "Added: MONITOR_CONNECTED_CARDS, FILE_REPORT"
+    "what_changed": "Assumed reply (denied) moved the probability from 0.69 to 0.85; R2 now applies, so the card is blocked and the case confirmed."
   },
   "sar": {
-    "file": true,
-    "reason": "Shared device profile linking multiple cards",
-    "narrative": "We need to produce JSON only, with a field \"sar_narrative\": \"...\". The narrative must be 6-12 sentences, factual only, using only transaction IDs and amounts listed above. Must cite evidence for every conclusion. Must not use other numbers. Must not mention risk score, device ID, billing region number, prior case numbers. Also must not mention any other numbers besides the allowed transaction IDs and amounts. So we cannot mention counts like two, five, etc. Also cannot mention numbers like 2033, 264, etc. Must avoid any numeric characters except those in the allowed IDs and amounts. Also must avoid numbers written as words? The instruction says \"NUMERIC RULES (MANDATORY): ... transaction counts: you will be given the exact counts. Do NOT change them.\" It doesn't explicitly forbid using numbers in words, but safer to avoid any numeric references besides the allowed ones. However, we need to convey some information like \"the customer has two cards\" - that's a number. We cannot say \"two\". We could say \"the customer holds multiple cards\". That avoids a number. Similarly, \"the device has been used by other cards\" avoids specifying five. \"Prior closed cases\" avoids number. \"The billing region shows card activity\" avoids number.\n\nWe must still cite evidence for each conclusion. We'll need to reference evidence IDs like [evidence 1], etc. Those are not numbers? They contain numbers but they are labels; likely acceptable as they are part of citation format. The instruction about numbers likely refers to content of narrative, not citations. We'll keep citations.\n\nNow craft sentences without any numbers besides the allowed IDs and amounts.\n\nAllowed transaction IDs: 3314748, 3503878. Allowed amounts: $2875.51, $99.92, $311.86.\n\nWe must use each of those? The instruction: \"Must use only transaction IDs and amounts listed above.\" It doesn't say we must use all, but we should use them as needed. We'll use both IDs and all three amounts.\n\nWe need to avoid any other numbers. Let's check each sentence for any digits.\n\nWe'll write sentences like:\n\nSentence 1: Customer C07987 holds multiple cards and the alert concerns card C07987-K2. (Contains \"C07987\" which includes numbers; is that allowed? The customer ID includes numbers. The instruction only restricts transaction IDs and amounts; customer ID is not a transaction ID, so maybe allowed. But to be safe, we might avoid mentioning the customer ID? However we need to reference evidence 4 which mentions customer C07987. If we avoid the ID, we lose ability to cite. But we can cite evidence without mentioning the ID in the sentence? We could say \"The customer associated with the card has multiple cards\" and cite evidence 4. That avoids the ID. Good.\n\nThus we should avoid any IDs that are not transaction IDs. So we should not mention card IDs like C07987-K2, device IDs, billing region numbers, case numbers, etc. Only transaction IDs allowed. So we must not mention card C07987-K2. We can refer to \"the card in question\". That's okay.\n\nThus we need to rephrase to avoid any non-transaction IDs.\n\nLet's list what we can mention: transaction IDs 3314748 and 3503878, amounts $2875.51, $99.92, $311.86. Also we can mention generic descriptors: card, transaction, device, customer, region, etc. But we must not include any other specific identifiers that contain numbers.\n\nNow craft sentences:\n\n1. The alert involves an exposure amount of $2875.51 linked to transaction ID 3314748. (Contains only allowed amount and transaction ID. No other numbers.)\n\n2. A separate flagged transaction is ID 3503878 for $99.92 and was processed online. (Contains allowed ID and amount. \"online\" is fine.)\n\n3. This amount is below the historical average transaction amount of $311.86 for the card. (Contains allowed amount.)\n\n4. The transaction originated from a device that is new for the card and has been used by other cards. (No numbers.)\n\n5. Prior closed cases for this customer show confirmed fraud for similar out-of-region or card-not-present activity. (No numbers.)\n\n6. The billing region associated with the card shows substantial card activity. (No numbers.)\n\n7. The pattern matches the card_not_present_new_device indicator identified in the LLM analysis. (No numbers.)\n\nWe have 7 sentences, within 6-12. Need to cite evidence for each conclusion.\n\nWe need to map evidence:\n\nEvidence 1: flagged transaction 3503878: $99.92, online channel, risk score 0.90. We'll cite for sentence 2.\n\nEvidence 2: device D8D1C12: new for card C07987-K2, shared by five cards. We'll cite for sentence 4 (device new and used by other cards). Even though we avoid mentioning five, we still cite evidence 2.\n\nEvidence 3: historical average transaction amount for card C07987-K2: $311.86. Cite for sentence 3.\n\nEvidence 4: customer C07987 has two cards: C07987-K1, C07987-K2; prior closed cases CC-2011, CC-2087, CC-2860, CC-5026. We'll cite for sentence 5 (prior closed cases). Also could cite for sentence 1? Not needed.\n\nEvidence 5: billing region 264 has 2033 cards transacting. Cite for sentence 6 (billing region shows substantial card activity).\n\nEvidence 6: prior cases show confirmed fraud for similar out-of-region or card-not-present activity. Could also cite for sentence 5, but we already have evidence 4.\n\nEvidence 7: device shared by five other cards (same as evidence 2). Already.\n\nEvidence 8: device is new for card C07987-K2 (same as evidence 2).\n\nDocument: LLM analysis suggests card_not_present_new_device pattern with high confidence. Cite for sentence 7.\n\nNow we need to include citations in the sentences. Use format like [evidence 1], [evidence 2], etc. Also [document] for LLM analysis.\n\nMake sure not to introduce any extra numbers in citations? The citations contain numbers like \"evidence 1\". That's a number but it's part of citation label. The instruction about numbers likely refers to narrative content, not citations. We'll assume it's okay.\n\nNow produce JSON:\n\n{\n  \"sar_narrative\": \"Sentence one. Sentence two. ...\"\n}\n\nWe need to escape quotes inside string if any. We'll avoid internal quotes.\n\nLet's craft final narrative with citations.\n\nSentence 1: The alert involves an exposure amount of $2875.51 linked to transaction ID 3314748. [facts] maybe we don't have evidence ID for that; we could cite nothing? But we need to cite evidence for every conclusion. The exposure amount is given in the prompt; maybe we can treat it as fact and not need citation. However to be safe, we could cite evidence? There's no evidence for that. Could we cite evidence 1? No. Could we cite evidence 3? No. Perhaps we can omit stating the exposure amount and just mention transaction ID 3314748 as involved without amount. But we must use the amount somewhere. We could mention amount in another sentence where we have evidence. For example, we could say \"The exposure amount of $2875.51 is associated with the alert.\" That's still a conclusion without evidence. Maybe we can cite the facts as [case file] but not defined. The user didn't give an evidence ID for the exposure amount. However, the instruction says \"you will be given the exact figure. Do NOT invent a different number.\" It doesn't say we must cite it. The citation rule is separate: \"Cite evidence for every conclusion.\" If we consider the exposure amount as a given fact, not a conclusion, maybe we don't need to cite. But the sentence \"The alert involves an exposure amount of $2875.51 linked to transaction ID 3314748.\" includes a conclusion that the amount is linked to that transaction ID. That is a conclusion linking amount to ID; we have no evidence for that link besides the prompt. But the prompt gave both the exposure amount and transaction ID 3314748 as part of the case. So we could treat that as given and not need citation. However to be safe, we could rephrase to avoid linking: \"The alert includes an exposure amount of $2875.51 and references transaction ID 3314748.\" Still linking.\n\nMaybe we can cite evidence",
-    "subjects": [
-      "C07987",
-      "C07987-K2",
-      "D8D1C12"
-    ],
-    "total_amount_usd": 2875.51,
-    "activity_dates": [
-      "2016-07-02",
-      "2016-12-01"
-    ]
+    "file": false,
+    "reason": "3a: no report \u2014 exposure $99.92 is at most $1,000 and there is no shared device, region cluster, other customer's fraud, or coordinated pattern; case only",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
   },
-  "stop_reason": "Fraud probability 0.95 \u2265 0.85 supported by 8 independent pieces of evidence",
-  "tool_calls": 12,
-  "tokens": 16162,
-  "latency_s": 89.6
+  "stop_reason": "The customer validation reply (assumed: denied) settles the question; probability 0.69 -> 0.85. Further steps would not change the actions.",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.17
 }

@@ -1,0 +1,204 @@
+{
+  "case_id": "MON-008",
+  "case": {
+    "status": "escalated",
+    "verdict": "fraud",
+    "fraud_probability": 0.98,
+    "pattern": "undocumented",
+    "pattern_description": "Threshold structuring: 4 online purchases of $477.74-$489.91 within 21 minutes, each just under a $500 limit, totalling $1,935.29. The same burst shape appears on 6 other customers' cards (C00466-K1, C01890-K1, C05851-K1, C07297-K1) in the prior 30 days, so it is coordinated rather than card testing (no small probes) or a known category. Found by a population sweep for sub-$500 bursts after the amounts on this card clustered below $500.",
+    "affected_txn_ids": [
+      "3487284",
+      "3487318",
+      "3487340",
+      "3487348"
+    ],
+    "first_suspicious_txn_id": "3487284",
+    "connected_card_ids": [
+      "C00466-K1",
+      "C01890-K1",
+      "C05851-K1",
+      "C07297-K1",
+      "C10751-K2",
+      "C10990-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 1935.29,
+    "evidence": [
+      {
+        "claim": "Flagged $477.74 online purchase (product C) in billing region 191 on 2016-11-25 21:21; bank risk score 0.15, our transaction model 0.36 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
+        "source": "graph",
+        "ref": "query:txn_context(txn_id=3487348)",
+        "entity_ids": [
+          "3487348",
+          "C03633-K1"
+        ]
+      },
+      {
+        "claim": "Customer has 88 transactions in the prior 120 days; billing region 191 is familiar for the customer; device profile MacOS | Mac OS X 10_8_5 | chrome 49.0 | 1280x800 is not established",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C03633, days=120)",
+        "entity_ids": [
+          "C03633"
+        ]
+      },
+      {
+        "claim": "4 transaction(s) on 2016-11-25 between 21:00 and 21:21 on card(s) C03633-K1 form one episode (gaps <= 48 h); 3 of them score >= 0.35 on the model; the rest are tied in by the structural finding below",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C03633, days=10)",
+        "entity_ids": [
+          "3487284",
+          "3487318",
+          "3487340",
+          "3487348"
+        ]
+      },
+      {
+        "claim": "4 online purchases within 21 minutes, each between $477.74 and $489.91 (just under $500)",
+        "source": "graph",
+        "ref": "query:structuring_scan(card_id=C03633-K1)",
+        "entity_ids": [
+          "3487284",
+          "3487318",
+          "3487340",
+          "3487348"
+        ]
+      },
+      {
+        "claim": "The same sub-$500 burst appears on 7 cards of 7 customers in the prior 30 days; closed cases CC-3748, CC-3841, CC-3907, CC-4086, CC-4124 document the same modus operandi",
+        "source": "graph",
+        "ref": "query:population_structuring_sweep(days=30)",
+        "entity_ids": [
+          "C00466-K1",
+          "C01890-K1",
+          "C03633-K1",
+          "C05851-K1",
+          "C07297-K1",
+          "C10751-K2",
+          "C10990-K1",
+          "CC-3748",
+          "CC-3841",
+          "CC-3907",
+          "CC-4086",
+          "CC-4124"
+        ]
+      },
+      {
+        "claim": "Behavioural nearest neighbours among closed cases: 5 of 5 confirmed fraud (CC-5147 card_not_present_fraud, d=0.9, CC-4890 card_not_present_fraud, d=1.0, CC-3365 card_not_present_fraud, d=1.2, CC-2133 card_not_present_fraud, d=1.3, CC-5048 card_not_present_fraud, d=1.4); closest cleared look-alikes: CC-4439 d=2.3, CC-3590 d=4.3, CC-2095 d=4.4",
+        "source": "graph",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
+        "entity_ids": [
+          "CC-5147",
+          "CC-4890",
+          "CC-3365",
+          "CC-2133",
+          "CC-5048",
+          "CC-4439",
+          "CC-3590",
+          "CC-2095"
+        ]
+      },
+      {
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
+        "source": "document",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-3748",
+      "CC-3841",
+      "CC-3907",
+      "CC-4086",
+      "CC-5147",
+      "CC-4890"
+    ],
+    "summary": "An undocumented coordinated pattern: 4 transaction(s) on 2016-11-25 between 21:00 and 21:21 on C03633-K1 totalling $1,935.29 (probability 0.98). Evidence: sub-$500 burst repeated across customers. 6 connected card(s) identified.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.98 on 2 independent signals) and 3b: exposure $1,935.29 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R9: coordinated abuse outside the five documented patterns; 3a: fraud probability 0.98 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R9: undocumented pattern repeated across customers; 3a: fraud confirmed and exposure $1,935.29 exceeds $1,000; activity connects to another customer's fraud; coordinated undocumented pattern (R9)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: undocumented pattern handed to an analyst with the evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.98 on 2 independent signals) and 3b: exposure $1,935.29 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R9: coordinated abuse outside the five documented patterns; 3a: fraud probability 0.98 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R9: undocumented pattern repeated across customers; 3a: fraud confirmed and exposure $1,935.29 exceeds $1,000; activity connects to another customer's fraud; coordinated undocumented pattern (R9)"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: undocumented pattern handed to an analyst with the evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "3a/R9: fraud confirmed and exposure $1,935.29 exceeds $1,000; activity connects to another customer's fraud; coordinated undocumented pattern (R9)",
+    "narrative": "Between 2016-11-25 21:00 and 2016-11-25 21:21, 4 transaction(s) totalling $1,935.29 were made on card(s) C03633-K1 belonging to customer C03633. The activity comprised 4 online transaction(s) under product code(s) C, in billing region 191. Online transactions came from device profile(s) MacOS | Mac OS X 10_8_5 | chrome 49.0 | 1280x800. The purchases were placed within minutes of each other, each just below a $500 threshold, a pattern that avoids single-transaction limits. The same burst shape was found on 7 cards of 7 different customers in the preceding 30 days, indicating coordinated abuse (policy R9). The amount exceeds the $1,000 reporting threshold. Total suspicious amount: $1,935.29. Actions recommended: BLOCK_CARD, CREATE_CASE, FILE_REPORT, ESCALATE_TO_ANALYST.",
+    "subjects": [
+      "C00466-K1",
+      "C01890-K1",
+      "C03633",
+      "C03633-K1",
+      "C05851-K1",
+      "C07297-K1",
+      "C10751-K2",
+      "C10990-K1"
+    ],
+    "total_amount_usd": 1935.29,
+    "activity_dates": [
+      "2016-11-25",
+      "2016-11-25"
+    ]
+  },
+  "stop_reason": "Probability 0.98 >= 0.85 on 2 independent signals (episode, structuring); stopping rule met.",
+  "tool_calls": 9,
+  "tokens": 0,
+  "latency_s": 0.32,
+  "monitoring_alert": {
+    "type": "structuring",
+    "element": "C03633-K1",
+    "n_txns": 4,
+    "total": 1935.29,
+    "first": "2016-11-25 21:00:00",
+    "last": "2016-11-25 21:21:00",
+    "cards": [
+      "C03633-K1"
+    ],
+    "seed_txn": "3487348",
+    "as_of": "2016-11-25 22:21:00"
+  }
+}

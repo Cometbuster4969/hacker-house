@@ -1,0 +1,61 @@
+{
+  "generated": "2026-09-25T02:39:30",
+  "transaction_model_sep_oct": {
+    "n": 193323,
+    "fraud_rate": 0.0365,
+    "model_roc_auc": 0.9466,
+    "risk_score_roc_auc": 0.861,
+    "model_brier": 0.01825
+  },
+  "case_replay_oct": {
+    "n_cases": 1347,
+    "fraud_share": 0.893,
+    "case_roc_auc": 0.8091,
+    "brier_raw_prior": 0.086,
+    "verdict_accuracy_balanced_50_50": 0.7725,
+    "brier_balanced_50_50": 0.1686,
+    "flagged_txn_score_only_roc_auc": 0.7898
+  },
+  "episode_sep_oct": {
+    "mean_jaccard@0.2": 0.8463,
+    "mean_jaccard@0.3": 0.8421,
+    "mean_jaccard@0.35": 0.838,
+    "mean_jaccard@0.4": 0.8342,
+    "mean_jaccard@0.5": 0.8247,
+    "mean_jaccard@0.6": 0.8168,
+    "exact_match@chosen": 0.6772,
+    "exposure_within_10pct@chosen": 0.6912
+  },
+  "pattern_sep_oct": {
+    "accuracy": 0.7958,
+    "per_pattern": {
+      "account_takeover": 0.625,
+      "card_not_present_fraud": 0.977,
+      "card_not_present_new_device": 0.874,
+      "card_testing": 0.333,
+      "out_of_region_use": 0.69,
+      "undocumented": 0.0
+    },
+    "n": 2429
+  },
+  "production": {
+    "txn_model_train_rows": 417404,
+    "pattern_model_cases": 4665,
+    "case_calibrator": {
+      "coef": [
+        0.2381,
+        0.0106,
+        1.1608,
+        1.9369
+      ],
+      "features": [
+        "lp_flag",
+        "lp_max",
+        "log_n_members",
+        "known_uid"
+      ],
+      "train_prior": 0.905,
+      "target_prior": 0.5
+    }
+  }
+}

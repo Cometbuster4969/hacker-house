@@ -3,11 +3,15 @@
 Fraud Investigation Agent — Main Entry Point
 
 Modes:
-    python main.py investigate          Run all 20 cases (hybrid: rules + LLM)
-    python main.py investigate HHG-001  Run a single case
+    python main.py build                Build the transaction store (data/store) from the dataset
+    python main.py train                Train models + write benchmark/backtest.json
+    python main.py investigate          Run all 20 cases with the engine (src/engine)
+    python main.py investigate HHG-001  Write a single case (all cases still run, so memory is identical)
+    python main.py validate             Check cases/ against the answer contract + policy
+    python main.py backtest             Replay October closed cases end-to-end
+    python main.py monitor              Autonomous sweep beyond the 20 cases -> monitoring/
     python main.py serve                Start the web dashboard
-    python main.py load                 Load data into the graph
-    python main.py stats                Show graph statistics
+    python main.py investigate --legacy Run the original rules+LLM orchestrator (src/agent)
 
 Environment:
     LLM_PROVIDER=openai     Use OpenAI for LLM reasoning
@@ -107,6 +111,10 @@ def main():
     inv = subparsers.add_parser("investigate", help="Run investigation")
     inv.add_argument("case_id", nargs="?", help="Specific case (e.g. HHG-001)")
     inv.add_argument("--max-txns", type=int, default=0)
+    inv.add_argument("--legacy", action="store_true", help="use the original src/agent orchestrator")
+    for name, hlp in (("build", "build data/store"), ("train", "train models"), ("validate", "validate cases/"),
+                      ("backtest", "closed-case replay"), ("monitor", "autonomous monitoring sweep")):
+        subparsers.add_parser(name, help=hlp)
 
     srv = subparsers.add_parser("serve", help="Start dashboard")
     srv.add_argument("--port", type=int, default=PORT)
@@ -122,17 +130,28 @@ def main():
         return
 
     ensure_dirs()
-    graph = InMemoryGraph()
+    import subprocess
+    root = Path(__file__).parent
+    if args.command == "investigate" and not args.legacy:
+        from src.engine.runner import run
+        run([args.case_id] if args.case_id else None)
+        return
+    if args.command == "build":
+        from src.engine.store import build_store
+        print(build_store(force=True))
+        return
+    if args.command in ("train", "validate", "backtest", "monitor"):
+        script = {"train": "train_models.py", "validate": "validate_answers.py", "backtest": "backtest.py",
+                  "monitor": "monitor.py"}[args.command]
+        sys.exit(subprocess.call([sys.executable, str(root / "scripts" / script)]))
+    if args.command == "serve":
+        run_server()
+        return
 
+    graph = InMemoryGraph()
     if args.command == "investigate":
         loader = load_data(graph, getattr(args, "max_txns", 0))
         run_investigation(graph, loader, args.case_id)
-
-    elif args.command == "serve":
-        loader = load_data(graph)
-        from src.ui import app as ui_app
-        ui_app._graph_stats = graph.get_graph_stats()
-        run_server()
 
     elif args.command == "load":
         loader = load_data(graph, getattr(args, "max_txns", 0))

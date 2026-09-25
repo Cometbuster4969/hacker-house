@@ -1,0 +1,172 @@
+{
+  "case_id": "HHG-017",
+  "as_of": "2016-11-12 00:46:24",
+  "steps": [
+    {
+      "step": 1,
+      "tool": "intake",
+      "why": "every investigation starts from the alert",
+      "result": "risk_score: Real-time model scored transaction 3450629 ($100.09, online) at 0.57. Review and decide.",
+      "p_fraud": null,
+      "params": {
+        "as_of": "2016-11-12 00:46:24"
+      },
+      "entity_ids": []
+    },
+    {
+      "step": 2,
+      "tool": "txn_context",
+      "why": "read the flagged transaction and its device/region attributes",
+      "result": "$100.09 online product R at 2016-11-11 23:46, region 204, device Windows | Windows 10 | chrome 65.0 | 1920x1080 (Found), risk_score 0.57",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3450629"
+      ]
+    },
+    {
+      "step": 3,
+      "tool": "cardholder_baseline",
+      "why": "establish what normal looks like before judging the alert",
+      "result": "52 customer transactions in 120 days (2 by this cardholder key); region seen for the customer; device seen",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "C04570"
+      ]
+    },
+    {
+      "step": 4,
+      "tool": "score_window",
+      "why": "score every transaction on the customer's cards in the look-back window with the calibrated model (trained on the bank's own closed cases)",
+      "result": "3 transactions scored; 0 at or above 0.35; flagged transaction 0.010",
+      "p_fraud": 0.01,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 5,
+      "tool": "device_neighbors",
+      "why": "devices connect people: who else used this device profile in the last 30 days?",
+      "result": "no anomalous shared use of 1 device profile(s)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 6,
+      "tool": "reconstruct_episode",
+      "why": "chain model-flagged transactions across the customer's cards with gaps <= 48 h (the rule the bank's own closed cases follow)",
+      "result": "1 transaction(s) on 2016-11-11 at 23:46, exposure $100.09",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "3450629"
+      ]
+    },
+    {
+      "step": 7,
+      "tool": "assess_model",
+      "why": "combine flagged score, episode strength and cardholder history into a case probability (logistic calibrator fitted on replayed closed cases, prior shifted to 50/50)",
+      "result": "case probability 0.25",
+      "p_fraud": 0.247,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 8,
+      "tool": "retrieve_memory",
+      "why": "GraphRAG: graph-linked closed cases plus behavioural nearest neighbours",
+      "result": "1 graph-linked closed case(s); 5 nearest precedents: CC-3346 (confirmed fraud, card_not_present_fraud), CC-3375 (confirmed fraud, card_not_present_fraud), CC-4358 (confirmed fraud, card_not_present_fraud), CC-0593 (cleared, none), CC-2724 (confirmed fraud, card_not_present_fraud)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": [
+        "CC-1383"
+      ]
+    },
+    {
+      "step": 9,
+      "tool": "policy_initial",
+      "why": "the policy engine is the only writer of actions",
+      "result": "VERIFY_WITH_CUSTOMER, CREATE_CASE",
+      "p_fraud": 0.247,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 10,
+      "tool": "evidence_request",
+      "why": "stopping rule not met (p=0.25, 0 fraud signal(s)); one answer from the cardholder changes the action set, so the information is worth asking for",
+      "result": "customer_validation: assumed 'Customer confirms they made the $100.09 transaction' (simulated from the evidence-only probability 0.25: deny >= 0.6, confirm < 0.4, otherwise no reply)",
+      "p_fraud": 0.076,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 11,
+      "tool": "policy_final",
+      "why": "re-run the policy on the updated state (3b)",
+      "result": "CREATE_CASE, CLOSE_NO_FRAUD",
+      "p_fraud": 0.076,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 12,
+      "tool": "write_case",
+      "why": "3a: a case written to the graph becomes evidence for the next investigation",
+      "result": "CASE-HHG-017 stored in agent memory (TigerGraph not configured: memory file only)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    }
+  ],
+  "queries": [
+    {
+      "query": "txn_context",
+      "params": {
+        "txn_id": "3450629"
+      }
+    },
+    {
+      "query": "cardholder_baseline",
+      "params": {
+        "customer_id": "C04570",
+        "as_of": "2016-11-11 23:46:24",
+        "days": "120"
+      }
+    },
+    {
+      "query": "card_window",
+      "params": {
+        "customer_id": "C04570",
+        "start": "2016-11-01 23:46:24",
+        "end": "2016-11-12 00:46:24"
+      }
+    },
+    {
+      "query": "prior_cases",
+      "params": {
+        "customer_id": "C04570",
+        "as_of": "2016-11-12 00:46:24"
+      }
+    },
+    {
+      "query": "device_neighbors",
+      "params": {
+        "device_profile": "Windows|Windows 10|chrome 65.0|1920x1080",
+        "start": "2016-10-13 00:46:24",
+        "end": "2016-11-12 00:46:24"
+      }
+    }
+  ],
+  "signals": [],
+  "legit_signals": [
+    "model",
+    "familiar region/device",
+    "isolated"
+  ],
+  "p_model": 0.247,
+  "p_initial": 0.247,
+  "p_final": 0.076
+}

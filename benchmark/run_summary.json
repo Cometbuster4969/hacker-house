@@ -1,0 +1,406 @@
+{
+  "engine": "src/engine",
+  "n_cases": 20,
+  "verdicts": {
+    "fraud": 8,
+    "legitimate": 9,
+    "uncertain": 3
+  },
+  "sars": 3,
+  "tokens": 0,
+  "tool_calls": 164,
+  "written_to_graph": 0,
+  "cases": [
+    {
+      "case_id": "HHG-001",
+      "verdict": "legitimate",
+      "p": 0.08,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.17
+    },
+    {
+      "case_id": "HHG-002",
+      "verdict": "legitimate",
+      "p": 0.08,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.19
+    },
+    {
+      "case_id": "HHG-003",
+      "verdict": "uncertain",
+      "p": 0.71,
+      "status": "open",
+      "pattern": "out_of_region_use",
+      "exposure_usd": 165.93,
+      "n_affected": 2,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "DECLINE_TRANSACTION",
+        "MONITOR_CARD",
+        "CREATE_CASE"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.19
+    },
+    {
+      "case_id": "HHG-004",
+      "verdict": "uncertain",
+      "p": 0.41,
+      "status": "escalated",
+      "pattern": "card_not_present_new_device",
+      "exposure_usd": 128.33,
+      "n_affected": 1,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "DECLINE_TRANSACTION",
+        "MONITOR_CARD",
+        "CREATE_CASE",
+        "ESCALATE_TO_ANALYST"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.17
+    },
+    {
+      "case_id": "HHG-005",
+      "verdict": "legitimate",
+      "p": 0.12,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.18
+    },
+    {
+      "case_id": "HHG-006",
+      "verdict": "fraud",
+      "p": 0.98,
+      "status": "escalated",
+      "pattern": "undocumented",
+      "exposure_usd": 1906.07,
+      "n_affected": 4,
+      "n_connected_cards": 3,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "ESCALATE_TO_ANALYST"
+      ],
+      "sar": true,
+      "tool_calls": 9,
+      "tokens": 0,
+      "latency_s": 0.33
+    },
+    {
+      "case_id": "HHG-007",
+      "verdict": "fraud",
+      "p": 0.98,
+      "status": "closed_fraud",
+      "pattern": "out_of_region_use",
+      "exposure_usd": 475.82,
+      "n_affected": 4,
+      "n_connected_cards": 0,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.19
+    },
+    {
+      "case_id": "HHG-008",
+      "verdict": "fraud",
+      "p": 0.95,
+      "status": "closed_fraud",
+      "pattern": "card_not_present_fraud",
+      "exposure_usd": 111.28,
+      "n_affected": 2,
+      "n_connected_cards": 0,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.18
+    },
+    {
+      "case_id": "HHG-009",
+      "verdict": "fraud",
+      "p": 0.89,
+      "status": "closed_fraud",
+      "pattern": "card_not_present_fraud",
+      "exposure_usd": 30.02,
+      "n_affected": 1,
+      "n_connected_cards": 0,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.17
+    },
+    {
+      "case_id": "HHG-010",
+      "verdict": "legitimate",
+      "p": 0.06,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.17
+    },
+    {
+      "case_id": "HHG-011",
+      "verdict": "uncertain",
+      "p": 0.49,
+      "status": "escalated",
+      "pattern": "card_not_present_new_device",
+      "exposure_usd": 131.3,
+      "n_affected": 1,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "DECLINE_TRANSACTION",
+        "MONITOR_CARD",
+        "CREATE_CASE",
+        "ESCALATE_TO_ANALYST"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.24
+    },
+    {
+      "case_id": "HHG-012",
+      "verdict": "legitimate",
+      "p": 0.11,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.18
+    },
+    {
+      "case_id": "HHG-013",
+      "verdict": "legitimate",
+      "p": 0.11,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.19
+    },
+    {
+      "case_id": "HHG-014",
+      "verdict": "fraud",
+      "p": 0.88,
+      "status": "escalated",
+      "pattern": "undocumented",
+      "exposure_usd": 187.33,
+      "n_affected": 2,
+      "n_connected_cards": 19,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT",
+        "MONITOR_CONNECTED_CARDS",
+        "ESCALATE_TO_ANALYST"
+      ],
+      "sar": true,
+      "tool_calls": 10,
+      "tokens": 0,
+      "latency_s": 0.36
+    },
+    {
+      "case_id": "HHG-015",
+      "verdict": "legitimate",
+      "p": 0.06,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.2
+    },
+    {
+      "case_id": "HHG-016",
+      "verdict": "fraud",
+      "p": 0.91,
+      "status": "closed_fraud",
+      "pattern": "card_not_present_new_device",
+      "exposure_usd": 59.67,
+      "n_affected": 1,
+      "n_connected_cards": 0,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.23
+    },
+    {
+      "case_id": "HHG-017",
+      "verdict": "legitimate",
+      "p": 0.08,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 9,
+      "tokens": 0,
+      "latency_s": 0.61
+    },
+    {
+      "case_id": "HHG-018",
+      "verdict": "fraud",
+      "p": 0.98,
+      "status": "closed_fraud",
+      "pattern": "account_takeover",
+      "exposure_usd": 2752.48,
+      "n_affected": 15,
+      "n_connected_cards": 0,
+      "evidence_request": "",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE",
+        "FILE_REPORT"
+      ],
+      "sar": true,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.22
+    },
+    {
+      "case_id": "HHG-019",
+      "verdict": "fraud",
+      "p": 0.85,
+      "status": "closed_fraud",
+      "pattern": "card_not_present_new_device",
+      "exposure_usd": 99.92,
+      "n_affected": 1,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "BLOCK_CARD",
+        "CREATE_CASE"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.17
+    },
+    {
+      "case_id": "HHG-020",
+      "verdict": "legitimate",
+      "p": 0.12,
+      "status": "closed_legitimate",
+      "pattern": "none",
+      "exposure_usd": 0.0,
+      "n_affected": 0,
+      "n_connected_cards": 0,
+      "evidence_request": "customer_validation",
+      "final": [
+        "CREATE_CASE",
+        "CLOSE_NO_FRAUD"
+      ],
+      "sar": false,
+      "tool_calls": 8,
+      "tokens": 0,
+      "latency_s": 0.16
+    }
+  ]
+}

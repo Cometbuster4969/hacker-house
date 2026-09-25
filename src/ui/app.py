@@ -67,6 +67,30 @@ def create_app(cases_dir: str = "cases") -> FastAPI:
         with open(case_path) as f:
             return JSONResponse(json.load(f))
 
+    root = Path(__file__).resolve().parents[2]
+
+    @app.get("/api/traces/{case_id}")
+    async def get_trace(case_id: str):
+        """Step-by-step agent trace (tool, why, result, probability) for a case."""
+        p = root / "traces" / f"{case_id}.json"
+        if not p.exists() or "/" in case_id:
+            raise HTTPException(status_code=404, detail="no trace")
+        return JSONResponse(json.loads(p.read_text()))
+
+    @app.get("/api/benchmark")
+    async def benchmark():
+        out = {}
+        for name in ("backtest", "case_backtest"):
+            p = root / "benchmark" / f"{name}.json"
+            if p.exists():
+                out[name] = json.loads(p.read_text())
+        return JSONResponse(out)
+
+    @app.get("/api/monitoring")
+    async def monitoring():
+        p = root / "monitoring" / "alerts.json"
+        return JSONResponse(json.loads(p.read_text()) if p.exists() else {"alerts": []})
+
     @app.get("/api/graph/stats")
     async def graph_stats():
         """Get graph database statistics."""
@@ -370,6 +394,7 @@ def get_dashboard_html() -> str:
                     <tr><td colspan="7" class="loading">Loading cases...</td></tr>
                 </tbody>
             </table>
+            <div id="extras"></div>
         </div>
     </div>
 
@@ -498,6 +523,7 @@ def get_dashboard_html() -> str:
                     <button class="tab" onclick="showTab('actions')">Actions</button>
                     <button class="tab" onclick="showTab('sar')">SAR</button>
                     <button class="tab" onclick="showTab('memory')">Case Memory</button>
+                    <button class="tab" onclick="showTab('trace')">Agent Trace</button>
                 </div>
 
                 <div id="tab-summary" class="tab-content active">
@@ -577,7 +603,45 @@ def get_dashboard_html() -> str:
                 </div>
             `;
 
+            html += `<div id="tab-trace" class="tab-content"><p style="color:#7a8ba8">Loading trace...</p></div>`;
             document.getElementById('modal-body').innerHTML = html;
+            fetch(`/api/traces/${data.case_id}`).then(r => r.ok ? r.json() : null).then(t => {
+                const el = document.getElementById('tab-trace');
+                if (!t) { el.innerHTML = '<p style="color:#7a8ba8">No trace recorded.</p>'; return; }
+                el.innerHTML = `<p style="color:#7a8ba8;margin-bottom:8px">as_of ${t.as_of} &middot; model ${t.p_model} &rarr; initial ${t.p_initial} &rarr; final ${t.p_final} &middot; signals: ${(t.signals||[]).join(', ')}</p>` +
+                  t.steps.map(s => `<div class="detail-card" style="margin-bottom:6px">
+                      <div class="label">${s.step}. ${s.tool}${s.p_fraud !== null ? ` &middot; p=${s.p_fraud.toFixed(2)}` : ''}</div>
+                      <div style="font-size:0.85em;color:#7a8ba8">why: ${s.why}</div>
+                      <div class="value" style="font-size:0.9em">${s.result}</div>
+                      ${s.p_fraud !== null ? `<div class="prob-bar"><div class="prob-fill" style="width:${s.p_fraud*100}%;background:${s.p_fraud>0.7?'#ff4757':s.p_fraud>0.3?'#ffa502':'#00d4aa'}"></div></div>` : ''}
+                    </div>`).join('') +
+                  `<h4 style="margin:12px 0 6px;color:#7a8ba8">Graph queries (${t.queries.length})</h4>` +
+                  t.queries.map(q => `<div style="font-family:monospace;font-size:0.8em;color:#7a8ba8">${q.query}(${Object.entries(q.params).map(([k,v])=>k+'='+v).join(', ')})</div>`).join('');
+            });
+        }
+
+        async function loadExtras() {
+            try {
+                const b = await (await fetch('/api/benchmark')).json();
+                const m = await (await fetch('/api/monitoring')).json();
+                const el = document.getElementById('extras');
+                if (!el) return;
+                const tb = b.backtest ? b.backtest.transaction_model_sep_oct : null;
+                const cb = b.case_backtest || null;
+                el.innerHTML = `
+                  <h3 style="margin:20px 0 10px">Honest backtest (no leakage)</h3>
+                  <div class="detail-grid">
+                    ${tb ? `<div class="detail-card"><div class="label">Txn model ROC-AUC (Sep-Oct)</div><div class="value">${tb.model_roc_auc} vs risk score ${tb.risk_score_roc_auc}</div></div>` : ''}
+                    ${cb ? `<div class="detail-card"><div class="label">Case verdict accuracy (Oct, 50/50, decided)</div><div class="value">${cb.verdict_accuracy_balanced_on_decided}</div></div>
+                    <div class="detail-card"><div class="label">Episode Jaccard</div><div class="value">${cb.episode_mean_jaccard_on_fraud_found}</div></div>
+                    <div class="detail-card"><div class="label">Pattern accuracy</div><div class="value">${cb.pattern_accuracy_on_fraud_verdicts}</div></div>
+                    <div class="detail-card"><div class="label">Blocks on cleared cases</div><div class="value">${(cb.block_rate_on_cleared*100).toFixed(1)}%</div></div>` : ''}
+                  </div>
+                  <h3 style="margin:20px 0 10px">Autonomous monitoring (beyond the 20 cases): ${m.alerts.length} alerts</h3>
+                  <table><thead><tr><th>Type</th><th>Element</th><th>Window</th><th>Verdict</th><th>Final actions</th></tr></thead><tbody>
+                  ${m.alerts.map(a => `<tr><td>${a.type}</td><td style="font-size:0.85em">${a.element}</td><td style="font-size:0.85em">${(a.first||'').slice(0,16)} &rarr; ${(a.last||'').slice(0,16)}</td><td>${a.verdict} (${a.p})</td><td style="font-size:0.8em">${(a.final_actions||[]).join(', ')}</td></tr>`).join('')}
+                  </tbody></table>`;
+            } catch (e) { console.error(e); }
         }
 
         function showTab(tabName) {
@@ -593,6 +657,7 @@ def get_dashboard_html() -> str:
         });
 
         loadCases();
+        loadExtras();
     </script>
 </body>
 </html>"""
