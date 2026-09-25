@@ -1,7 +1,8 @@
 # Results
 
-Engine run: `python main.py investigate` (deterministic, 0 LLM tokens, 164 tool calls, ~0.3 s per case).
+Engine run: `python main.py investigate` (deterministic, 0 LLM tokens, 181 tool calls, ~0.3 s per case).
 Validator: `python main.py validate` → **20 files, 0 violations**. It checks IDs exist, dates are consistent, exact action names and routes, R1–R10, 3a, the SAR/FILE_REPORT agreement and the legitimate-verdict invariants.
+Graph write-back: **20/20** cases are `InvestigationCase` vertices on the live instance (`written_to_graph: true`, `graph_case_id: CASE-HHG-001…020`); see [`../evidence/tg_live_check.json`](../evidence/tg_live_check.json).
 
 ## 20 benchmark cases
 

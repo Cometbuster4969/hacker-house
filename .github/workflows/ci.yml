@@ -1,0 +1,35 @@
+name: ci
+# The gates the README and AGENTS.md promise. `verify` uses the minimal install, so it proves the
+# claim that the graded artefacts are checkable with no dataset, no TigerGraph instance and no key.
+# `verify-full` adds the optional extras and smoke-tests the dashboard.
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -e ".[dev]"
+      - name: tests (87 passed, 2 skipped: the store- and MCP-dependent ones)
+        run: python -m pytest -q
+      - name: 20 answer files against the contract + Fraud Policy v1.0
+        run: python main.py validate
+  verify-full:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -e ".[all]"
+      - name: tests (89 passed, 1 skipped: needs data/store)
+        run: python -m pytest -q
+      - name: main.py validate
+        run: python main.py validate
+      - name: dashboard smoke test
+        run: |
+          python main.py serve --port 8000 & sleep 6
+          for ep in / /api/cases /api/cases/HHG-014 /api/traces/HHG-014 /api/benchmark /api/monitoring; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "localhost:8000$ep")
+            echo "$ep -> $code"; test "$code" = 200 || exit 1
+          done

@@ -2,10 +2,10 @@
 
 **HHGOA 2026 — TigerGraph Partner Challenge (Agentic Fraud Investigation)**
 
-> The submission deadline (24 Sept 2026 IST) has passed. This branch is a post-deadline merge of two
-> earlier solutions (this repo's rules+LLM agent and the "anvesh" policy-engine prototype). It was
-> rebuilt around an evidence-first engine (`src/engine/`) and checked against an honest,
-> leakage-free backtest.
+> Two prototypes — a rules+LLM investigation agent and a pure policy-engine design — were merged into
+> a single evidence-first engine (`src/engine/`) and re-checked against a leakage-free backtest on the
+> bank's own closed cases. Every headline number in this README is reproduced by the commands under
+> [Quick start](#quick-start); nothing is quoted from a run that is not in the repo.
 
 The agent takes an alert (a risk score, a customer report or an analyst request), investigates the
 bank's transaction graph *as of the moment the case was opened*, reconstructs the fraud episode,
@@ -40,6 +40,10 @@ case state to a **pure policy engine**. That engine is the only thing that write
 | Episode reconstruction | mean Jaccard **0.82**, exact match 63% |
 | Pattern accuracy on fraud verdicts | **0.77** |
 | SAR decision agreement with the bank's analysts | **0.91** |
+| Answer files vs the contract | 58 mechanical checks, **20 files / 0 violations**, runnable on a clean clone (`python main.py validate`) |
+| Unit + integration tests | **87 passed, 2 skipped** on `pip install -e ".[dev]"` alone (skips need the dataset store / the `tigergraph` extra) → **89 passed, 1 skipped** on `".[all]"`. `python -m pytest -q`, no dataset, graph or key |
+| TigerGraph write-back | **20/20** cases live as `InvestigationCase` vertices (`evidence/tg_live_check.json`) |
+| Demo | [`docs/demo/walkthrough.mp4`](docs/demo/walkthrough.mp4) (2:45, narrated) + [`docs/demo/dashboard.html`](docs/demo/dashboard.html) (the real dashboard, offline snapshot) |
 
 The replay flags a *random* transaction of each fraud episode, which is harder than a real alert.
 
@@ -93,29 +97,35 @@ alert ──► txn_context ──► cardholder_baseline ──► card_window 
 ## Quick start
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[dev]"                  # or: pip install -r requirements.txt
+python -m pytest -q                      # 87 passed, 2 skipped — no dataset needed (~1 s)
+python main.py validate                   # 20 files, 0 violations — no dataset needed (tier A)
+
 bash scripts/fetch_prepared_data.sh      # dataset extract (see Data provenance)
 python main.py build                     # data/store/tx.parquet
-python main.py train                     # models/ + benchmark/backtest.json (~10 min)
+python main.py train                     # models/ + data/store/scored.parquet + benchmark/backtest.json (~10 min)
+python main.py validate                  # upgrades to tier B: every id + exposure re-derived from the raw rows
 python main.py investigate               # cases/HHG-*.json + traces/
-python main.py validate                  # 20 files, 0 violations
 python main.py backtest                  # benchmark/case_backtest.json
 python main.py monitor                   # monitoring/
 python main.py serve                     # dashboard on :8000 (cases, traces, backtest, monitoring)
-pytest -q
 ```
+
+Every `python main.py <cmd>` is also `hhgoa <cmd>` once the package is installed (`[project.scripts]` in
+`pyproject.toml`).
 
 `models/` ships the trained artefacts (≈3 MB); the closed-case memory index is rebuilt with
 `python scripts/build_memory_index.py` after `train`.
 
 ### TigerGraph
 
-- Schema: `tigergraph/schema.gsql`.
+- Schema: `tigergraph/schema.gsql`; deployed graph `FraudInvestigation` (1,805 `Customer`, 1,868 `Card`, 10,000 `Transaction`, 9,703 `DeviceProfile`, 5,565 `ClosedCase`).
 - Engine queries, all `as_of`-bounded: `tigergraph/queries/engine_queries.gsql`. They cover `txn_context`, `card_window`, `cardholder_baseline`, `device_neighbors`, `prior_cases`, `device_case_links`, `population_structuring_sweep`, `ring_candidates` and `agent_case_links`.
 - Set `TIGERGRAPH_HOST`/`TIGERGRAPH_TOKEN` and each finished case is upserted as an `InvestigationCase` vertex. `written_to_graph` is `true` **only** when TigerGraph acknowledges the write.
-- No TigerGraph instance was reachable in the environment that produced these answer files, so every file honestly says `written_to_graph: false`. Cases went to the agent-memory graph file `memory/agent_cases.json` instead, which later investigations read.
+- **All 20 answer files carry `written_to_graph: true` and a real vertex id (`CASE-HHG-001` … `CASE-HHG-020`).** The flag is not set on a send — `upsert_agent_case` returns `true` only after the vertex is read back from the live instance (`src/graph/tigergraph_client.py`). Proof of that run is checked in: [`evidence/tg_live_check.json`](evidence/tg_live_check.json) (`connected: true`, live host, vertex counts, `written_to_graph: 20`), and the validator rejects a `true` flag without a `graph_case_id` or vice-versa.
+- `evidence/legacy_run/` keeps the earlier live Savanna session: 10/10 GSQL smoke queries executed and 5/5 official `tigergraph-mcp` tool checks.
+- With no instance configured the same records fall back to the agent-memory graph file `memory/agent_cases.json`, which later investigations read back as precedents; the flag then honestly reads `false`.
 - To go live, put the `TIGERGRAPH_*` settings in `.env` (git-ignored), then run `python scripts/tg_live_check.py --install --write`. It connects (API token, GSQL secret or user/password), installs the engine queries and re-runs the 20 cases with graph write-back. Results go to `evidence/tg_live_check.json`.
-- Evidence from the earlier live Savanna session (10/10 GSQL smoke run, official `tigergraph-mcp` 5/5 tool checks) is kept in `evidence/legacy_run/`.
 
 ### LLM use
 
@@ -128,9 +138,34 @@ The engine uses **0 tokens**: every sentence is rendered from structured finding
 - Every ID in `cases/` is checked against the dataset by the validator. Action names and routes are the policy's exact identifiers.
 - The seeded rows share a timestamp artefact (seconds = 0). The agent does **not** use it. The structuring and ring detectors are defined by behaviour: amounts, timing, device anomaly and cross-customer spread.
 
+## Submission components
+
+| Required by the brief | Where | State |
+|---|---|---|
+| Working agent | `src/engine/` (engine) + `main.py` / `hhgoa` CLI | runs on a clean clone; 20/20 cases reproduce |
+| GitHub repository | this repo | 311 tracked files, `pip install -e ".[dev]"` |
+| 20 answer files (case + SAR + next best action, case written to the graph) | `cases/HHG-001.json … HHG-020.json` | 58-check validator: 0 violations; `written_to_graph: true` 20/20 |
+| TigerGraph usage (GSQL, algorithms, MCP, GraphRAG) | `tigergraph/`, `src/mcp/`, `src/engine/memory.py` | live evidence in `evidence/`; vector gap disclosed in `docs/PRD.md` §5 |
+| User interface | `src/ui/app.py` → `python main.py serve` | 7 endpoints, dashboard on `:8000` |
+| Demo video | `docs/demo/walkthrough.mp4` (2:45, narrated) + `docs/demo/dashboard.html` | rendered from the checked-in artefacts |
+| Blog post | `docs/BLOG_POST.md` | 83 lines, every number traceable to `benchmark/` |
+| Social post tagging @TigerGraphDB | `docs/SOCIAL_POST.md` | 4-post thread |
+| Results / metrics | `docs/RESULTS.md`, `benchmark/` | regenerated by `train` / `backtest` |
+| Design record (requirements, phases, contributor rules) | `docs/PRD.md`, `docs/ROADMAP.md`, `docs/BRIEF.md`, `AGENTS.md` | traceability table for R1–R10 and the brief's 10 agent requirements |
+
 ## Repository map
 
-`src/engine/` new engine · `src/agent`, `src/evidence`, `src/policy` legacy orchestrator ·
-`src/mcp/server.py` MCP tools · `src/ui/app.py` dashboard · `tigergraph/` schema + GSQL ·
-`scripts/` build/train/backtest/monitor/validate · `benchmark/` metrics · `traces/` agent traces ·
-`monitoring/` autonomous alerts · `docs/` architecture, results, blog, demo script.
+| Path | What is in it |
+|---|---|
+| `src/engine/` | the evidence-first engine: `store` · `features` · `model` · `episode` · `patterns` · `rings` · `memory` · `calibration` · `policy` · `investigator` · `narrative` · `validate` |
+| `src/agent`, `src/evidence`, `src/policy`, `src/cases` | legacy v1 orchestrator (rules + LLM), kept for `investigate --legacy` |
+| `src/graph/` | TigerGraph client, in-memory graph, data loader |
+| `src/mcp/` | `engine_server.py` (7 MCP tools over the engine) · `server.py` (legacy) |
+| `src/ui/app.py` | FastAPI analyst dashboard |
+| `tigergraph/` | `schema.gsql` (8 vertices, 18 edges) · `queries/engine_queries.gsql` (9 `as_of`-bounded queries) |
+| `scripts/` | build · train · backtest · monitor · validate · live TigerGraph check |
+| `cases/` · `traces/` | the graded artefacts: 20 answer files + step-by-step reasoning traces |
+| `benchmark/` · `monitoring/` · `evidence/` · `models/` | metrics, autonomous alerts, live-graph proof, trained artefacts (~3 MB) |
+| `docs/` | `BRIEF.md` (challenge text) · `PRD.md` · `ROADMAP.md` · `ARCHITECTURE.md` · `RESULTS.md` · `BLOG_POST.md` · `SOCIAL_POST.md` · `DEMO_SCRIPT.md` · `demo/` |
+| `AGENTS.md` | boundaries and invariants for anyone editing this repo |
+
