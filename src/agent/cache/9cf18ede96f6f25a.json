@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "af6a73e52008615a057726cf97024370",
-  "response": "{\"narrative\":\"Customer C08106 used card C08106-K1 for a series of online transactions on a new device (evidence 6) identified as device D1C3672 (evidence 5). The recent transactions include IDs 3087548 ($96.45), 3087605 ($96.37), 3087613 ($96.41), 3087647 ($96.43), and 3087652 ($24.28). The card\u2019s historical profile shows 30 prior transactions with an average amount of $50.15 (evidence 3), making the recent amounts notably higher than the average. Device D1C3672 is shared among six cards, indicating a potential risk vector (evidence 5). The card has four closed fraud cases (CC-0696, CC-1736, CC-2121, CC-3778) demonstrating a pattern of card\u2011not\u2011present fraud (evidence 4). The total exposure from the recent series is $2,397.71. Given the new device usage, elevated transaction amounts relative to the card\u2019s average, and the documented fraud history, the activity aligns with the card_not_present_new_device pattern and warrants further investigation.\"}",
-  "cached_at": 1790267469.3795238
-}

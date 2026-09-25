@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "6cd0273c6a438c66f8707cf6cda58366",
-  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"account_takeover\",\"pattern_description\":\"\",\"reasoning\":\"The cardholder explicitly reported the $39.08 in\u2011person purchase (ID 3491361) as unauthorized [1][7]. The card has a history of multiple confirmed account\u2011takeover cases (CC\u20110255, CC\u20110454, CC\u20111454) [5]. Recent activity shows a burst of 8 transactions within 24\u202fh totaling $956.88, a high\u2011velocity pattern typical of takeover [6]. The moderate risk score of 0.48 further flags the transaction for review [1]. Combined, these signals strongly indicate fraud.\"}",
-  "cached_at": 1790268020.792157
-}

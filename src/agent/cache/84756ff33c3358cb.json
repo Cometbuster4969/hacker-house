@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "1899140fe47bdb34023899adcef8ef0a",
-  "response": "{\"fraud_probability\":0.38,\"verdict\":\"uncertain\",\"pattern\":\"none\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3514030, $77.07, in_person) has a risk score of 0.61 (evidence 1) and occurs amid a high\u2011velocity burst of 9 transactions in 24\u202fh totaling $736.43 (evidence 5). The card has a history of prior confirmed fraud cases (evidence 4) but those were out\u2011of\u2011region or card\u2011not\u2011present, whereas this purchase is in\u2011person and in the same billing region (evidence 3). The amount is below the card\u2019s average ($110.83) and there is no device anomaly (evidence 2). Given mixed signals, the case remains uncertain.\"}",
-  "cached_at": 1790265719.7090852
-}

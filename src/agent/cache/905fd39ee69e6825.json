@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "65fb9861a0213150b43be3f9d728542e",
-  "response": "{\"fraud_probability\":0.95,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3506725) is $1,000.03, far above the card's average $133.90 and exceeds the historical maximum $670.04 (evidence 3, 1). It was made online from device D9FD230, which is unknown and is shared by 209 other cards (evidence 6), indicating a new, high\u2011risk device for this card. The real\u2011time model assigned a high risk score of 0.90 (evidence 1), and the rule\u2011calculated fraud probability is 0.95. Combined, these signals point to a card\u2011not\u2011present fraud attempt using a new device.\"}",
-  "cached_at": 1790267736.1699069
-}

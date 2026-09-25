@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "d51e46fc380b0d96b611cda2fb03969c",
-  "response": "{\"narrative\":\"Customer C03042 used card C03042\u2011K1 for a series of card\u2011not\u2011present transactions on a new device (Device D8A3375) as indicated in evidence [7]. The device is shared among eight cards, a known risk indicator [6]. The recent transactions include IDs 3054463 ($49.91), 3054510 ($200.00), 3054511 ($24.97), 3054532 ($200.01), and 3063365 ($100.04). These amounts are within the card\u2019s historical average of $88.22 across 30 prior transactions, but the pattern of using a new shared device deviates from typical behavior [3][6][7]. The card has three prior closed fraud cases (CC\u20110615, CC\u20111313, CC\u20113886) involving similar new\u2011device activity, reinforcing the concern [5]. The cumulative exposure for the identified activity totals $8,110.87. The model assigned a fraud probability of 0.90, well above typical thresholds, supporting a heightened risk assessment [document]. Based on the combination of a new shared device, prior fraud history, and elevated fraud probability, the activity warrants further investigation.\",\"fraud_probability\":0.90,\"exposure_usd\":8110.87,\"transaction_count\":5}",
-  "cached_at": 1790266847.4045389
-}

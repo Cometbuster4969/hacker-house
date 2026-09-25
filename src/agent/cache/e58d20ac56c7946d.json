@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "46a485e6e8a3182623dc37290db4ef49",
-  "response": "{\n  \"fraud_probability\": 1.00,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_new_device\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"Customer C11923 reported that transaction 3583368 for $131.30 was unauthorized. The transaction is online (card-not-present) and its amount is 3.7 times the card's average of $35.62, indicating an atypical purchase. The device DA6E029 used for this transaction is marked as NEW for card C11923-K2 and is shared across four different cards, suggesting possible device compromise. Historical cases for this customer include confirmed fraud with the card_not_present_new_device pattern (CC-0031, CC-1056) and card_testing patterns, reinforcing the likelihood of fraud. Additionally, the card shows high velocity with 22 transactions in 24 hours totaling $752.43, consistent with fraudulent activity following a device change.\"\n}",
-  "cached_at": 1790286588.5842738
-}

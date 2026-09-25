@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "387d915bb9431b476b9e04e7ce991bf6",
-  "response": "{\"verdict\":\"fraud\",\"fraud_probability\":0.95,\"pattern\":\"card_not_present_new_device\",\"evidence\":[\"Flagged transaction 3503878: $99.92, online channel, risk score 0.90\",\"Device: Windows (other, chrome 61.0, 1280x720)\",\"Card C07987-K2 has 1 transaction in history, average amount $311.86\"],\"summary\":\"The flagged transaction 3503878 of $99.92 was processed online with a high risk score of 0.90, indicating a suspicious card\u2011not\u2011present activity on a new device (Windows, Chrome 61.0, 1280x720) [1][2]. The card C07987\u2011K2 has only one prior transaction with an average amount of $311.86, making this low\u2011value online purchase atypical for the card\u2019s usage pattern [3]. This behavior mirrors the confirmed fraud case CC\u20112011, which involved out\u2011of\u2011region use, supporting a fraud assessment. Accordingly, the investigation concludes a fraud verdict with a probability of 0.95.\"}",
-  "cached_at": 1790266956.006179
-}

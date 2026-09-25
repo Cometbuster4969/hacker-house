@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "d01d4b89d275607e525286ddeedf9014",
-  "response": "{\n  \"investigation_summary\": \"The alert for card C05876-K2 carries a low fraud probability of 0.12, indicating weak fraud signals. The flagged transaction is a modest $30.91 in-person purchase with a risk score of 0.55, which does not align with typical card\u2011testing behavior involving numerous low\u2011value attempts. Historical data show only three transactions on this card averaging $71.17, and the customer holds two cards, suggesting normal usage rather than testing activity. Prior cases for this customer have been cleared, further supporting a legitimate assessment.\"\n}",
-  "cached_at": 1790286709.9689505
-}

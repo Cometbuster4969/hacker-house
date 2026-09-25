@@ -35,8 +35,6 @@ from src.utils.models import CasePackEntry
 from src.graph.in_memory_graph import InMemoryGraph
 from src.graph.data_loader import DataLoader
 from src.agent.orchestrator import FraudInvestigationAgent
-from src.mcp.server import TigerGraphMCPServer
-from src.ui.app import create_app
 
 logging.basicConfig(
     level=logging.INFO,
@@ -88,12 +86,14 @@ def run_investigation(graph: InMemoryGraph, loader: DataLoader,
     return answers
 
 
-def run_server(cases_dir: str = None):
+def run_server(cases_dir: str = None, port: int = None):
+    # imported here so that build/train/validate/backtest/monitor need no web stack installed
     import uvicorn
+    from src.ui.app import create_app
     cases = cases_dir or str(CASES_DIR)
     app = create_app(cases_dir=cases)
-    logger.info("Dashboard on http://0.0.0.0:%d", PORT)
-    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
+    logger.info("Dashboard on http://0.0.0.0:%d", port or PORT)
+    uvicorn.run(app, host="0.0.0.0", port=port or PORT, log_level="info")
 
 
 def show_stats(graph: InMemoryGraph):
@@ -145,7 +145,7 @@ def main():
                   "monitor": "monitor.py"}[args.command]
         sys.exit(subprocess.call([sys.executable, str(root / "scripts" / script)]))
     if args.command == "serve":
-        run_server()
+        run_server(port=args.port)
         return
 
     graph = InMemoryGraph()

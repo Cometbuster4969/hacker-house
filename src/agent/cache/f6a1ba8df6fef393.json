@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "3df5ec97c0a102a1f2de45ae580447d6",
-  "response": "{\"fraud_probability\":0.45,\"verdict\":\"uncertain\",\"pattern\":\"none\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3514948, $111.92, in_person) has a high model risk score of 0.87 [1]. The card shows a normal average spend ($115.98) and all recent activity is in\u2011person with similar amounts, suggesting typical behavior [2]. However, the card has a recent high\u2011velocity burst of three transactions in 24\u202fhours totaling $404.85 [6] and the customer/card has a history of multiple confirmed fraud cases (e.g., CC\u20110104, CC\u20110765, CC\u20111228, CC\u20111524) [5], which raises concern. No out\u2011of\u2011region or device anomalies are observed, so no specific fraud pattern is evident. Given the mixed signals, the case remains uncertain.\"}",
-  "cached_at": 1790267589.5598605
-}

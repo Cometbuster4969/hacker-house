@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "4f3fcfd6928fe89d555df2f0eb240e7f",
-  "response": "{\"investigation_summary\":\"The flagged in\u2011person transaction 3514948 for $111.92 carries a high risk score of 0.87, suggesting possible unauthorized use of card C09933\u2011K2. This card has a modest transaction history of four payments averaging $115.98, which aligns with the amount of the flagged transaction. The customer holds two cards, but there is no evidence of activity on the other card, raising a potential account takeover scenario. While the pattern resembles prior confirmed fraud case CC\u20110104, the current activity lacks out\u2011of\u2011region indicators and the risk is moderate, leading to an uncertain verdict.\",\"verdict\":\"uncertain\",\"fraud_probability\":0.45,\"pattern\":\"account_takeover\",\"evidence\":[{\"id\":\"3514948\",\"amount\":111.92,\"channel\":\"in_person\",\"risk_score\":0.87},{\"card\":\"C09933-K2\",\"transaction_count\":4,\"average_amount\":115.98}],\"prior_cases\":[{\"id\":\"CC-0104\",\"status\":\"confirmed_fraud\",\"type\":\"out_of_region_use\",\"amount\":92.02},{\"id\":\"CC-0657\",\"status\":\"cleared\",\"type\":\"none\",\"amount\":0.00}]}",
-  "cached_at": 1790277217.9620469
-}

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "cc07b491aa56f130fb93a9fc4bb0a3a6",
-  "response": "{\n    \"fraud_probability\": 0.50,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"card_testing\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"The customer explicitly denies making the $49.00 in-person transaction (ID 3530164), which is a strong signal of unauthorized use. The transaction amount is significantly below the card's historical average ($138.54) and matches a pattern of low-value testing seen in prior fraud cases (e.g., CC-2817, CC-2935) where small amounts preceded larger fraud. Graph-level signals note a burst of three or more transactions on the same day, consistent with testing behavior before larger fraudulent activity. The cardholder's history includes multiple confirmed fraud cases (CC-2817, CC-2935, CC-3327, CC-3682) involving out-of-region use and account takeover, indicating a heightened risk profile. Considering the customer report, low amount, burst pattern, and historical fraud, the likelihood of fraud is elevated, supporting a fraud verdict.\"\n}",
-  "cached_at": 1790285532.6866763
-}

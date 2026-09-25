@@ -25,7 +25,15 @@ RULE = re.compile(r"\bR(10|[1-9])\b|3a|3b|\b6\b|Policy")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
-def validate(ans: dict, store=None, case_row=None) -> list[str]:
+def validate(ans: dict, store=None, case_row=None, closed_ids=None) -> list[str]:
+    """Check one answer file.
+
+    Tier A (always): the answer-format contract, Fraud Policy v1.0 routing/invariants, id shapes and
+    closed-case references. ``case_pack.csv`` and ``closed_cases_history.csv`` are checked in, so tier A
+    needs no install beyond pandas.
+    Tier B (needs ``store``, i.e. ``main.py build``): ids exist in the 590k-transaction graph, exposure
+    equals the sum of the cited transactions, and the first suspicious txn is the earliest one.
+    """
     v = []
     e = v.append
     for k in ("case_id", "case", "evidence_requests", "next_best_actions", "sar", "stop_reason", "tool_calls",
@@ -86,6 +94,24 @@ def validate(ans: dict, store=None, case_row=None) -> list[str]:
     for ev in c["evidence"]:
         if set(ev) != {"claim", "source", "ref", "entity_ids"} or ev["source"] not in SOURCES:
             e(f"bad evidence item {ev}")
+    # id shapes and closed-case references: dataset-grounded but need no parquet store
+    for t in aff + ([c["first_suspicious_txn_id"]] if c["first_suspicious_txn_id"] else []):
+        if not re.fullmatch(r"\d{1,12}", str(t)):
+            e(f"txn id is not a numeric string: {t!r}")
+    for cd in c["connected_card_ids"]:
+        if not re.fullmatch(r"C\d{5}-K\d", str(cd)):
+            e(f"connected card id does not match C#####-K#: {cd!r}")
+    for dp in c["connected_device_profiles"]:
+        if "|" not in dp:
+            e(f"device profile is not a labelled profile: {dp!r}")
+    if len(set(c["similar_prior_cases"])) != len(c["similar_prior_cases"]):
+        e("duplicate id in similar_prior_cases")
+    if closed_ids is not None:
+        for cc in c["similar_prior_cases"]:
+            if cc not in closed_ids:
+                e(f"cited closed case {cc} is not in closed_cases_history.csv")
+    if case_row is not None and case_row.card_id in c["connected_card_ids"]:
+        e("connected_card_ids should list OTHER cards")
     # ids exist
     if store is not None:
         ids = store.id_set
@@ -102,8 +128,6 @@ def validate(ans: dict, store=None, case_row=None) -> list[str]:
         for cd in c["connected_card_ids"]:
             if cd not in store.card_set:
                 e(f"unknown card {cd}")
-        if case_row is not None and case_row.card_id in c["connected_card_ids"]:
-            e("connected_card_ids should list OTHER cards")
         for cc in c["similar_prior_cases"]:
             if cc not in store.closed_case_set:
                 e(f"unknown closed case {cc}")
@@ -181,10 +205,13 @@ def validate(ans: dict, store=None, case_row=None) -> list[str]:
     return v
 
 
-def validate_dir(d: Path, store=None, case_pack=None) -> dict[str, list[str]]:
+def validate_dir(d: Path, store=None, case_pack=None, closed_ids=None) -> dict[str, list[str]]:
     rows = {r.case_id: r for r in case_pack.itertuples()} if case_pack is not None else {}
     out = {}
     for f in sorted(Path(d).glob("HHG-*.json")):
         a = json.loads(f.read_text())
-        out[f.stem] = validate(a, store, rows.get(f.stem))
+        out[f.stem] = validate(a, store, rows.get(f.stem), closed_ids)
     return out
+
+
+N_CHECKS = sum(1 for _ in re.finditer(r"\be\(", Path(__file__).read_text()))

@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "e996b39ac17cf46d1dd20df5ca31d55d",
-  "response": "{\n  \"investigation_summary\": \"The alert for transaction 3526826 ($35.66, online) was flagged with risk score 0.76 and originated from a Windows device using Chrome 66.0, matching the card_not_present_new_device pattern. Card C07671-K2's historical behavior shows 8 transactions averaging $113.94, making the low\u2011value online purchase anomalous. Similar prior cases (CC-1475 and CC-3216) involved confirmed fraud on new devices, reinforcing the likelihood of account takeover. Given the strong pattern match, customer\u2011not\u2011present risk, and historical fraud precedents, the fraud probability is assessed at 1.00, leading to a fraud verdict.\"\n}",
-  "cached_at": 1790286792.7956414
-}

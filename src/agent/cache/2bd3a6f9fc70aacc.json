@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "a69180402c2c1ed274e001117ecddb01",
-  "response": "{\"narrative\":\"The subject, customer C07987, used card C07987-K2 in a card-not-present transaction on a new device [2]. The flagged transaction (ID 3503878) for $99.92 was processed online and received a risk score of 0.90 [1]. The device (D8D1C12) used for this transaction is marked as NEW for card C07987-K2 and is shared among five other cards [8][7]. The amount of $99.92 is well below the card\u2019s historical average transaction amount of $311.86 [3]. The cardholder has four prior closed fraud cases (CC-2011, CC-2087, CC-2860, CC-5026) indicating a history of fraudulent activity [6]. No other cards are connected to this card, reducing the likelihood of legitimate shared usage (Connected cards: None). The total exposure associated with this activity is $2,875.51. These combined factors support a suspicion of fraud under the card_not_present_new_device pattern.\"}",
-  "cached_at": 1790266966.474386
-}

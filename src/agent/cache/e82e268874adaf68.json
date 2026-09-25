@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "cc967bf0dd38f7ef502cff8f50b492d3",
-  "response": "{\n  \"investigation_summary\": \"The alert indicates a high\u2011probability account takeover, with fraud probability assessed at 1.00. Flagged transaction 3523199 for $100.07 originated from an iOS device (iOS 9.3.5, Mobile Safari 9.0, 1024x768) and carries a risk score of 0.54. The associated card C02923\u2011K1 shows a history of 30 transactions averaging $149.92, consistent with the victim\u2019s typical spending pattern. Similar account\u2011takeover frauds were confirmed in prior cases CC\u20112400 ($350.99) and CC\u20112717 ($896.08), reinforcing the conclusion that this event is fraudulent.\"\n}",
-  "cached_at": 1790285755.98239
-}

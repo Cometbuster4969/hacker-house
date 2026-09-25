@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "4c1bb87906573418b7e7393ae1dd72a1",
-  "response": "{\n  \"sar_narrative\": \"Customer C08106, card C08106-K1, exhibited a card_not_present_new_device pattern with total exposure of $2,397.\"\n}",
-  "cached_at": 1790285672.231685
-}

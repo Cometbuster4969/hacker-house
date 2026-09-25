@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "cddd8066a1cb6c3723e3937b4c8505bb",
-  "response": "{\"customer\":\"C13487\",\"card\":\"C13487-K1\",\"pattern\":\"card_not_present_new_device\",\"total_exposure_usd\":25838.07,\"fraud_probability\":0.60,\"total_transactions\":30,\"involved_transactions\":5,\"narrative\":\"Customer C13487 used card C13487-K1 for a series of online purchases on a new device. The five recent transactions (IDs 3166525 amount $40.02, 3170774 amount $58.01, 3179654 amount $48.00, 3182101 amount $58.02, and 3197482 amount $57.96) were all processed through the online channel. All transactions originated from device DC72BD4, which is associated with 52 different cards across the institution [evidence 5]. The device profile is classified as unknown and has been identified as a classic indicator of card\u2011not\u2011present fraud on a new device [evidence 2, evidence 5]. Card C13487-K1 has a historical pattern of 30 transactions with an average amount of $62.64, making the recent amounts consistent with typical spend but the device context atypical [evidence 3]. The calculated fraud probability for the activity is 0.60, exceeding a neutral threshold and supporting heightened scrutiny [evidence 6]. The total exposure associated with these activities is $25,838.07.\"}",
-  "cached_at": 1790267858.5167792
-}

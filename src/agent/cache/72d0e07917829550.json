@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "bf83ae9f6b61c14ad4f51acd465d95d9",
-  "response": "{\"fraud_probability\":0.94,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_fraud\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reported the $482.12 online purchase (ID 3476682) as unauthorized, which is a strong fraud signal. This transaction is significantly larger than the card's average $91.52 and deviates from the card's historic in\u2011person only usage. It occurred on an online channel from device D7059DC, a shared device linked to 547 other cards, raising suspicion of card\u2011not\u2011present abuse. The calculated fraud probability is 0.94 and the risk score of 0.25, while modest, is outweighed by the customer report and anomalous behavior. These factors together support a fraud verdict.\"}",
-  "cached_at": 1790277183.0932746
-}

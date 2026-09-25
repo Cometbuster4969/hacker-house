@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "c19144c2f835f1cae67843e9db727da9",
-  "response": "{\n  \"fraud_probability\": 0.90,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_not_present_new_device\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3464869 is a high\u2011value online purchase ($599.94) with a risk score of 0.77, far above the card\u2019s average of $88.22 [evidence 1][evidence 3]. The transaction originated from device D8A3375, which is shared by eight cards and is flagged as new for card C03042\u2011K1, indicating a possible compromise of a new device [evidence 6][evidence 7]. Historical cases for this card show two confirmed frauds with the same card_not_present_new_device pattern (CC\u20110615, CC\u20113886) and one cleared case where the cardholder confirmed travel [evidence 5]. Given the high risk score, anomalous amount, new shared device, and prior fraud pattern, the transaction is very likely fraudulent.\"\n}",
-  "cached_at": 1790287003.1276603
-}

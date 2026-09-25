@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "89c0a6d4c4f90758564ddb27d6c80a95",
-  "response": "{\"fraud_probability\":1.0,\"verdict\":\"fraud\",\"pattern\":\"account_takeover\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3523199, $100.07, online) has a risk score of 0.54 and was made from device D5B64CE, which is marked as NEW for this card and is shared with 112 other cards, a strong indicator of credential compromise [2][6][7]. The card C02923\u2011K1 has three prior confirmed account\u2011takeover cases (CC\u20112400, CC\u20112717, CC\u20112857) [5][6]. Although the amount is within the card\u2019s historical average ($149.92) [3], the combination of a new shared device and a history of takeover cases raises the fraud likelihood to the maximum. Consequently, the fraud probability is set to 1.00 and the verdict is fraud.\"}",
-  "cached_at": 1790266624.8886883
-}

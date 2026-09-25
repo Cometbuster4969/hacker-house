@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "1a28a4d4a2cc7398d87c34842a1b8674",
-  "response": "{\"fraud_probability\":0.80,\"verdict\":\"fraud\",\"pattern\":\"account_takeover\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reports that they did not make the $30.02 online purchase (evidence 1, customer report). The transaction originated from device D2EDF29, which is linked to 1,023 different cards, indicating a high\u2011risk shared device (evidence 5). The flagged transaction\u2019s risk score of 0.28 is above the baseline for this card\u2019s typical activity, and the amount is lower than the card\u2019s average ($77.35), which can be a sign of testing or unauthorized use. Combined with the strong customer claim and the device\u2011sharing signal, the case aligns with an account takeover pattern.\"}",
-  "cached_at": 1790266724.8343568
-}

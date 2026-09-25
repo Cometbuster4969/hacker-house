@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "9e96c227b8dc316d7df5f43991442737",
-  "response": "{\"fraud_probability\":0.94,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_fraud\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly reported the $482.12 online purchase (ID 3476682) as unauthorized [evidence 1]. This transaction is significantly larger than the card\u2019s historical average ($91.52) and exceeds the prior maximum ($210.03) [evidence 3]. All 30 prior transactions were in\u2011person, whereas the flagged transaction was online, indicating a card\u2011not\u2011present scenario [evidence 1,3]. The device used (D7059DC) is shared among 547 cards, a known risk factor for fraud [evidence 6]. Combined with a high rule\u2011calculated fraud probability of 0.95, the evidence supports a fraud verdict.\"}",
-  "cached_at": 1790266669.5753784
-}

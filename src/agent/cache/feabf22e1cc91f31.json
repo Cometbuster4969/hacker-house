@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "cb036febb1a47ee13ef767b8a8b7cbf8",
-  "response": "{\n    \"fraud_probability\": 0.95,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"card_not_present_new_device\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"The flagged transaction is an online purchase of $482.12, which is more than double the card's historical maximum of $210.03 and far above the average $91.52. All 30 prior transactions were in-person, indicating a sudden shift to card-not-present channel. The transaction originated from device D7059DC, which has been used by 547 different cards, indicating a highly shared and potentially compromised device. The customer explicitly denied making the purchase, providing a strong external signal of unauthorized use.\"\n   \n}",
-  "cached_at": 1790285833.2928672
-}

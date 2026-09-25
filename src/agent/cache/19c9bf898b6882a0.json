@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "6a7053a47fc0a8fa64b24158e7c5232e",
-  "response": "{\"summary\":\"The flagged online transaction 3478782 for $292.36 (risk score 0.79) is atypical compared to card C11891\u2011K1\u2019s usual $45.02 average across 30 prior transactions (evidence\u202f1,\u202f2). The card also has a prior confirmed card\u2011not\u2011present fraud case (CC\u20114160) involving $90.54, indicating a repeat pattern (evidence\u202f3). Given the high risk score, the prior fraud incident, and the deviation from normal spending, the case is assessed as fraud with a probability of 0.86.\"}",
-  "cached_at": 1790266613.688481
-}

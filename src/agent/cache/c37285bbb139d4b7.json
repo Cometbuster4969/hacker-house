@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "4481ec4ec1ed9bcfb85877f990b56598",
-  "response": "{\n  \"fraud_probability\": 0.45,\n  \"verdict\": \"uncertain\",\n  \"pattern\": \"out_of_region_use\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3514030 ($77.07, in_person) triggered with a risk score of 0.61. The card shows high velocity: 9 transactions in 24h totaling $736.43 (evidence #5). Four prior closed cases for this card (CC-1066, CC-1673, CC-2964, CC-3587) were all confirmed fraud, three involving out_of_region_use and one card_not_present_new_device (evidence #4, prior cases). While the current transaction is in_person and lacks device anomalies, the combination of elevated risk score, recent burst activity, and strong historical fraud pattern raises suspicion, though definitive region mismatch evidence is absent.\"\n}",
-  "cached_at": 1790285394.1135824
-}

@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-pytest.importorskip("mcp")
+pytest.importorskip("mcp.server.fastmcp", reason="needs the tigergraph extra: mcp>=1.2,<2")
 from src.mcp.engine_server import mcp  # noqa: E402
 
 

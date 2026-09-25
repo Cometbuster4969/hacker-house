@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "05368e79340978549790e475d444850f",
-  "response": "{\"verdict\":\"fraud\",\"probability\":0.95,\"pattern\":\"card_not_present_new_device\",\"evidence\":[{\"transaction_id\":3476682,\"amount\":482.12,\"channel\":\"online\",\"risk_score\":0.25},{\"device\":\"Trident/7.0 (Windows 7, ie 11.0 for desktop, 1920x1080)\"},{\"card\":\"C07297-K1\",\"history_transactions\":30,\"average_amount\":91.52}],\"summary\":\"The flagged online transaction 3476682 for $482.12, with a low risk score of 0.25, was initiated from a new device identified as Trident/7.0 on Windows\u202f7, which differs from the cardholder\u2019s typical usage patterns. Card C07297\u2011K1 normally processes an average of $91.52 across 30 prior transactions, making this amount unusually high. The combination of a card\u2011not\u2011present purchase on an unfamiliar device and the atypical transaction size raises a high likelihood of fraud. Accordingly, the case is classified as fraud with a probability of 0.95.\"}",
-  "cached_at": 1790267536.793768
-}

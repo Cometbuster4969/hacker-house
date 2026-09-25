@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "4312493c40133e4cde8e8165d1f8ffef",
-  "response": "{\"fraud_probability\":0.65,\"verdict\":\"uncertain\",\"pattern\":\"card_testing\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3450629) is $100.09, well below the card\u2019s average $427.76 (evidence 3), which can indicate a test purchase. The real\u2011time model assigned a risk score of 0.57 and the rule\u2011calculated fraud probability is 0.65, suggesting elevated risk but not conclusive (evidence 1). The device D06A9AB is shared among 302 cards, a known risk factor for card\u2011not\u2011present fraud, yet this card has previously used the device, reducing the novelty signal (evidence 6). A prior similar alert (CC\u20111383) was cleared after the cardholder confirmed legitimate travel, showing no pattern of fraud for this card (evidence 5). Given mixed signals, the case is marked uncertain pending further investigation.\"}",
-  "cached_at": 1790266062.868025
-}

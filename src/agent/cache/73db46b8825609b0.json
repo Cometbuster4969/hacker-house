@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "cb03f206c0d0162a5822c3deca0a6c33",
-  "response": "{\n  \"fraud_probability\": 0.95,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"account_takeover\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction (ID 3509359) occurred online with a risk score of 0.52 and was processed on device DD3A0AF, which is shared by 254 different cards, indicating a high-risk device. The customer's card C12265-K2 has two prior confirmed fraud cases (CC-2277 and CC-2447) both labeled as account takeover, showing a pattern of compromise. Historical transactions for this card are exclusively in-person, making the sudden online channel usage anomalous. Given the shared device, prior account takeover incidents, and the deviation from normal behavior, the transaction is highly likely fraudulent.\"\n}",
-  "cached_at": 1790287565.8710167
-}

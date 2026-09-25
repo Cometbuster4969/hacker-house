@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "9acf8638219bf7530bf5b67e0f1d9f0e",
-  "response": "{\n  \"sar_narrative\": \"Customer C08299, card C08299-K1, is under review for suspected card-not-present fraud based on multiple disputed transactions. The recent disputed amounts include transaction 3184681 for $19.99, transaction 3184683 for $50.00, transaction 3184770 for $49.96, transaction 3184779 for $50.06, and transaction 3226142 for $343.94. These five transactions contribute to a total exposure of $639,804.12 associated with the card. Additionally, transaction 3581141 for $30.02, processed online via device D2EDF29, was flagged with a risk score of 0.28 and is disputed by the customer as unauthorized. The card exhibits high velocity, with nine transactions in a 24\u2011hour period totaling $360.22. Historically, card C08299\u2011K1 has thirty transactions with an average amount of $77.35. Device D2EDF29 has been used by 1,023 distinct cards, and the billing region 203 shows activity from 415 cards. No other cards are linked to C08299\u2011K1, and the customer explicitly denies authorizing the $30.02 online purchase, supporting a conclusion of unauthorized card\u2011not\u2011present activity.\"\n \n}",
-  "cached_at": 1790286191.244424
-}

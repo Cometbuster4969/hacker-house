@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "3e7189e6378b35ab36543ed715bc0523",
-  "response": "{\n  \"investigation_summary\": \"The alert for customer C02354 suggests a possible account takeover, as indicated by the flagged in-person transaction 3491361 for $39.08 with a risk score of 0.48 (evidence 1). Card C02354-K2, which belongs to the customer, has a history of 12 transactions averaging $159.70, making the low\u2011value flagged transaction anomalous relative to its usual activity (evidence 2). The customer holds two cards (C02354-K1 and C02354-K2), increasing the attack surface for credential compromise (evidence 3). A prior confirmed fraud case, CC-0255, involved an account takeover and a loss of $1,167.08, reinforcing the pattern observed here (evidence from prior cases).\"\n}",
-  "cached_at": 1790287337.622305
-}

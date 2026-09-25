@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "aac0c1ea97548d26ab0a9ff4519bfff9",
-  "response": "{\n  \"fraud_probability\": 0.65,\n  \"verdict\": \"fraud\",\n  \"pattern\": \"card_testing\",\n  \"pattern_description\": \"\",\n  \"reasoning\": \"The flagged transaction 3450629 is $100.09, which is notably lower than the card's average transaction amount of $427.76 (evidence 3), a pattern consistent with card testing. It occurred online with an anonymous email address (evidence 1) and was processed on device D06A9AB, which has been used by 302 different cards (evidence 6), indicating a high\u2011risk shared device often exploited for testing stolen cards. The real\u2011time model assigned a moderate risk score of 0.57 (evidence 1), and there is no prior fraud history for this card beyond a cleared case CC-1383 (evidence 5). Together, these signals suggest the transaction is likely fraudulent rather than legitimate.\"\n}",
-  "cached_at": 1790287214.2651808
-}

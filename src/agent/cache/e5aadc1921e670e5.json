@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "acd1c949c24d2d3c61e6ad1590478a98",
-  "response": "{\n    \"fraud_probability\": 1.00,\n    \"verdict\": \"fraud\",\n    \"pattern\": \"card_not_present_new_device\",\n    \"pattern_description\": \"\",\n    \"reasoning\": \"The customer reports not authorizing the $55.68 online transaction (evidence 1). The transaction occurred on device DF89AEB, which has been used by 175 different cards, indicating a high-risk shared device (evidence 6). The card C13171-K2 has only one prior transaction of $72.44, showing low historical volume, and the current amount is lower, consistent with testing behavior (evidence 3, 4). Historical closed cases for this card/customer show a pattern of card-not-present fraud, many labeled as new device fraud (evidence 5). The risk score of 0.38, while modest, combined with the customer report and device sharing, supports a fraud conclusion.\"\n}",
-  "cached_at": 1790286029.9070861
-}

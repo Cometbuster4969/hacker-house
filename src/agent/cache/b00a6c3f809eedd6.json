@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "cbc065070062c63c1c9a46e371151ea6",
-  "response": "{\n  \"sar_narrative\": \"Customer C04570 with card C04570\u2011K1 exhibited a card\u2011testing pattern involving five transactions (IDs 3121778, 3135192, 3137978, 3149016, 3155462) with amounts of $200.00, $199.93, $199.95, $199.91 and $199.92. A flagged transaction (ID 3450629) for $100.09 was also identified as part of this activity (Evidence 1). The $100.09 amount is notably lower than the card\u2019s historical average transaction amount of $427.76, consistent with low\u2011value card\u2011testing attempts (Evidence 3). The transaction occurred online and was processed on device D06A9AB, which has been used by 302 distinct cards, indicating a high\u2011risk shared device often exploited for testing stolen cards (Evidence 6). The real\u2011time model assigned a moderate risk score of 0.57 to the flagged transaction (Evidence 1). Billing region 204 shows substantial card activity, with 2,096 cards transacting in that area (Evidence 4). The card/customer has one prior closed case (CC\u20111383) and no other fraud history (Evidence 5). No other cards are linked to this customer (Connected cards: None), and the total exposure associated with the identified testing pattern is $252,641.87.\"\n}",
-  "cached_at": 1790287236.6638396
-}

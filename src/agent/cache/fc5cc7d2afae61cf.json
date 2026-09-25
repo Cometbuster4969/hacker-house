@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "c800ee5f06971e23a9925ae46830ce2e",
-  "response": "{\"summary\":\"The flagged transaction 3558054 of $55.68 was made online with a risk score of 0.38. It originated from an unknown device using Chrome 66.0, which is atypical for the card holder. Card C13171\u2011K2 has only one prior transaction with an average amount of $72.44, indicating limited usage. Similar patterns have been observed in prior confirmed fraud cases CC\u20110056 and CC\u20110467, both involving card\u2011not\u2011present transactions on new devices. Given the matching pattern and supporting evidence, the transaction is classified as fraud.\",\"verdict\":\"fraud\",\"probability\":1.00,\"pattern\":\"card_not_present_new_device\",\"evidence\":[{\"transaction_id\":3558054,\"amount_usd\":55.68,\"channel\":\"online\",\"risk_score\":0.38},{\"device_info\":{\"browser\":\"chrome 66.0\",\"os\":null,\"device\":null}},{\"card_id\":\"C13171-K2\",\"history_transaction_count\":1,\"average_amount_usd\":72.44}],\"prior_cases\":[{\"case_id\":\"CC-0056\",\"status\":\"confirmed_fraud\",\"pattern\":\"card_not_present_new_device\",\"amount_usd\":40.21},{\"case_id\":\"CC-0467\",\"status\":\"confirmed_fraud\",\"pattern\":\"card_not_present_new_device\",\"amount_usd\":649.77}]}",
-  "cached_at": 1790267649.5496879
-}

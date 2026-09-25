@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "12042a5707a363e12bfba02b9bd52eb6",
-  "response": "{\"fraud_probability\":0.86,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_fraud\",\"pattern_description\":\"\",\"reasoning\":\"The flagged transaction (ID 3478782) is $292.36, which is 6.5\u00d7 the card\u2019s average spend of $45.02 [evidence 2]. Its risk score of 0.79 and a recent burst of six transactions in 24\u202fh totaling $161.39 indicate abnormal activity [evidence 4]. A prior confirmed fraud case (CC\u20114160) on the same card involved an online purchase of $90.54 and was classified as card\u2011not\u2011present fraud [evidence 3]. Combined with the high calculated fraud probability of 0.85, the evidence points to fraudulent activity. Therefore the transaction should be treated as fraud.\"}",
-  "cached_at": 1790265721.4289067
-}

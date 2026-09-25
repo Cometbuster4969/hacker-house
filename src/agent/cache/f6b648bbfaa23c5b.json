@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "nvidia/nemotron-3-super-120b-a12b:free",
-  "prompt_hash": "c800ee5f06971e23a9925ae46830ce2e",
-  "response": "{\n  \"verdict\": \"fraud\",\n  \"fraud_probability\": 1.00,\n  \"pattern\": \"card_not_present_new_device\",\n  \"investigation_summary\": \"The flagged transaction 3558054 for $55.68 occurred online from an unfamiliar device (Chrome 66.0) with no prior history, matching the card_not_present_new_device pattern. Card C13171-K2 shows only one historical transaction averaging $72.44, indicating limited usage and heightened risk. Prior confirmed fraud cases CC-0056 ($40.21) and CC-0467 ($649.77) exhibited the same pattern, reinforcing the likelihood of fraud. Given the evidence and pattern consistency, the transaction is assessed as fraudulent with a probability of 1.00.\"\n}",
-  "cached_at": 1790286038.2970574
-}

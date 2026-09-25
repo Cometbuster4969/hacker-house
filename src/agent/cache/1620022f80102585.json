@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "cb036febb1a47ee13ef767b8a8b7cbf8",
-  "response": "{\"fraud_probability\":0.94,\"verdict\":\"fraud\",\"pattern\":\"card_not_present_new_device\",\"pattern_description\":\"\",\"reasoning\":\"The customer explicitly denied the $482.12 online purchase (evidence 1) and the amount is far above the card's average $91.52 (evidence 3). All prior 30 transactions were in\u2011person, making this online channel anomalous (evidence 3). The transaction originated from device D7059DC, which is a shared device used by 547 other cards (evidence 6), indicating a new, high\u2011risk device for this card. Combined with a risk score of 0.25 and a rule\u2011calculated fraud probability of 0.95, the evidence points to card\u2011not\u2011present fraud on a new device.\"}",
-  "cached_at": 1790267500.2189424
-}

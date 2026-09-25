@@ -1,7 +1,0 @@
-{
-  "provider": "openai",
-  "model": "openai/gpt-oss-120b",
-  "prompt_hash": "389feb03c4d270cb1ab70824f5efe98f",
-  "response": "{\"summary\":\"The investigation finds strong indicators of account takeover fraud. Transaction 3491361, an in\u2011person purchase of $39.08 with a risk score of 0.48, is flagged [1]. Card C02354\u2011K2 shows an unusually high activity pattern with 12 transactions averaging $159.70, matching the behavior seen in prior confirmed takeover case CC\u20110255 [2]. Therefore, the case is concluded as fraud with a probability of 1.00.\"}",
-  "cached_at": 1790268023.5129187
-}
