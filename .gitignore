@@ -45,3 +45,6 @@ memory/runtime/
 
 # Source archives
 *.zip
+
+# LLM response cache for the legacy orchestrator (regenerable)
+src/agent/cache/
