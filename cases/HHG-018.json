@@ -3,170 +3,186 @@
   "case": {
     "status": "closed_fraud",
     "verdict": "fraud",
-    "fraud_probability": 0.55,
+    "fraud_probability": 0.98,
     "pattern": "account_takeover",
     "pattern_description": "",
     "affected_txn_ids": [
-      "3311243",
-      "3523768",
-      "3523535",
-      "3523392",
-      "3524115",
-      "3311203",
-      "3523709",
-      "3523384",
-      "3524102",
-      "3491361",
-      "3523668"
+      "3467166",
+      "3467513",
+      "3469970",
+      "3469979",
+      "3473840",
+      "3474342",
+      "3476938",
+      "3477971",
+      "3481169",
+      "3484403",
+      "3485810",
+      "3485990",
+      "3486341",
+      "3490180",
+      "3491361"
     ],
-    "first_suspicious_txn_id": "3311243",
+    "first_suspicious_txn_id": "3467166",
     "connected_card_ids": [],
     "connected_device_profiles": [],
-    "exposure_usd": 1700.51,
+    "exposure_usd": 2752.48,
     "evidence": [
       {
-        "claim": "Flagged transaction 3491361: $39.08, in_person channel, risk score 0.48",
+        "claim": "Flagged $39.08 in-person purchase (product W) in billing region 126 on 2016-11-27 13:41; bank risk score 0.48, our transaction model 0.99 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
         "source": "graph",
-        "ref": "query:get_transaction(3491361)",
+        "ref": "query:txn_context(txn_id=3491361)",
         "entity_ids": [
-          "3491361"
-        ]
-      },
-      {
-        "claim": "Card C02354-K2 has 12 transactions in history, average amount $159.70",
-        "source": "graph",
-        "ref": "query:card_transactions(C02354-K2)",
-        "entity_ids": [
+          "3491361",
           "C02354-K2"
         ]
       },
       {
-        "claim": "Customer C02354 has 2 cards: C02354-K1, C02354-K2",
+        "claim": "Customer has 4560 transactions in the prior 120 days; billing region 126 is familiar for the customer",
         "source": "graph",
-        "ref": "query:customer_cards(C02354)",
+        "ref": "query:cardholder_baseline(customer_id=C02354, days=120)",
         "entity_ids": [
-          "C02354",
-          "C02354-K1",
-          "C02354-K2"
+          "C02354"
         ]
       },
       {
-        "claim": "Billing region 126 has 1088 cards transacting in it",
+        "claim": "This cardholder key (card + billing region + account-open day) already has 11 transaction(s) in confirmed closed fraud cases",
         "source": "graph",
-        "ref": "query:region_cards(126)",
+        "ref": "query:prior_cases(customer_id=C02354)",
         "entity_ids": [
-          "126"
-        ]
-      },
-      {
-        "claim": "Found 20 prior closed cases for this card/customer: CC-0255, CC-0405, CC-0454, CC-0631, CC-1450, CC-1699, CC-2051, CC-2187, CC-2432, CC-2589, CC-3085, CC-3537, CC-3634, CC-3899, CC-4070, CC-4436, CC-4721, CC-4942, CC-5441, CC-5558",
-        "source": "graph",
-        "ref": "query:closed_cases(C02354-K2, C02354)",
-        "entity_ids": [
-          "CC-0255",
-          "CC-0405",
-          "CC-0454",
           "CC-0631",
           "CC-1450",
           "CC-1699",
           "CC-2051",
-          "CC-2187",
-          "CC-2432",
-          "CC-2589",
-          "CC-3085",
-          "CC-3537",
-          "CC-3634",
-          "CC-3899",
-          "CC-4070",
-          "CC-4436",
-          "CC-4721",
-          "CC-4942",
-          "CC-5441",
-          "CC-5558"
+          "CC-2432"
         ]
       },
       {
-        "claim": "Card C02354-K2 shows high velocity: 8 transactions in 24h totaling $956.88",
+        "claim": "15 transaction(s) between 2016-11-18 and 2016-11-27 on card(s) C02354-K2 form one episode (gaps <= 48 h); 15 of them score >= 0.35 on the model",
         "source": "graph",
-        "ref": "query:card_velocity(C02354-K2, 24h)",
+        "ref": "query:card_window(customer_id=C02354, days=10)",
         "entity_ids": [
-          "3523384",
-          "3523392",
-          "3523535",
-          "3523668",
-          "3523709",
-          "3523768",
-          "3524102",
-          "3524115"
+          "3467166",
+          "3467513",
+          "3469970",
+          "3469979",
+          "3473840",
+          "3474342",
+          "3476938",
+          "3477971",
+          "3481169",
+          "3484403",
+          "3485810",
+          "3485990",
+          "3486341",
+          "3490180",
+          "3491361"
         ]
       },
       {
-        "claim": "LLM analysis: Customer C02354 reports unauthorized $39.08 transaction 3491361 (evidence 1). The flagged amount is below the card's average $159.70 (evidence 2), suggesting a low-value test or probe. The card exhibits high velocity with 8 transactions in 24h totaling $956.88 (evidence 6) and a burst of 4+ transactions same day (graph-level signals), indicative of compromised card use. Prior cases for this card/customer show multiple confirmed frauds with account_takeover pattern (CC-0255, CC-0454, CC-1450) (evidence 5/prior cases). Together, these signals support an account takeover fraud verdict.",
+        "claim": "No monthly recurring charge of the same product and amount in the customer's history (R7 does not apply)",
+        "source": "graph",
+        "ref": "query:recurring_check",
+        "entity_ids": [
+          "C02354-K2"
+        ]
+      },
+      {
+        "claim": "Behavioural nearest neighbours among closed cases: 5 of 5 confirmed fraud (CC-3638 account_takeover, d=3.5, CC-3538 account_takeover, d=3.8, CC-4061 account_takeover, d=4.0, CC-4454 account_takeover, d=4.3, CC-2358 account_takeover, d=4.4); closest cleared look-alikes: CC-1666 d=9.8, CC-2534 d=10.0, CC-1404 d=10.1",
+        "source": "graph",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
+        "entity_ids": [
+          "CC-3638",
+          "CC-3538",
+          "CC-4061",
+          "CC-4454",
+          "CC-2358",
+          "CC-1666",
+          "CC-2534",
+          "CC-1404"
+        ]
+      },
+      {
+        "claim": "Customer reported the charge as not made by them: 'I never made this $39.08 purchase. Please check my card.' Refers to 3491361.",
+        "source": "customer",
+        "ref": "case_pack:trigger_text",
+        "entity_ids": [
+          "C02354"
+        ]
+      },
+      {
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
         "source": "document",
-        "ref": "llm:assess_evidence",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-0255",
-      "CC-0405",
-      "CC-0454",
       "CC-0631",
       "CC-1450",
       "CC-1699",
-      "CC-2051",
-      "CC-2187",
-      "CC-2432",
-      "CC-2589",
-      "CC-3085",
-      "CC-3537",
-      "CC-3634",
-      "CC-3899",
-      "CC-4070",
-      "CC-4436",
-      "CC-4721",
-      "CC-4942",
-      "CC-5441",
-      "CC-5558"
+      "CC-3638",
+      "CC-3538",
+      "CC-4061"
     ],
-    "summary": "{\n  \"investigation_summary\": \"The alert for customer C02354 suggests a possible account takeover, as indicated by the flagged in-person transaction 3491361 for $39.08 with a risk score of 0.48 (evidence 1). Card C02354-K2, which belongs to the customer, has a history of 12 transactions averaging $159.70, making the low\u2011value flagged transaction anomalous relative to its usual activity (evidence 2). The customer holds two cards (C02354-K1 and C02354-K2), increasing the attack surface for credential compromise (evidence 3). A prior confirmed fraud case, CC-0255, involved an account takeover and a loss of $1,167.08, reinforcing the pattern observed here (evidence from prior cases).\"\n}",
-    "written_to_graph": true,
-    "graph_case_id": "CASE-HHG-018"
+    "summary": "Account takeover: 15 transaction(s) between 2016-11-18 and 2016-11-27 on C02354-K2 totalling $2,752.48 (probability 0.98). Evidence: model score 0.99, prior confirmed fraud on the same cardholder.",
+    "written_to_graph": false,
+    "graph_case_id": ""
   },
-  "evidence_requests": [
-    {
-      "type": "customer_validation",
-      "asked_after_step": 6,
-      "assumed_response": "Customer C02354 states they did not make this purchase and still has the card"
-    }
-  ],
+  "evidence_requests": [],
   "next_best_actions": {
     "initial": [
       {
-        "action": "VERIFY_WITH_CUSTOMER",
+        "action": "BLOCK_CARD",
+        "route": "L2",
+        "reason": "R2: customer denied the transaction; exposure $2,752.48 > $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "R1: Customer report requires verification before any blocking action"
+        "reason": "R2: customer denied the transaction; 3a: fraud probability 0.98 reaches 0.30; 3a: the customer disputes a charge; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R2: exposure $2,752.48 exceeds $1,000; 3a: fraud confirmed and exposure $2,752.48 exceeds $1,000"
       }
     ],
     "final": [
       {
-        "action": "VERIFY_WITH_CUSTOMER",
+        "action": "BLOCK_CARD",
+        "route": "L2",
+        "reason": "R2: customer denied the transaction; exposure $2,752.48 > $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "R1: Customer report requires verification before any blocking action"
+        "reason": "R2: customer denied the transaction; 3a: fraud probability 0.98 reaches 0.30; 3a: the customer disputes a charge; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R2: exposure $2,752.48 exceeds $1,000; 3a: fraud confirmed and exposure $2,752.48 exceeds $1,000"
       }
     ],
     "what_changed": "nothing"
   },
   "sar": {
-    "file": false,
-    "reason": "No SAR triggers met: exposure below threshold and no shared connections",
-    "narrative": "",
-    "subjects": [],
-    "total_amount_usd": 0.0,
-    "activity_dates": []
+    "file": true,
+    "reason": "3a/R2: fraud confirmed and exposure $2,752.48 exceeds $1,000",
+    "narrative": "Between 2016-11-18 03:54 and 2016-11-27 13:41, 15 transaction(s) totalling $2,752.48 were made on card(s) C02354-K2 belonging to customer C02354. The activity comprised 1 online and 14 in-person transaction(s) under product code(s) C, W, in billing region 126, 325. Online transactions came from device profile(s) Windows | UNK | chrome 65.0 | UNK. The same cardholder already had transactions confirmed as fraud in closed cases. The amount exceeds the $1,000 reporting threshold. Total suspicious amount: $2,752.48. Actions recommended: BLOCK_CARD, CREATE_CASE, FILE_REPORT.",
+    "subjects": [
+      "C02354",
+      "C02354-K2"
+    ],
+    "total_amount_usd": 2752.48,
+    "activity_dates": [
+      "2016-11-18",
+      "2016-11-27"
+    ]
   },
-  "stop_reason": "Investigation complete; all available evidence examined",
+  "stop_reason": "Probability 0.98 >= 0.85 on 4 independent signals (model, episode, history, customer_report); stopping rule met.",
   "tool_calls": 8,
-  "tokens": 8114,
-  "latency_s": 36.3
+  "tokens": 0,
+  "latency_s": 0.22
 }

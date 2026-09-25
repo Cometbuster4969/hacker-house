@@ -1,203 +1,130 @@
 {
   "case_id": "HHG-015",
   "case": {
-    "status": "closed_fraud",
-    "verdict": "fraud",
-    "fraud_probability": 0.9,
-    "pattern": "card_not_present_new_device",
-    "pattern_description": "Card-not-present fraud: $599.94 online purchase is 6.8x the average ($88.22). Burst of 30 online transactions detected.",
-    "affected_txn_ids": [
-      "3065132",
-      "3054511",
-      "3001357",
-      "3024689",
-      "3052787",
-      "3072040",
-      "3056786",
-      "3014983",
-      "3035043",
-      "3012978",
-      "3000645",
-      "3000930",
-      "3000032",
-      "3074143",
-      "3011574",
-      "3019109",
-      "3030909",
-      "3054532",
-      "3063365",
-      "3066356",
-      "3000174",
-      "3018447",
-      "3054463",
-      "3042725",
-      "3013025",
-      "3051963",
-      "3000029",
-      "3024504",
-      "3001230",
-      "3035710",
-      "3019053",
-      "3024656",
-      "3464869",
-      "3035054",
-      "3000901",
-      "3054510",
-      "3072772",
-      "3000139",
-      "3000028",
-      "3063943",
-      "3012946",
-      "3012981",
-      "3020392",
-      "3014930",
-      "3018088",
-      "3013003"
-    ],
-    "first_suspicious_txn_id": "3065132",
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.06,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
     "connected_card_ids": [],
-    "connected_device_profiles": [
-      "D8A3375"
-    ],
-    "exposure_usd": 851.16,
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
     "evidence": [
       {
-        "claim": "Flagged transaction 3464869: $599.94, online channel, risk score 0.77",
+        "claim": "Flagged $599.94 online purchase (product R) in billing region 327 on 2016-11-17 14:03; bank risk score 0.77, our transaction model 0.00 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
         "source": "graph",
-        "ref": "query:get_transaction(3464869)",
+        "ref": "query:txn_context(txn_id=3464869)",
+        "entity_ids": [
+          "3464869",
+          "C03042-K1"
+        ]
+      },
+      {
+        "claim": "Customer has 40 transactions in the prior 120 days; billing region 327 is new for the customer; device profile Trident/7.0 | Windows 8.1 | ie 11.0 for desktop | 1680x1050 is not established and marked New for the account",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C03042, days=120)",
+        "entity_ids": [
+          "C03042"
+        ]
+      },
+      {
+        "claim": "No other transaction on the customer's cards in the 10-day window scores as likely fraud; the flagged transaction is isolated",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C03042, days=10)",
         "entity_ids": [
           "3464869"
         ]
       },
       {
-        "claim": "Transaction came from device: Trident/7.0 (Windows 8.1, ie 11.0 for desktop, 1680x1050)",
+        "claim": "Behavioural nearest neighbours among closed cases: 1 of 5 confirmed fraud (CC-0735 none, d=0.2, CC-1422 none, d=0.5, CC-3435 none, d=0.5, CC-1786 card_not_present_new_device, d=0.5, CC-1567 none, d=0.5); closest cleared look-alikes: CC-0735 d=0.2, CC-1422 d=0.5, CC-3435 d=0.5",
         "source": "graph",
-        "ref": "query:get_device(D8A3375)",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
         "entity_ids": [
-          "D8A3375"
+          "CC-0735",
+          "CC-1422",
+          "CC-3435",
+          "CC-1786",
+          "CC-1567",
+          "CC-0735",
+          "CC-1422",
+          "CC-3435"
         ]
       },
       {
-        "claim": "Card C03042-K1 has 30 transactions in history, average amount $88.22",
-        "source": "graph",
-        "ref": "query:card_transactions(C03042-K1)",
-        "entity_ids": [
-          "C03042-K1"
-        ]
-      },
-      {
-        "claim": "Billing region 327 has 872 cards transacting in it",
-        "source": "graph",
-        "ref": "query:region_cards(327)",
-        "entity_ids": [
-          "327"
-        ]
-      },
-      {
-        "claim": "Found 3 prior closed cases for this card/customer: CC-0615, CC-1313, CC-3886",
-        "source": "graph",
-        "ref": "query:closed_cases(C03042-K1, C03042)",
-        "entity_ids": [
-          "CC-0615",
-          "CC-1313",
-          "CC-3886"
-        ]
-      },
-      {
-        "claim": "Device D8A3375 used by 8 cards: C11227-K1, C01155-K1, C02881-K1, C11413-K1, C00681-K1, C03042-K1, C05704-K1, C05292-K1",
-        "source": "graph",
-        "ref": "query:device_cards(D8A3375)",
-        "entity_ids": [
-          "D8A3375",
-          "C11227-K1",
-          "C01155-K1",
-          "C02881-K1",
-          "C11413-K1",
-          "C00681-K1",
-          "C03042-K1",
-          "C05704-K1",
-          "C05292-K1"
-        ]
-      },
-      {
-        "claim": "Device D8A3375 is marked as NEW for card C03042-K1",
-        "source": "graph",
-        "ref": "query:new_device_check(C03042-K1, D8A3375)",
-        "entity_ids": [
-          "D8A3375"
-        ]
-      },
-      {
-        "claim": "LLM analysis: The flagged transaction 3464869 is a high\u2011value online purchase ($599.94) with a risk score of 0.77, far above the card\u2019s average of $88.22 [evidence 1][evidence 3]. The transaction originated from device D8A3375, which is shared by eight cards and is flagged as new for card C03042\u2011K1, indicating a possible compromise of a new device [evidence 6][evidence 7]. Historical cases for this card show two confirmed frauds with the same card_not_present_new_device pattern (CC\u20110615, CC\u20113886) and one cleared case where the cardholder confirmed travel [evidence 5]. Given the high risk score, anomalous amount, new shared device, and prior fraud pattern, the transaction is very likely fraudulent.",
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
         "source": "document",
-        "ref": "llm:assess_evidence",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      },
+      {
+        "claim": "Customer confirms they made the $599.94 transaction (simulated reply; assumption recorded in evidence_requests)",
+        "source": "customer",
+        "ref": "evidence_request:1",
         "entity_ids": []
       }
     ],
     "similar_prior_cases": [
-      "CC-0615",
       "CC-1313",
-      "CC-3886"
+      "CC-0735",
+      "CC-1422",
+      "CC-3435",
+      "CC-1567"
     ],
-    "summary": "{\n  \"investigation_summary\": \"The alert was triggered by a flagged card-not-present transaction (ID 3464869) for $599.94 from an unfamiliar device (Trident/7.0 on Windows 8.1, IE 11.0) with a risk score of 0.77. This transaction deviates sharply from the card's historical behavior (C03042-K1 averages 30 transactions at $88.22), indicating a potential compromise. The pattern matches prior confirmed fraud case CC-0615, which also involved a card-not-present new device and resulted in a $174.99 loss. Given the high fraud probability (0.90) and supporting evidence, the transaction is assessed as fraudulent.\"\n}",
-    "written_to_graph": true,
-    "graph_case_id": "CASE-HHG-015"
+    "summary": "$599.94 online transaction 3464869 on C03042-K1 assessed as legitimate (probability 0.06). Our model scores it 0.00 despite a risk score of 0.77, and no other transaction in the window looks fraudulent. The cardholder's (simulated) confirmation settles it; alert closed under R3.",
+    "written_to_graph": false,
+    "graph_case_id": ""
   },
-  "evidence_requests": [],
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 7,
+      "assumed_response": "Customer confirms they made the $599.94 transaction"
+    }
+  ],
   "next_best_actions": {
     "initial": [
       {
-        "action": "BLOCK_CARD",
-        "route": "L1",
-        "reason": "R2: High confidence fraud with exposure $599.94"
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1: probability 0.19 rests on a single signal; verify before any block"
       },
       {
         "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "R2: Confirmed fraud requires case"
+        "reason": "3a: evidence requested"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R8: verdict uncertain and exposure $599.94 exceeds $500"
       }
     ],
     "final": [
       {
-        "action": "BLOCK_CARD",
-        "route": "L2",
-        "reason": "High confidence fraud, exposure $8110.87 > $2,500"
-      },
-      {
         "action": "CREATE_CASE",
         "route": "auto",
-        "reason": "Confirmed fraud requires case creation"
+        "reason": "3a: case opened when evidence was requested; closed as legitimate under R3"
       },
       {
-        "action": "FILE_REPORT",
-        "route": "L2",
-        "reason": "SAR required: exposure $8110.87 or shared connections"
-      },
-      {
-        "action": "MONITOR_CONNECTED_CARDS",
+        "action": "CLOSE_NO_FRAUD",
         "route": "auto",
-        "reason": "Shared device profile detected"
+        "reason": "R3: customer confirmed the transaction; confirmation noted in the case file"
       }
     ],
-    "what_changed": "Added: MONITOR_CONNECTED_CARDS, FILE_REPORT"
+    "what_changed": "Assumed reply (confirmed) moved the probability from 0.19 to 0.06; R3 applies, so the alert is closed as legitimate."
   },
   "sar": {
-    "file": true,
-    "reason": "Shared device profile linking multiple cards",
-    "narrative": "{\n  \"narrative\": \"Customer C03042, card C03042-K1, exhibited a card_not_present_new_device pattern with total exposure $8,110.87 across transactions 3054463 ($49.91), 3054510 ($200.00), 3054511 ($24.97), 3054532 ($200.01), and 3063365 ($100.04). An additional flagged transaction 3464869 for $599.94 occurred online with a risk score of 0.77. Transaction 3464869 originated from device D8A3375, identified as Trident/7.0 (Windows 8.1, IE 11.0) with resolution 1680x1050. Device D8A3375 is associated with eight cards, including C03042-K1, and is marked as new for this card. Card C03042-K1 has a historical average transaction amount of $88.22 based on 30 prior transactions. The amount of transaction 3464869 ($599.94) is substantially above the card\u2019s historical average. Prior closed cases for this card/customer include CC-0615, CC-1313, and CC-3886, with CC-0615 and CC-3886 confirmed as fraud under the same card_not_present_new_device pattern. No other cards are connected to C03042-K1.\"\n}",
-    "subjects": [
-      "C03042",
-      "C03042-K1",
-      "D8A3375"
-    ],
-    "total_amount_usd": 8110.87,
-    "activity_dates": [
-      "2016-07-02",
-      "2016-11-17"
-    ]
+    "file": false,
+    "reason": "3a: no report \u2014 the activity was assessed as legitimate",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
   },
-  "stop_reason": "Fraud probability 0.90 \u2265 0.85 supported by 7 independent pieces of evidence",
-  "tool_calls": 12,
-  "tokens": 7833,
-  "latency_s": 55.1
+  "stop_reason": "The customer validation reply (assumed: confirmed) settles the question; probability 0.19 -> 0.06. Further steps would not change the actions.",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.2
 }

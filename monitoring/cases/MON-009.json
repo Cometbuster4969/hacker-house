@@ -1,0 +1,173 @@
+{
+  "case_id": "MON-009",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.9,
+    "pattern": "card_testing",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3492323",
+      "3492374",
+      "3492494",
+      "3492921"
+    ],
+    "first_suspicious_txn_id": "3492323",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 65.03,
+    "evidence": [
+      {
+        "claim": "Flagged $55.57 online purchase (product C) on 2016-11-27 22:12; bank risk score 0.29, our transaction model 0.17 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
+        "source": "graph",
+        "ref": "query:txn_context(txn_id=3492921)",
+        "entity_ids": [
+          "3492921",
+          "C08962-K2"
+        ]
+      },
+      {
+        "claim": "Customer has 3033 transactions in the prior 120 days; no billing region on the flagged transaction; device profile Windows | UNK | chrome generic | UNK is established (seen > 14 days earlier)",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C08962, days=120)",
+        "entity_ids": [
+          "C08962"
+        ]
+      },
+      {
+        "claim": "4 transaction(s) on 2016-11-27 between 19:05 and 22:12 on card(s) C08962-K2 form one episode (gaps <= 48 h); 0 of them score >= 0.35 on the model; the rest are tied in by the structural finding below",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C08962, days=10)",
+        "entity_ids": [
+          "3492323",
+          "3492374",
+          "3492494",
+          "3492921"
+        ]
+      },
+      {
+        "claim": "3 online authorizations under $5 within an hour on C08962-K2, then $55.57",
+        "source": "graph",
+        "ref": "query:card_testing_scan(card_id=C08962-K2)",
+        "entity_ids": [
+          "3492323",
+          "3492374",
+          "3492494",
+          "3492921"
+        ]
+      },
+      {
+        "claim": "Behavioural nearest neighbours among closed cases: 5 of 5 confirmed fraud (CC-4582 card_not_present_new_device, d=4.9, CC-4225 card_testing, d=4.9, CC-3653 card_testing, d=4.9, CC-4167 card_not_present_fraud, d=5.2, CC-4859 card_not_present_fraud, d=5.2); closest cleared look-alikes: CC-4589 d=6.4, CC-0252 d=6.9, CC-4743 d=8.0",
+        "source": "graph",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
+        "entity_ids": [
+          "CC-4582",
+          "CC-4225",
+          "CC-3653",
+          "CC-4167",
+          "CC-4859",
+          "CC-4589",
+          "CC-0252",
+          "CC-4743"
+        ]
+      },
+      {
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
+        "source": "document",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      },
+      {
+        "claim": "One-time passcode challenge failed; the cardholder, reached by phone, says they made no online purchases (simulated reply; assumption recorded in evidence_requests)",
+        "source": "customer",
+        "ref": "evidence_request:1",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-0429",
+      "CC-1235",
+      "CC-1401",
+      "CC-4582",
+      "CC-4225",
+      "CC-3653"
+    ],
+    "summary": "Card testing: 4 transaction(s) on 2016-11-27 between 19:05 and 22:12 on C08962-K2 totalling $65.03 (probability 0.90). The (simulated) customer denial settles the verdict.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [
+    {
+      "type": "step_up_auth",
+      "asked_after_step": 9,
+      "assumed_response": "One-time passcode challenge failed; the cardholder, reached by phone, says they made no online purchases"
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "DECLINE_TRANSACTION",
+        "route": "L1",
+        "reason": "R5: three or more small online authorizations within an hour, then a larger purchase"
+      },
+      {
+        "action": "STEP_UP_AUTH",
+        "route": "auto",
+        "reason": "R5: require a one-time passcode before further activity; 6/R1: probability 0.78 is not yet decisive; confirm the cardholder by one-time passcode"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R5 / 3a: card-testing case; 3a: fraud probability 0.78 reaches 0.30; 3a: evidence requested"
+      }
+    ],
+    "final": [
+      {
+        "action": "DECLINE_TRANSACTION",
+        "route": "L1",
+        "reason": "R5: three or more small online authorizations within an hour, then a larger purchase"
+      },
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2: customer denied the transaction; exposure $65.03 <= $2,500"
+      },
+      {
+        "action": "STEP_UP_AUTH",
+        "route": "auto",
+        "reason": "R5: require a one-time passcode before further activity"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2: customer denied the transaction; R5 / 3a: card-testing case; 3a: fraud probability 0.90 reaches 0.30; 3a: evidence requested"
+      }
+    ],
+    "what_changed": "Assumed reply (denied) moved the probability from 0.78 to 0.90; R2 now applies, so the card is blocked and the case confirmed."
+  },
+  "sar": {
+    "file": false,
+    "reason": "3a: no report \u2014 exposure $65.03 is at most $1,000 and there is no shared device, region cluster, other customer's fraud, or coordinated pattern; case only",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0,
+    "activity_dates": []
+  },
+  "stop_reason": "The step up auth reply (assumed: denied) settles the question; probability 0.78 -> 0.90. Further steps would not change the actions.",
+  "tool_calls": 8,
+  "tokens": 0,
+  "latency_s": 0.19,
+  "monitoring_alert": {
+    "type": "card_testing",
+    "element": "C08962-K2",
+    "n_txns": 11,
+    "model_p_purchase": 0.168,
+    "first": "2016-11-27 19:05:08",
+    "last": "2016-11-28 19:46:31",
+    "cards": [
+      "C08962-K2"
+    ],
+    "seed_txn": "3492921",
+    "as_of": "2016-11-28 20:46:31"
+  }
+}

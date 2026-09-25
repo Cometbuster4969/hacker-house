@@ -37,3 +37,11 @@ htmlcov/
 
 # Logs
 *.log
+
+# Engine artefacts (rebuildable)
+data/HHGOA_IEEE/prepared
+data/store
+memory/runtime/
+
+# Source archives
+*.zip

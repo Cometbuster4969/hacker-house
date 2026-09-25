@@ -1,0 +1,351 @@
+[
+ {
+  "case_id": "HHG-017",
+  "graph_case_id": "CASE-HHG-017",
+  "customer_id": "C04570",
+  "cards": [
+   "C04570-K1"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-11-12 00:46:24"
+ },
+ {
+  "case_id": "HHG-015",
+  "graph_case_id": "CASE-HHG-015",
+  "customer_id": "C03042",
+  "cards": [
+   "C03042-K1"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-11-17 19:03:36"
+ },
+ {
+  "case_id": "HHG-006",
+  "graph_case_id": "CASE-HHG-006",
+  "customer_id": "C07297",
+  "cards": [
+   "C00466-K1",
+   "C05851-K1",
+   "C07297-K1",
+   "C10990-K1"
+  ],
+  "devices": [
+   "Trident/7.0|Windows 7|ie 11.0 for desktop|1920x1080",
+   "iOS Device|iOS 11.2.1|mobile safari 11.0|2208x1242"
+  ],
+  "verdict": "fraud",
+  "pattern": "undocumented",
+  "txn_ids": [
+   "3476602",
+   "3476633",
+   "3476665",
+   "3476682"
+  ],
+  "opened_at": "2016-11-22 02:30:00"
+ },
+ {
+  "case_id": "HHG-014",
+  "graph_case_id": "CASE-HHG-014",
+  "customer_id": "C13487",
+  "cards": [
+   "C01289-K2",
+   "C01996-K2",
+   "C02910-K1",
+   "C02975-K1",
+   "C03676-K2",
+   "C04108-K2",
+   "C04274-K1",
+   "C05448-K2",
+   "C06710-K1",
+   "C08168-K1",
+   "C09049-K1",
+   "C09906-K1",
+   "C09975-K1",
+   "C10193-K2",
+   "C10326-K1",
+   "C11082-K1",
+   "C11670-K2",
+   "C12796-K2",
+   "C13291-K1",
+   "C13487-K1"
+  ],
+  "devices": [
+   "SM-G935F Build/NRD90M|Android 7.0|chrome 62.0 for android|1920x1080"
+  ],
+  "verdict": "fraud",
+  "pattern": "undocumented",
+  "txn_ids": [
+   "3460634",
+   "3478561"
+  ],
+  "opened_at": "2016-11-22 20:11:00"
+ },
+ {
+  "case_id": "HHG-002",
+  "graph_case_id": "CASE-HHG-002",
+  "customer_id": "C11891",
+  "cards": [
+   "C11891-K1"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-11-22 23:27:07"
+ },
+ {
+  "case_id": "HHG-018",
+  "graph_case_id": "CASE-HHG-018",
+  "customer_id": "C02354",
+  "cards": [
+   "C02354-K2"
+  ],
+  "devices": [
+   "Windows|UNK|chrome 65.0|UNK"
+  ],
+  "verdict": "fraud",
+  "pattern": "account_takeover",
+  "txn_ids": [
+   "3467166",
+   "3467513",
+   "3469970",
+   "3469979",
+   "3473840",
+   "3474342",
+   "3476938",
+   "3477971",
+   "3481169",
+   "3484403",
+   "3485810",
+   "3485990",
+   "3486341",
+   "3490180",
+   "3491361"
+  ],
+  "opened_at": "2016-11-27 14:41:26"
+ },
+ {
+  "case_id": "HHG-019",
+  "graph_case_id": "CASE-HHG-019",
+  "customer_id": "C07987",
+  "cards": [
+   "C07987-K2"
+  ],
+  "devices": [
+   "Windows|other|chrome 61.0|1280x720"
+  ],
+  "verdict": "fraud",
+  "pattern": "card_not_present_new_device",
+  "txn_ids": [
+   "3503878"
+  ],
+  "opened_at": "2016-12-01 22:28:53"
+ },
+ {
+  "case_id": "HHG-010",
+  "graph_case_id": "CASE-HHG-010",
+  "customer_id": "C10434",
+  "cards": [
+   "C10434-K1"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-12-02 18:18:27"
+ },
+ {
+  "case_id": "HHG-020",
+  "graph_case_id": "CASE-HHG-020",
+  "customer_id": "C12265",
+  "cards": [
+   "C12265-K2"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-12-03 12:04:26"
+ },
+ {
+  "case_id": "HHG-001",
+  "graph_case_id": "CASE-HHG-001",
+  "customer_id": "C12382",
+  "cards": [
+   "C12382-K1"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-12-05 01:55:28"
+ },
+ {
+  "case_id": "HHG-007",
+  "graph_case_id": "CASE-HHG-007",
+  "customer_id": "C09933",
+  "cards": [
+   "C09933-K2"
+  ],
+  "devices": [],
+  "verdict": "fraud",
+  "pattern": "out_of_region_use",
+  "txn_ids": [
+   "3504015",
+   "3508487",
+   "3514573",
+   "3514948"
+  ],
+  "opened_at": "2016-12-05 03:46:14"
+ },
+ {
+  "case_id": "HHG-005",
+  "graph_case_id": "CASE-HHG-005",
+  "customer_id": "C02923",
+  "cards": [
+   "C02923-K1"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-12-08 03:38:37"
+ },
+ {
+  "case_id": "HHG-013",
+  "graph_case_id": "CASE-HHG-013",
+  "customer_id": "C07671",
+  "cards": [
+   "C07671-K2"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-12-09 05:39:29"
+ },
+ {
+  "case_id": "HHG-003",
+  "graph_case_id": "CASE-HHG-003",
+  "customer_id": "C08623",
+  "cards": [
+   "C08623-K2"
+  ],
+  "devices": [],
+  "verdict": "uncertain",
+  "pattern": "out_of_region_use",
+  "txn_ids": [
+   "3530056",
+   "3530164"
+  ],
+  "opened_at": "2016-12-10 15:01:21"
+ },
+ {
+  "case_id": "HHG-016",
+  "graph_case_id": "CASE-HHG-016",
+  "customer_id": "C09988",
+  "cards": [
+   "C09988-K1"
+  ],
+  "devices": [
+   "Windows|UNK|edge 16.0|UNK"
+  ],
+  "verdict": "fraud",
+  "pattern": "card_not_present_new_device",
+  "txn_ids": [
+   "3534820"
+  ],
+  "opened_at": "2016-12-12 01:39:08"
+ },
+ {
+  "case_id": "HHG-012",
+  "graph_case_id": "CASE-HHG-012",
+  "customer_id": "C05876",
+  "cards": [
+   "C05876-K2"
+  ],
+  "devices": [],
+  "verdict": "legitimate",
+  "pattern": "none",
+  "txn_ids": [],
+  "opened_at": "2016-12-18 05:00:31"
+ },
+ {
+  "case_id": "HHG-008",
+  "graph_case_id": "CASE-HHG-008",
+  "customer_id": "C13171",
+  "cards": [
+   "C13171-K2"
+  ],
+  "devices": [
+   "Moto G (4) Build/NPJS25.93-14-15|UNK|chrome 66.0 for android|UNK",
+   "MotoG3 Build/MPIS24.65-33.1-2-16|UNK|chrome 66.0 for android|UNK",
+   "UNK|UNK|chrome 66.0|UNK",
+   "UNK|UNK|mobile safari 11.0|UNK",
+   "Windows|UNK|chrome 66.0|UNK",
+   "Windows|UNK|firefox 59.0|UNK"
+  ],
+  "verdict": "fraud",
+  "pattern": "card_not_present_fraud",
+  "txn_ids": [
+   "3557979",
+   "3558054"
+  ],
+  "opened_at": "2016-12-20 03:08:56"
+ },
+ {
+  "case_id": "HHG-009",
+  "graph_case_id": "CASE-HHG-009",
+  "customer_id": "C08299",
+  "cards": [
+   "C08299-K1"
+  ],
+  "devices": [],
+  "verdict": "fraud",
+  "pattern": "card_not_present_fraud",
+  "txn_ids": [
+   "3581141"
+  ],
+  "opened_at": "2016-12-28 17:10:53"
+ },
+ {
+  "case_id": "HHG-011",
+  "graph_case_id": "CASE-HHG-011",
+  "customer_id": "C11923",
+  "cards": [
+   "C11923-K2"
+  ],
+  "devices": [
+   "SM-G610F Build/NRD90M|UNK|chrome 66.0 for android|UNK"
+  ],
+  "verdict": "uncertain",
+  "pattern": "card_not_present_new_device",
+  "txn_ids": [
+   "3583368"
+  ],
+  "opened_at": "2016-12-29 06:27:44"
+ },
+ {
+  "case_id": "HHG-004",
+  "graph_case_id": "CASE-HHG-004",
+  "customer_id": "C08106",
+  "cards": [
+   "C08106-K1"
+  ],
+  "devices": [
+   "UNK|UNK|firefox 47.0|UNK"
+  ],
+  "verdict": "uncertain",
+  "pattern": "card_not_present_new_device",
+  "txn_ids": [
+   "3583227"
+  ],
+  "opened_at": "2016-12-29 07:53:54"
+ }
+]

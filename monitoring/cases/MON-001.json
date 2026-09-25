@@ -1,0 +1,161 @@
+{
+  "case_id": "MON-001",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.91,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3475403",
+      "3475405",
+      "3475408",
+      "3475414"
+    ],
+    "first_suspicious_txn_id": "3475403",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 1911.84,
+    "evidence": [
+      {
+        "claim": "Flagged $488.00 online purchase (product C) in billing region 420 on 2016-11-21 10:30; bank risk score 0.07, our transaction model 0.85 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
+        "source": "graph",
+        "ref": "query:txn_context(txn_id=3475414)",
+        "entity_ids": [
+          "3475414",
+          "C05851-K1"
+        ]
+      },
+      {
+        "claim": "Customer has 22 transactions in the prior 120 days; billing region 420 is familiar for the customer; device profile C6743 Build/LMY47V | Android 5.1.1 | android browser 4.0 | 960x540 is not established",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C05851, days=120)",
+        "entity_ids": [
+          "C05851"
+        ]
+      },
+      {
+        "claim": "4 transaction(s) on 2016-11-21 between 10:00 and 10:30 on card(s) C05851-K1 form one episode (gaps <= 48 h); 4 of them score >= 0.35 on the model",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C05851, days=10)",
+        "entity_ids": [
+          "3475403",
+          "3475405",
+          "3475408",
+          "3475414"
+        ]
+      },
+      {
+        "claim": "4 online purchases within 30 minutes, each between $459.27 and $496.35 (just under $500)",
+        "source": "graph",
+        "ref": "query:structuring_scan(card_id=C05851-K1)",
+        "entity_ids": [
+          "3475403",
+          "3475405",
+          "3475408",
+          "3475414"
+        ]
+      },
+      {
+        "claim": "Behavioural nearest neighbours among closed cases: 5 of 5 confirmed fraud (CC-5147 card_not_present_fraud, d=0.9, CC-4890 card_not_present_fraud, d=1.0, CC-3365 card_not_present_fraud, d=1.2, CC-2133 card_not_present_fraud, d=1.3, CC-5048 card_not_present_fraud, d=1.4); closest cleared look-alikes: CC-4439 d=2.3, CC-3590 d=4.3, CC-0681 d=4.4",
+        "source": "graph",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
+        "entity_ids": [
+          "CC-5147",
+          "CC-4890",
+          "CC-3365",
+          "CC-2133",
+          "CC-5048",
+          "CC-4439",
+          "CC-3590",
+          "CC-0681"
+        ]
+      },
+      {
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
+        "source": "document",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-5147",
+      "CC-4890",
+      "CC-3365",
+      "CC-2133",
+      "CC-5048"
+    ],
+    "summary": "Card-not-present fraud: 4 transaction(s) on 2016-11-21 between 10:00 and 10:30 on C05851-K1 totalling $1,911.84 (probability 0.91). Evidence: model score 0.85.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.91 on 2 independent signals) and 3b: exposure $1,911.84 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "3a: fraud probability 0.91 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "3a: fraud confirmed and exposure $1,911.84 exceeds $1,000"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.91 on 2 independent signals) and 3b: exposure $1,911.84 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "3a: fraud probability 0.91 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "3a: fraud confirmed and exposure $1,911.84 exceeds $1,000"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "3a: fraud confirmed and exposure $1,911.84 exceeds $1,000",
+    "narrative": "Between 2016-11-21 10:00 and 2016-11-21 10:30, 4 transaction(s) totalling $1,911.84 were made on card(s) C05851-K1 belonging to customer C05851. The activity comprised 4 online transaction(s) under product code(s) C, in billing region 420. Online transactions came from device profile(s) C6743 Build/LMY47V | Android 5.1.1 | android browser 4.0 | 960x540. The purchases were placed within minutes of each other, each just below a $500 threshold, a pattern that avoids single-transaction limits. The amount exceeds the $1,000 reporting threshold. Total suspicious amount: $1,911.84. Actions recommended: BLOCK_CARD, CREATE_CASE, FILE_REPORT.",
+    "subjects": [
+      "C05851",
+      "C05851-K1"
+    ],
+    "total_amount_usd": 1911.84,
+    "activity_dates": [
+      "2016-11-21",
+      "2016-11-21"
+    ]
+  },
+  "stop_reason": "Probability 0.91 >= 0.85 on 2 independent signals (model, episode); stopping rule met.",
+  "tool_calls": 10,
+  "tokens": 0,
+  "latency_s": 0.44,
+  "monitoring_alert": {
+    "type": "structuring",
+    "element": "C05851-K1",
+    "n_txns": 4,
+    "total": 1911.84,
+    "first": "2016-11-21 10:00:00",
+    "last": "2016-11-21 10:30:00",
+    "cards": [
+      "C05851-K1"
+    ],
+    "seed_txn": "3475414",
+    "as_of": "2016-11-21 11:30:00"
+  }
+}

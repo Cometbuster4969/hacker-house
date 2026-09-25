@@ -1,0 +1,185 @@
+{
+  "case_id": "MON-007",
+  "case": {
+    "status": "escalated",
+    "verdict": "fraud",
+    "fraud_probability": 0.95,
+    "pattern": "undocumented",
+    "pattern_description": "Shared-device ring: one device profile (Windows | Windows 7 | chrome 65.0 | 1916x901), marked New for every account, behind a proxy (transparent), made purchases on 3 cards belonging to 3 different customers within 30 days. No single cardholder's behaviour explains it; the common element is the device. Found by expanding from the flagged transaction's device to every card that used it.",
+    "affected_txn_ids": [
+      "3485757"
+    ],
+    "first_suspicious_txn_id": "3485757",
+    "connected_card_ids": [
+      "C00768-K2",
+      "C04776-K1"
+    ],
+    "connected_device_profiles": [
+      "Windows | Windows 7 | chrome 65.0 | 1916x901"
+    ],
+    "exposure_usd": 75.08,
+    "evidence": [
+      {
+        "claim": "Flagged $75.08 online purchase (product H) in billing region 325 on 2016-11-25 07:39; bank risk score 0.51, our transaction model 0.40 (model trained on the closed cases; ROC-AUC 0.95 vs 0.86 for the risk score on a Sep-Oct holdout)",
+        "source": "graph",
+        "ref": "query:txn_context(txn_id=3485757)",
+        "entity_ids": [
+          "3485757",
+          "C09149-K1"
+        ]
+      },
+      {
+        "claim": "Customer has 364 transactions in the prior 120 days; billing region 325 is familiar for the customer; device profile Windows | Windows 7 | chrome 65.0 | 1916x901 is not established and marked New for the account, connection through transparent proxy",
+        "source": "graph",
+        "ref": "query:cardholder_baseline(customer_id=C09149, days=120)",
+        "entity_ids": [
+          "C09149"
+        ]
+      },
+      {
+        "claim": "No other transaction on the customer's cards in the 10-day window scores as likely fraud; the flagged transaction is isolated",
+        "source": "graph",
+        "ref": "query:card_window(customer_id=C09149, days=10)",
+        "entity_ids": [
+          "3485757"
+        ]
+      },
+      {
+        "claim": "Device profile Windows | Windows 7 | chrome 65.0 | 1916x901 (marked New for every account, behind a proxy (transparent)) was used on 3 cards of 3 customers in the prior 30 days",
+        "source": "graph",
+        "ref": "query:device_neighbors(days=30)",
+        "entity_ids": [
+          "C00768-K2",
+          "C04776-K1",
+          "C09149-K1"
+        ]
+      },
+      {
+        "claim": "Behavioural nearest neighbours among closed cases: 3 of 5 confirmed fraud (CC-2774 card_not_present_new_device, d=0.3, CC-3915 card_not_present_new_device, d=0.3, CC-5037 card_not_present_new_device, d=0.4, CC-1030 none, d=0.4, CC-1238 none, d=0.5); closest cleared look-alikes: CC-1030 d=0.4, CC-1238 d=0.5, CC-0951 d=0.5",
+        "source": "graph",
+        "ref": "query:similar_cases(k=5, vector=episode_behaviour)",
+        "entity_ids": [
+          "CC-2774",
+          "CC-3915",
+          "CC-5037",
+          "CC-1030",
+          "CC-1238",
+          "CC-1030",
+          "CC-1238",
+          "CC-0951"
+        ]
+      },
+      {
+        "claim": "Policy rules applied: see next_best_actions reasons; thresholds from Fraud Policy v1.0 sections 2, 3, 3a and 6",
+        "source": "document",
+        "ref": "HHGOA_IEEE/README.md#fraud-policy",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [
+      "CC-1355",
+      "CC-1744",
+      "CC-2367",
+      "CC-2774",
+      "CC-3915",
+      "CC-5037"
+    ],
+    "summary": "An undocumented coordinated pattern: 1 transaction(s) on 2016-11-25 at 07:39 on C09149-K1 totalling $75.08 (probability 0.95). Evidence: new device / proxy, device shared by 3 customers. 2 connected card(s) identified.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.95 on 2 independent signals) and 3b: exposure $75.08 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: several cards show fraud from the same device profile Windows | Windows 7 | chrome 65.0 | 1916x901; R9: coordinated abuse outside the five documented patterns; 3a: fraud probability 0.95 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: shared origin named: device profile Windows | Windows 7 | chrome 65.0 | 1916x901; R9: undocumented pattern repeated across customers; 3a: fraud confirmed and activity connects to a shared device profile Windows | Windows 7 | chrome 65.0 | 1916x901; activity connects to another customer's fraud; coordinated undocumented pattern (R9)"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: monitor the 2 other card(s) sharing the device profile Windows | Windows 7 | chrome 65.0 | 1916x901"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: undocumented pattern handed to an analyst with the evidence"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R1 satisfied (p=0.95 on 2 independent signals) and 3b: exposure $75.08 <= $2,500"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R6: several cards show fraud from the same device profile Windows | Windows 7 | chrome 65.0 | 1916x901; R9: coordinated abuse outside the five documented patterns; 3a: fraud probability 0.95 reaches 0.30; 3a: a report always has a case behind it"
+      },
+      {
+        "action": "FILE_REPORT",
+        "route": "L2",
+        "reason": "R6: shared origin named: device profile Windows | Windows 7 | chrome 65.0 | 1916x901; R9: undocumented pattern repeated across customers; 3a: fraud confirmed and activity connects to a shared device profile Windows | Windows 7 | chrome 65.0 | 1916x901; activity connects to another customer's fraud; coordinated undocumented pattern (R9)"
+      },
+      {
+        "action": "MONITOR_CONNECTED_CARDS",
+        "route": "auto",
+        "reason": "R6: monitor the 2 other card(s) sharing the device profile Windows | Windows 7 | chrome 65.0 | 1916x901"
+      },
+      {
+        "action": "ESCALATE_TO_ANALYST",
+        "route": "auto",
+        "reason": "R9: undocumented pattern handed to an analyst with the evidence"
+      }
+    ],
+    "what_changed": "nothing"
+  },
+  "sar": {
+    "file": true,
+    "reason": "3a/R6/R9: fraud confirmed and activity connects to a shared device profile Windows | Windows 7 | chrome 65.0 | 1916x901; activity connects to another customer's fraud; coordinated undocumented pattern (R9)",
+    "narrative": "Between 2016-11-25 07:39 and 2016-11-25 07:39, 1 transaction(s) totalling $75.08 were made on card(s) C09149-K1 belonging to customer C09149. The activity comprised 1 online transaction(s) under product code(s) H, in billing region 325. Online transactions came from device profile(s) Windows | Windows 7 | chrome 65.0 | 1916x901. All came from device profile Windows | Windows 7 | chrome 65.0 | 1916x901, marked New for every account, behind a proxy (transparent). That device was used on 3 cards of 3 customers within 30 days, which no legitimate cardholder explains (policy R6). Total suspicious amount: $75.08. Actions recommended: BLOCK_CARD, CREATE_CASE, FILE_REPORT, MONITOR_CONNECTED_CARDS, ESCALATE_TO_ANALYST.",
+    "subjects": [
+      "C00768-K2",
+      "C04776-K1",
+      "C09149",
+      "C09149-K1",
+      "Windows | Windows 7 | chrome 65.0 | 1916x901"
+    ],
+    "total_amount_usd": 75.08,
+    "activity_dates": [
+      "2016-11-25",
+      "2016-11-25"
+    ]
+  },
+  "stop_reason": "Probability 0.95 >= 0.85 on 2 independent signals (device, device_ring); stopping rule met.",
+  "tool_calls": 10,
+  "tokens": 0,
+  "latency_s": 0.3,
+  "monitoring_alert": {
+    "type": "device_ring",
+    "element": "Windows | Windows 7 | chrome 65.0 | 1916x901",
+    "n_customers": 3,
+    "n_txns": 3,
+    "first": "2016-11-20 18:00:02",
+    "last": "2016-11-25 07:39:35",
+    "cards": [
+      "C00768-K2",
+      "C04776-K1",
+      "C09149-K1"
+    ],
+    "seed_txn": "3485757",
+    "as_of": "2016-11-25 08:39:35"
+  }
+}

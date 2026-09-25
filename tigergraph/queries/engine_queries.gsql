@@ -1,0 +1,115 @@
+-- Engine queries: the GSQL twins of src/engine/store.py (InvestigationStore).
+-- Every query is bounded by an as_of / end timestamp so an investigation can only see
+-- what existed when the case was opened. Timestamps are 'YYYY-MM-DD HH:MM:SS' strings
+-- (the schema stores ts as STRING), which compare correctly as strings.
+-- Install:  gsql -g FraudInvestigation tigergraph/queries/engine_queries.gsql
+--           then INSTALL QUERY ALL
+
+USE GRAPH FraudInvestigation
+
+CREATE OR REPLACE QUERY txn_context(STRING txn_id) FOR GRAPH FraudInvestigation SYNTAX V2 {
+  Seed = {Transaction.*};
+  T = SELECT t FROM Seed:t WHERE t.transaction_id == txn_id;
+  D = SELECT d FROM T:t -(FROM_DEVICE>:e)- DeviceProfile:d;
+  PRINT T, D;
+}
+
+CREATE OR REPLACE QUERY card_window(STRING customer_id, STRING start_ts, STRING end_ts)
+    FOR GRAPH FraudInvestigation SYNTAX V2 {
+  Seed = {Customer.*};
+  C = SELECT c FROM Seed:u -(OWNS>)- Card:c WHERE u.customer_id == customer_id;
+  T = SELECT t FROM C:c -(MADE>)- Transaction:t WHERE t.ts >= start_ts AND t.ts < end_ts;
+  PRINT T;
+}
+
+CREATE OR REPLACE QUERY cardholder_baseline(STRING customer_id, STRING start_ts, STRING as_of)
+    FOR GRAPH FraudInvestigation SYNTAX V2 {
+  SetAccum<STRING> @@regions;
+  SetAccum<STRING> @@devices;
+  SetAccum<STRING> @@products;
+  SumAccum<INT> @@n;
+  AvgAccum @@avg_amount;
+  Seed = {Customer.*};
+  C = SELECT c FROM Seed:u -(OWNS>)- Card:c WHERE u.customer_id == customer_id;
+  T = SELECT t FROM C:c -(MADE>)- Transaction:t
+      WHERE t.ts >= start_ts AND t.ts < as_of
+      ACCUM @@n += 1, @@avg_amount += t.amount, @@products += t.product_cd,
+            @@regions += to_string(t.addr1);
+  D = SELECT d FROM T:t -(FROM_DEVICE>)- DeviceProfile:d ACCUM @@devices += d.device_id;
+  PRINT @@n AS n_txns, @@avg_amount AS avg_amount, @@regions AS regions,
+        @@devices AS devices, @@products AS products;
+}
+
+CREATE OR REPLACE QUERY device_neighbors(STRING device_id, STRING start_ts, STRING end_ts)
+    FOR GRAPH FraudInvestigation SYNTAX V2 {
+  SetAccum<STRING> @@cards;
+  SetAccum<STRING> @@customers;
+  SumAccum<INT> @@n_new;
+  SumAccum<INT> @@n_proxy;
+  SumAccum<INT> @@n;
+  Seed = {Transaction.*};
+  T = SELECT t FROM Seed:t -(FROM_DEVICE>:e)- DeviceProfile:d
+      WHERE d.device_id == device_id AND t.ts >= start_ts AND t.ts < end_ts
+      ACCUM @@n += 1, @@cards += t.card_id, @@customers += t.customer_id,
+            IF e.is_new_device THEN @@n_new += 1 END,
+            IF e.proxy_type != " " THEN @@n_proxy += 1 END;
+  PRINT T, @@cards AS cards, @@customers AS customers, @@n AS n_txns,
+        @@n_new AS n_marked_new, @@n_proxy AS n_behind_proxy;
+}
+
+CREATE OR REPLACE QUERY prior_cases(STRING customer_id, STRING as_of) FOR GRAPH FraudInvestigation SYNTAX V2 {
+  Seed = {ClosedCase.*};
+  P = SELECT c FROM Seed:c WHERE c.customer_id == customer_id AND c.closed_at < as_of;
+  PRINT P;
+}
+
+-- Closed cases whose episode touched a device (ClosedCase -> Transaction -> DeviceProfile).
+CREATE OR REPLACE QUERY device_case_links(STRING device_id, STRING as_of) FOR GRAPH FraudInvestigation SYNTAX V2 {
+  SetAccum<STRING> @@cases;
+  Seed = {ClosedCase.*};
+  P = SELECT c FROM Seed:c -(INVOLVES_TXN>)- Transaction:t -(FROM_DEVICE>)- DeviceProfile:d
+      WHERE d.device_id == device_id AND c.closed_at < as_of
+      ACCUM @@cases += c.case_id;
+  PRINT @@cases AS cases;
+}
+
+-- Population sweep for the undocumented sub-$500 structuring burst: cards with >= 3
+-- online purchases in [0.85*cap, cap) inside the window. Burst timing is checked by the agent.
+CREATE OR REPLACE QUERY population_structuring_sweep(STRING start_ts, STRING end_ts, DOUBLE cap = 500.0)
+    FOR GRAPH FraudInvestigation SYNTAX V2 {
+  MapAccum<STRING, SumAccum<INT>> @@per_card;
+  MapAccum<STRING, ListAccum<STRING>> @@txns;
+  Seed = {Transaction.*};
+  T = SELECT t FROM Seed:t
+      WHERE t.channel == "online" AND t.amount < cap AND t.amount >= 0.85 * cap
+        AND t.ts >= start_ts AND t.ts < end_ts
+      ACCUM @@per_card += (t.card_id -> 1), @@txns += (t.card_id -> t.transaction_id);
+  PRINT @@per_card AS per_card, @@txns AS txns;
+}
+
+-- Ring candidates: device profiles used by >= min_customers distinct customers in the
+-- window (degree centrality on the Transaction-DeviceProfile bipartite projection),
+-- with the share of rows marked New / behind a proxy.
+CREATE OR REPLACE QUERY ring_candidates(STRING start_ts, STRING end_ts, INT min_customers = 3)
+    FOR GRAPH FraudInvestigation SYNTAX V2 {
+  SetAccum<STRING> @customers;
+  SetAccum<STRING> @cards;
+  SumAccum<INT> @n;
+  SumAccum<INT> @n_new_proxy;
+  Seed = {Transaction.*};
+  T = SELECT d FROM Seed:t -(FROM_DEVICE>:e)- DeviceProfile:d
+      WHERE t.ts >= start_ts AND t.ts < end_ts
+      ACCUM d.@customers += t.customer_id, d.@cards += t.card_id, d.@n += 1,
+            IF e.is_new_device AND e.proxy_type != " " THEN d.@n_new_proxy += 1 END
+      HAVING d.@customers.size() >= min_customers;
+  R = SELECT d FROM T:d WHERE d.@n_new_proxy * 5 >= d.@n * 4
+      ORDER BY d.@customers.size() DESC LIMIT 50;
+  PRINT R[R.device_id, R.@customers.size() AS n_customers, R.@cards AS cards, R.@n AS n_txns];
+}
+
+-- Agent memory: earlier investigations touching any of these cards.
+CREATE OR REPLACE QUERY agent_case_links(SET<STRING> card_ids) FOR GRAPH FraudInvestigation SYNTAX V2 {
+  Seed = {InvestigationCase.*};
+  L = SELECT ic FROM Seed:ic -(CASE_ON_CARD>)- Card:c WHERE c.card_id IN card_ids;
+  PRINT L;
+}
