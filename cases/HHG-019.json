@@ -76,13 +76,13 @@
       "CC-0663"
     ],
     "summary": "Card-not-present fraud from a new device: 1 transaction(s) on 2016-12-01 at 17:28 on C07987-K2 totalling $99.92 (probability 0.85). Evidence: new device / proxy. The (simulated) customer denial settles the verdict.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-019"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 7,
+      "asked_after_step": 8,
       "assumed_response": "Customer states they did not make the $99.92 transaction and still has the card"
     }
   ],
@@ -122,7 +122,7 @@
     "activity_dates": []
   },
   "stop_reason": "The customer validation reply (assumed: denied) settles the question; probability 0.69 -> 0.85. Further steps would not change the actions.",
-  "tool_calls": 8,
+  "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.17
+  "latency_s": 5.83
 }

@@ -88,8 +88,8 @@
       "CC-4917"
     ],
     "summary": "Card-not-present fraud: 2 transaction(s) on 2016-12-19 between 21:48 and 22:08 on C13171-K2 totalling $111.28 (probability 0.95). Evidence: model score 0.97.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-008"
   },
   "evidence_requests": [],
   "next_best_actions": {
@@ -128,7 +128,7 @@
     "activity_dates": []
   },
   "stop_reason": "Probability 0.95 >= 0.85 on 3 independent signals (model, episode, customer_report); stopping rule met.",
-  "tool_calls": 8,
+  "tool_calls": 14,
   "tokens": 0,
-  "latency_s": 0.18
+  "latency_s": 7.47
 }

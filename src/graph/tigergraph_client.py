@@ -5,6 +5,7 @@ Falls back to in-memory graph when TigerGraph is not available.
 from __future__ import annotations
 import json
 import logging
+import re
 import os
 from typing import Any, Optional
 
@@ -40,13 +41,16 @@ class TigerGraphClient:
         if os.getenv("TIGERGRAPH_SECRET"):  # a GSQL secret is exchanged for a REST token
             attempts.append(("gsql secret", dict(gsqlSecret=os.environ["TIGERGRAPH_SECRET"], username=user,
                                                  password=password)))
+        if self.token:  # some Savanna "API tokens" are really secrets: exchange them for a REST token
+            attempts.append(("api token as secret", dict(gsqlSecret=self.token, username=user, password=password)))
         attempts.append(("user/password", dict(username=user, password=password)))
         for label, kw in attempts:
             try:
                 self.conn = tg.TigerGraphConnection(host=self.host, graphname=self.graph, tgCloud=cloud, **kw)
-                if label == "gsql secret":
+                if label in ("gsql secret", "api token as secret"):
                     self.conn.getToken(kw["gsqlSecret"])
-                self.conn.echo()
+                # /echo accepts any token, so verify with an authenticated RESTPP call.
+                self.conn.getVertexCount("*")
                 self._connected = True
                 logger.info("Connected to TigerGraph at %s (%s)", self.host, label)
                 return True
@@ -246,23 +250,67 @@ class TigerGraphClient:
 
         logger.info("Investigation case %s written to TigerGraph", case_id)
 
+    def _schema(self) -> tuple[dict, set]:
+        """Live vertex attributes per type and edge type names (the deployed schema can differ
+        from tigergraph/schema.gsql, e.g. an older InvestigationCase definition)."""
+        if getattr(self, "_schema_cache", None) is None:
+            vt = {}
+            for t in self.conn.getVertexTypes():
+                try:
+                    vt[t] = {a["AttributeName"] for a in self.conn.getVertexType(t).get("Attributes", [])}
+                except Exception:  # noqa: BLE001
+                    vt[t] = set()
+            self._schema_cache = (vt, set(self.conn.getEdgeTypes()))
+        return self._schema_cache
+
     def upsert_agent_case(self, rec: dict) -> bool:
         """Write an engine case (src/engine) as an InvestigationCase vertex with edges.
 
-        Returns True only when TigerGraph acknowledged the upsert; the answer file's
-        written_to_graph flag is taken from this return value, never assumed."""
+        Only attributes/edges that exist in the deployed schema are sent. Returns True only
+        when the vertex can be read back; written_to_graph is taken from this value."""
         if not self._connected and not self.connect():
             return False
         try:
-            self.write_investigation_case(
-                rec["graph_case_id"],
-                {"customer_id": rec["customer_id"], "card_id": (rec["cards"] or [""])[0],
-                 "opened_at": rec["opened_at"], "verdict": rec["verdict"], "pattern": rec["pattern"],
-                 "status": "closed_fraud" if rec["verdict"] == "fraud" else
-                 ("closed_legitimate" if rec["verdict"] == "legitimate" else "open")},
-                linked_txns=rec.get("txn_ids"), linked_cards=rec.get("cards"),
-                linked_devices=rec.get("devices"))
-            return self.get_vertex("InvestigationCase", rec["graph_case_id"]) is not None
+            vtypes, etypes = self._schema()
+            if "InvestigationCase" not in vtypes:
+                logger.warning("upsert_agent_case: no InvestigationCase vertex type in the live schema")
+                return False
+            status = ("closed_fraud" if rec["verdict"] == "fraud" else
+                      "closed_legitimate" if rec["verdict"] == "legitimate" else "open")
+            props = {"customer_id": rec["customer_id"], "card_id": (rec["cards"] or [""])[0],
+                     "opened_at": rec["opened_at"], "verdict": rec["verdict"], "pattern": rec["pattern"],
+                     "status": status, "fraud_probability": rec.get("p"), "exposure_usd": rec.get("exposure")}
+            allowed = vtypes["InvestigationCase"]
+            props = {k: v for k, v in props.items() if v is not None and (not allowed or k in allowed)}
+            cid = rec["graph_case_id"]
+            for _ in range(len(props) + 1):
+                try:
+                    self.upsert_vertex("InvestigationCase", cid, props)
+                    break
+                except Exception as e:  # noqa: BLE001
+                    m = re.search(r"Unknown vertex attribute or vector name: (\w+)", str(e))
+                    if not m or m.group(1) not in props:
+                        raise
+                    logger.info("InvestigationCase has no attribute %s in the live schema; dropping it", m.group(1))
+                    props.pop(m.group(1))
+            links = [("CASE_INVOLVES_TXN", "Transaction", rec.get("txn_ids") or []),
+                     ("CASE_ON_CARD", "Card", rec.get("cards") or []),
+                     ("CASE_INVOLVES_DEVICE", "DeviceProfile", rec.get("devices") or [])]
+            n_ok = n_fail = 0
+            for et, tt, ids in links:
+                if et not in etypes:
+                    continue
+                for tid in ids:
+                    try:
+                        self.upsert_edge("InvestigationCase", cid, et, tt, str(tid))
+                        n_ok += 1
+                    except Exception as e:  # noqa: BLE001
+                        n_fail += 1
+                        logger.debug("edge %s -> %s failed: %s", et, tid, e)
+            ok = self.get_vertex("InvestigationCase", cid) is not None
+            logger.info("TigerGraph: %s written=%s (%d attrs, %d edges, %d edge failures)",
+                        cid, ok, len(props), n_ok, n_fail)
+            return ok
         except Exception as e:  # noqa: BLE001
             logger.warning("upsert_agent_case failed: %s", e)
             return False

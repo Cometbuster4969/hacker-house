@@ -71,8 +71,8 @@
       "CC-0749"
     ],
     "summary": "$292.36 online transaction 3478782 on C11891-K1 assessed as legitimate (probability 0.08). Our model scores it 0.01 despite a risk score of 0.79, and no other transaction in the window looks fraudulent. The cardholder's (simulated) confirmation settles it; alert closed under R3.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-002"
   },
   "evidence_requests": [
     {
@@ -119,5 +119,5 @@
   "stop_reason": "The customer validation reply (assumed: confirmed) settles the question; probability 0.26 -> 0.08. Further steps would not change the actions.",
   "tool_calls": 8,
   "tokens": 0,
-  "latency_s": 0.19
+  "latency_s": 4.91
 }

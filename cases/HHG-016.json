@@ -85,8 +85,8 @@
       "CC-3580"
     ],
     "summary": "Card-not-present fraud from a new device: 1 transaction(s) on 2016-12-11 at 22:39 on C09988-K1 totalling $59.67 (probability 0.91). Evidence: model score 0.96, new device / proxy.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-016"
   },
   "evidence_requests": [],
   "next_best_actions": {
@@ -125,7 +125,7 @@
     "activity_dates": []
   },
   "stop_reason": "Probability 0.91 >= 0.85 on 3 independent signals (model, device, customer_report); stopping rule met.",
-  "tool_calls": 8,
+  "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.23
+  "latency_s": 5.37
 }

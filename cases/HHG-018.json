@@ -126,8 +126,8 @@
       "CC-4061"
     ],
     "summary": "Account takeover: 15 transaction(s) between 2016-11-18 and 2016-11-27 on C02354-K2 totalling $2,752.48 (probability 0.98). Evidence: model score 0.99, prior confirmed fraud on the same cardholder.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-018"
   },
   "evidence_requests": [],
   "next_best_actions": {
@@ -184,5 +184,5 @@
   "stop_reason": "Probability 0.98 >= 0.85 on 4 independent signals (model, episode, history, customer_report); stopping rule met.",
   "tool_calls": 8,
   "tokens": 0,
-  "latency_s": 0.22
+  "latency_s": 10.95
 }

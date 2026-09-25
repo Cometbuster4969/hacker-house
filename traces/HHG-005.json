@@ -46,6 +46,15 @@
     },
     {
       "step": 5,
+      "tool": "device_neighbors",
+      "why": "devices connect people: who else used this device profile in the last 30 days?",
+      "result": "no anomalous shared use of 1 device profile(s)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 6,
       "tool": "reconstruct_episode",
       "why": "chain model-flagged transactions across the customer's cards with gaps <= 48 h (the rule the bank's own closed cases follow)",
       "result": "1 transaction(s) on 2016-12-07 at 21:38, exposure $100.07",
@@ -56,7 +65,7 @@
       ]
     },
     {
-      "step": 6,
+      "step": 7,
       "tool": "assess_model",
       "why": "combine flagged score, episode strength and cardholder history into a case probability (logistic calibrator fitted on replayed closed cases, prior shifted to 50/50)",
       "result": "case probability 0.36",
@@ -65,7 +74,7 @@
       "entity_ids": []
     },
     {
-      "step": 7,
+      "step": 8,
       "tool": "retrieve_memory",
       "why": "GraphRAG: graph-linked closed cases plus behavioural nearest neighbours",
       "result": "3 graph-linked closed case(s); 5 nearest precedents: CC-0621 (cleared, none), CC-3786 (confirmed fraud, card_not_present_new_device), CC-0477 (confirmed fraud, card_not_present_new_device), CC-2058 (cleared, none), CC-3991 (cleared, none)",
@@ -78,7 +87,7 @@
       ]
     },
     {
-      "step": 8,
+      "step": 9,
       "tool": "policy_initial",
       "why": "the policy engine is the only writer of actions",
       "result": "VERIFY_WITH_CUSTOMER, CREATE_CASE",
@@ -87,7 +96,7 @@
       "entity_ids": []
     },
     {
-      "step": 9,
+      "step": 10,
       "tool": "evidence_request",
       "why": "stopping rule not met (p=0.36, 0 fraud signal(s)); one answer from the cardholder changes the action set, so the information is worth asking for",
       "result": "customer_validation: assumed 'Customer confirms they made the $100.07 transaction' (simulated from the evidence-only probability 0.36: deny >= 0.6, confirm < 0.4, otherwise no reply)",
@@ -96,7 +105,7 @@
       "entity_ids": []
     },
     {
-      "step": 10,
+      "step": 11,
       "tool": "policy_final",
       "why": "re-run the policy on the updated state (3b)",
       "result": "CREATE_CASE, CLOSE_NO_FRAUD",
@@ -105,10 +114,10 @@
       "entity_ids": []
     },
     {
-      "step": 11,
+      "step": 12,
       "tool": "write_case",
       "why": "3a: a case written to the graph becomes evidence for the next investigation",
-      "result": "CASE-HHG-005 stored in agent memory (TigerGraph not configured: memory file only)",
+      "result": "CASE-HHG-005 stored in agent memory and TigerGraph",
       "p_fraud": null,
       "params": {},
       "entity_ids": []
@@ -142,6 +151,14 @@
       "params": {
         "customer_id": "C02923",
         "as_of": "2016-12-08 03:38:37"
+      }
+    },
+    {
+      "query": "device_neighbors",
+      "params": {
+        "device_profile": "iOS Device|iOS 9.3.5|mobile safari 9.0|1024x768",
+        "start": "2016-11-08 03:38:37",
+        "end": "2016-12-08 03:38:37"
       }
     }
   ],

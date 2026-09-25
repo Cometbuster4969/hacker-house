@@ -46,6 +46,15 @@
     },
     {
       "step": 5,
+      "tool": "device_neighbors",
+      "why": "devices connect people: who else used this device profile in the last 30 days?",
+      "result": "no anomalous shared use of 1 device profile(s)",
+      "p_fraud": null,
+      "params": {},
+      "entity_ids": []
+    },
+    {
+      "step": 6,
       "tool": "recurring_check",
       "why": "R7: a disputed charge may be the customer's own monthly charge",
       "result": "no monthly recurring charge of this product and amount",
@@ -54,7 +63,7 @@
       "entity_ids": []
     },
     {
-      "step": 6,
+      "step": 7,
       "tool": "reconstruct_episode",
       "why": "chain model-flagged transactions across the customer's cards with gaps <= 48 h (the rule the bank's own closed cases follow)",
       "result": "1 transaction(s) on 2016-12-29 at 01:53, exposure $128.33",
@@ -65,7 +74,7 @@
       ]
     },
     {
-      "step": 7,
+      "step": 8,
       "tool": "assess_model",
       "why": "combine flagged score, episode strength and cardholder history into a case probability (logistic calibrator fitted on replayed closed cases, prior shifted to 50/50)",
       "result": "case probability 0.26",
@@ -74,7 +83,7 @@
       "entity_ids": []
     },
     {
-      "step": 8,
+      "step": 9,
       "tool": "assess_report",
       "why": "the customer's own report is evidence, but reports can be mistaken",
       "result": "probability 0.41 with the dispute",
@@ -83,7 +92,7 @@
       "entity_ids": []
     },
     {
-      "step": 9,
+      "step": 10,
       "tool": "retrieve_memory",
       "why": "GraphRAG: graph-linked closed cases plus behavioural nearest neighbours",
       "result": "4 graph-linked closed case(s); 5 nearest precedents: CC-3683 (confirmed fraud, card_not_present_new_device), CC-1139 (cleared, none), CC-3407 (cleared, none), CC-2494 (confirmed fraud, card_not_present_new_device), CC-2667 (confirmed fraud, card_not_present_new_device)",
@@ -99,7 +108,7 @@
       ]
     },
     {
-      "step": 10,
+      "step": 11,
       "tool": "policy_initial",
       "why": "the policy engine is the only writer of actions",
       "result": "VERIFY_WITH_CUSTOMER, CREATE_CASE, ESCALATE_TO_ANALYST",
@@ -108,7 +117,7 @@
       "entity_ids": []
     },
     {
-      "step": 11,
+      "step": 12,
       "tool": "evidence_request",
       "why": "stopping rule not met (p=0.41, 1 fraud signal(s)); one answer from the cardholder changes the action set, so the information is worth asking for",
       "result": "customer_validation: assumed 'Customer did not reply to the follow-up within 24 hours' (simulated from the evidence-only probability 0.26: deny >= 0.6, confirm < 0.2, otherwise no reply)",
@@ -117,7 +126,7 @@
       "entity_ids": []
     },
     {
-      "step": 12,
+      "step": 13,
       "tool": "policy_final",
       "why": "re-run the policy on the updated state (3b)",
       "result": "DECLINE_TRANSACTION, MONITOR_CARD, CREATE_CASE, ESCALATE_TO_ANALYST",
@@ -126,10 +135,10 @@
       "entity_ids": []
     },
     {
-      "step": 13,
+      "step": 14,
       "tool": "write_case",
       "why": "3a: a case written to the graph becomes evidence for the next investigation",
-      "result": "CASE-HHG-004 stored in agent memory (TigerGraph not configured: memory file only)",
+      "result": "CASE-HHG-004 stored in agent memory and TigerGraph",
       "p_fraud": null,
       "params": {},
       "entity_ids": []
@@ -163,6 +172,14 @@
       "params": {
         "customer_id": "C08106",
         "as_of": "2016-12-29 07:53:54"
+      }
+    },
+    {
+      "query": "device_neighbors",
+      "params": {
+        "device_profile": "UNK|UNK|firefox 47.0|UNK",
+        "start": "2016-11-29 07:53:54",
+        "end": "2016-12-29 07:53:54"
       }
     }
   ],

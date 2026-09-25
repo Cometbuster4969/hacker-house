@@ -72,13 +72,13 @@
       "CC-2261"
     ],
     "summary": "$1,000.03 online transaction 3506725 on C10434-K1 assessed as legitimate (probability 0.06). Our model scores it 0.00 despite a risk score of 0.90, and no other transaction in the window looks fraudulent. The cardholder's (simulated) confirmation settles it; alert closed under R3.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-010"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 7,
+      "asked_after_step": 8,
       "assumed_response": "Customer confirms they made the $1,000.03 transaction"
     }
   ],
@@ -123,7 +123,7 @@
     "activity_dates": []
   },
   "stop_reason": "The customer validation reply (assumed: confirmed) settles the question; probability 0.19 -> 0.06. Further steps would not change the actions.",
-  "tool_calls": 8,
+  "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.17
+  "latency_s": 4.45
 }

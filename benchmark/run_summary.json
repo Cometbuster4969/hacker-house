@@ -8,8 +8,8 @@
   },
   "sars": 3,
   "tokens": 0,
-  "tool_calls": 164,
-  "written_to_graph": 0,
+  "tool_calls": 181,
+  "written_to_graph": 20,
   "cases": [
     {
       "case_id": "HHG-001",
@@ -28,7 +28,7 @@
       "sar": false,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.17
+      "latency_s": 3.64
     },
     {
       "case_id": "HHG-002",
@@ -47,7 +47,7 @@
       "sar": false,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.19
+      "latency_s": 4.91
     },
     {
       "case_id": "HHG-003",
@@ -67,7 +67,7 @@
       "sar": false,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.19
+      "latency_s": 5.23
     },
     {
       "case_id": "HHG-004",
@@ -86,9 +86,9 @@
         "ESCALATE_TO_ANALYST"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.17
+      "latency_s": 4.56
     },
     {
       "case_id": "HHG-005",
@@ -105,9 +105,9 @@
         "CLOSE_NO_FRAUD"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.18
+      "latency_s": 4.18
     },
     {
       "case_id": "HHG-006",
@@ -126,9 +126,9 @@
         "ESCALATE_TO_ANALYST"
       ],
       "sar": true,
-      "tool_calls": 9,
+      "tool_calls": 11,
       "tokens": 0,
-      "latency_s": 0.33
+      "latency_s": 7.99
     },
     {
       "case_id": "HHG-007",
@@ -147,7 +147,7 @@
       "sar": false,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.19
+      "latency_s": 6.2
     },
     {
       "case_id": "HHG-008",
@@ -164,9 +164,9 @@
         "CREATE_CASE"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 14,
       "tokens": 0,
-      "latency_s": 0.18
+      "latency_s": 7.47
     },
     {
       "case_id": "HHG-009",
@@ -185,7 +185,7 @@
       "sar": false,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.17
+      "latency_s": 5.22
     },
     {
       "case_id": "HHG-010",
@@ -202,9 +202,9 @@
         "CLOSE_NO_FRAUD"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.17
+      "latency_s": 4.45
     },
     {
       "case_id": "HHG-011",
@@ -223,9 +223,9 @@
         "ESCALATE_TO_ANALYST"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.24
+      "latency_s": 5.26
     },
     {
       "case_id": "HHG-012",
@@ -244,7 +244,7 @@
       "sar": false,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.18
+      "latency_s": 4.25
     },
     {
       "case_id": "HHG-013",
@@ -261,9 +261,9 @@
         "CLOSE_NO_FRAUD"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.19
+      "latency_s": 4.69
     },
     {
       "case_id": "HHG-014",
@@ -285,7 +285,7 @@
       "sar": true,
       "tool_calls": 10,
       "tokens": 0,
-      "latency_s": 0.36
+      "latency_s": 12.49
     },
     {
       "case_id": "HHG-015",
@@ -302,9 +302,9 @@
         "CLOSE_NO_FRAUD"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.2
+      "latency_s": 4.19
     },
     {
       "case_id": "HHG-016",
@@ -321,9 +321,9 @@
         "CREATE_CASE"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.23
+      "latency_s": 5.37
     },
     {
       "case_id": "HHG-017",
@@ -342,7 +342,7 @@
       "sar": false,
       "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.61
+      "latency_s": 5.48
     },
     {
       "case_id": "HHG-018",
@@ -362,7 +362,7 @@
       "sar": true,
       "tool_calls": 8,
       "tokens": 0,
-      "latency_s": 0.22
+      "latency_s": 10.95
     },
     {
       "case_id": "HHG-019",
@@ -379,9 +379,9 @@
         "CREATE_CASE"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.17
+      "latency_s": 5.83
     },
     {
       "case_id": "HHG-020",
@@ -398,9 +398,9 @@
         "CLOSE_NO_FRAUD"
       ],
       "sar": false,
-      "tool_calls": 8,
+      "tool_calls": 9,
       "tokens": 0,
-      "latency_s": 0.16
+      "latency_s": 4.56
     }
   ]
 }

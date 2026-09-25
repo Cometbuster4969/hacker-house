@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T02:39:30",
+  "generated": "2026-09-25T09:47:39",
   "transaction_model_sep_oct": {
     "n": 193323,
     "fraud_rate": 0.0365,
@@ -11,10 +11,10 @@
     "n_cases": 1347,
     "fraud_share": 0.893,
     "case_roc_auc": 0.8091,
+    "flagged_txn_score_only_roc_auc": 0.7898,
     "brier_raw_prior": 0.086,
     "verdict_accuracy_balanced_50_50": 0.7725,
-    "brier_balanced_50_50": 0.1686,
-    "flagged_txn_score_only_roc_auc": 0.7898
+    "brier_balanced_50_50": 0.1686
   },
   "episode_sep_oct": {
     "mean_jaccard@0.2": 0.8463,

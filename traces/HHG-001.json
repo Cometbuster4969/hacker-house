@@ -108,7 +108,7 @@
       "step": 11,
       "tool": "write_case",
       "why": "3a: a case written to the graph becomes evidence for the next investigation",
-      "result": "CASE-HHG-001 stored in agent memory (TigerGraph not configured: memory file only)",
+      "result": "CASE-HHG-001 stored in agent memory and TigerGraph",
       "p_fraud": null,
       "params": {},
       "entity_ids": []

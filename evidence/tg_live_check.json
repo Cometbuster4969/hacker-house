@@ -1,0 +1,16 @@
+{
+  "time": "2026-09-25T10:08:57",
+  "connected": true,
+  "host": "https://tg-0d7f3ac1-7c8e-4b37-b81d-9f15452c48e0.tg-2635877100.i.tgcloud.io",
+  "stats": {
+    "vertices_Customer": 1805,
+    "vertices_Card": 1868,
+    "vertices_Transaction": 10000,
+    "vertices_DeviceProfile": 9703,
+    "vertices_EmailDomain": 52,
+    "vertices_BillingRegion": 81,
+    "vertices_ClosedCase": 5565,
+    "vertices_InvestigationCase": 0
+  },
+  "written_to_graph": 20
+}

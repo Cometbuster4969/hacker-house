@@ -94,8 +94,8 @@
       "CC-2006"
     ],
     "summary": "Out-of-region use: 2 transaction(s) on 2016-12-10 between 12:12 and 13:01 on C08623-K2 totalling $165.93 (probability 0.71). No reply was assumed, so the card is monitored and pending authorizations declined.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-003"
   },
   "evidence_requests": [
     {
@@ -147,5 +147,5 @@
   "stop_reason": "Customer unreachable (assumed no reply); probability stays 0.71. R4 actions protect the card; further graph queries would not change the decision, so the case stays open pending the customer.",
   "tool_calls": 8,
   "tokens": 0,
-  "latency_s": 0.19
+  "latency_s": 5.23
 }

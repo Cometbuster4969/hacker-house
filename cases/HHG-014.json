@@ -120,8 +120,8 @@
       "CC-2722"
     ],
     "summary": "An undocumented coordinated pattern: 2 transaction(s) between 2016-11-15 and 2016-11-22 on C13487-K1 totalling $187.33 (probability 0.88). Evidence: new device / proxy, device shared by 20 customers. 19 connected card(s) identified.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-014"
   },
   "evidence_requests": [],
   "next_best_actions": {
@@ -218,5 +218,5 @@
   "stop_reason": "Probability 0.88 >= 0.85 on 2 independent signals (device, device_ring); stopping rule met.",
   "tool_calls": 10,
   "tokens": 0,
-  "latency_s": 0.36
+  "latency_s": 12.49
 }

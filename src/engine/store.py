@@ -42,16 +42,23 @@ def _build_from_raw(raw_dir: Path) -> pd.DataFrame:
     core_cols = ["TransactionID", "TransactionDT", "TransactionAmt", "ProductCD", "card2", "card3",
                  "card4", "card5", "card6", "customer_id", "ts", "channel", "risk_score", "addr1",
                  "addr2", "dist1", "dist2", "P_emaildomain", "R_emaildomain"] + SIG_COLS
+    card_cols = ["card2", "card3", "card4", "card5", "card6"]
     parts = []
     for ch in pd.read_csv(raw_dir / "transactions.csv", usecols=core_cols, chunksize=100_000,
-                          dtype={"TransactionID": str, "addr1": str, "addr2": str}):
+                          dtype={"TransactionID": str, "addr1": str, "addr2": str,
+                                 **{c: str for c in card_cols}}):
         parts.append(ch)
     df = pd.concat(parts, ignore_index=True)
-    key = df[["card2", "card3", "card4", "card5", "card6"]].astype(str).agg("|".join, axis=1)
-    df["_ck"] = key
-    first = df.drop_duplicates(["customer_id", "_ck"])[["customer_id", "_ck"]].copy()
-    first["k"] = first.groupby("customer_id").cumcount() + 1
-    df = df.merge(first, on=["customer_id", "_ck"], how="left")
+    # Card numbering used by the case pack (validated against its card_ids): card2..card6
+    # as the CSV text (missing -> "", trailing ".0" dropped), distinct tuples per customer
+    # sorted as strings, numbered K1, K2, ... in that order.
+    for c in card_cols:
+        df[c] = (df[c].astype(object).where(df[c].notna(), "").astype(str).str.strip()
+                 .str.replace(r"\.0$", "", regex=True))
+    use = ["customer_id"] + card_cols
+    cards = df[use].drop_duplicates().sort_values(use).reset_index(drop=True)
+    cards["k"] = cards.groupby("customer_id").cumcount() + 1
+    df = df.merge(cards, on=use, how="left", validate="many_to_one")
     df["card_id"] = df.customer_id + "-K" + df.k.astype(str)
     idt = pd.read_csv(raw_dir / "identity.csv", dtype={"TransactionID": str},
                       usecols=["TransactionID", "id_15", "id_23", "id_30", "id_31", "id_33", "id_34",
@@ -59,7 +66,7 @@ def _build_from_raw(raw_dir: Path) -> pd.DataFrame:
     idt["device_profile_id"] = idt.apply(_device_key, axis=1).replace("", np.nan)
     df = df.merge(idt[["TransactionID", "device_profile_id"] + ID_COLS], on="TransactionID", how="left")
     df["has_device_record"] = df.device_profile_id.notna()
-    return df.drop(columns=["_ck", "k", "card2", "card3", "card4", "card5", "card6"])
+    return df.drop(columns=["k"] + card_cols)
 
 
 def _build_from_prepared(pdir: Path) -> pd.DataFrame:
@@ -88,9 +95,30 @@ def build_store(force: bool = False) -> Path:
     df["ts"] = pd.to_datetime(df["ts"])
     df["addr1"] = df["addr1"].astype("string").str.replace(r"\.0$", "", regex=True)
     df = df.sort_values("ts").reset_index(drop=True)
+    _check_ids(df)
     df.to_parquet(out)
     log.info("Store written: %s rows -> %s", len(df), out)
     return out
+
+
+def _check_ids(df: pd.DataFrame) -> None:
+    """Card IDs must match the case pack (hard check) and the closed cases (soft check)."""
+    card_of = df.set_index("TransactionID")["card_id"]
+    cp = pd.read_csv(config.DATA_DIR / "case_pack.csv", dtype=str)
+    bad = [(t, c, card_of.get(t)) for t, c in zip(cp.flagged_txn_id, cp.card_id) if card_of.get(t) != c]
+    if bad:
+        raise ValueError(f"card_id mismatch on {len(bad)}/{len(cp)} case-pack cases, e.g. {bad[:3]} "
+                         f"(txn, expected, built)")
+    # A closed case's episode can span several of the customer's cards, so its card_id only has to
+    # appear among the cards of its transactions.
+    cc = pd.read_csv(config.DATA_DIR / "closed_cases_history.csv", dtype=str, usecols=["card_id", "txn_ids"])
+    cc = cc.dropna()
+    ok = sum(c in {card_of.get(t) for t in str(ids).split("|")} for c, ids in zip(cc.card_id, cc.txn_ids))
+    rate = ok / max(len(cc), 1)
+    log.info("ID check: %d/%d case-pack card_ids match; closed cases %d/%d (%.1f%%)",
+             len(cp), len(cp), ok, len(cc), 100 * rate)
+    if rate < 0.90:
+        raise ValueError(f"closed-case card_ids match only {rate:.1%}; card numbering is wrong")
 
 
 def load_closed_cases() -> pd.DataFrame:

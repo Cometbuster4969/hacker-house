@@ -92,13 +92,13 @@
       "CC-2667"
     ],
     "summary": "Card-not-present fraud from a new device: 1 transaction(s) on 2016-12-29 at 01:53 on C08106-K1 totalling $128.33 (probability 0.41). No reply was assumed, so the card is monitored and pending authorizations declined.",
-    "written_to_graph": false,
-    "graph_case_id": ""
+    "written_to_graph": true,
+    "graph_case_id": "CASE-HHG-004"
   },
   "evidence_requests": [
     {
       "type": "customer_validation",
-      "asked_after_step": 9,
+      "asked_after_step": 10,
       "assumed_response": "Customer did not reply to the follow-up within 24 hours"
     }
   ],
@@ -153,7 +153,7 @@
     "activity_dates": []
   },
   "stop_reason": "Customer unreachable (assumed no reply); probability stays 0.41. R4 actions protect the card; the analyst takes over with the evidence.",
-  "tool_calls": 8,
+  "tool_calls": 9,
   "tokens": 0,
-  "latency_s": 0.17
+  "latency_s": 4.56
 }

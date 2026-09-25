@@ -364,7 +364,8 @@ class Investigator:
         rec = {"case_id": case.case_id, "graph_case_id": graph_case_id, "customer_id": case.customer_id,
                "cards": sorted(own_cards | set(conn_cards)) if not legit else [f.card_id],
                "devices": sorted(devices) if not legit else [], "verdict": v1, "pattern": pattern,
-               "txn_ids": list(aff.TransactionID), "opened_at": str(as_of)}
+               "txn_ids": list(aff.TransactionID), "opened_at": str(as_of),
+               "p": round(float(p1), 4), "exposure": exposure}
         self.mem.write(rec)
         written = False
         if self.graph_writer is not None:
