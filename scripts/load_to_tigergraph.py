@@ -129,7 +129,7 @@ def main():
     host = os.getenv("TIGERGRAPH_HOST", "")
     user = os.getenv("TIGERGRAPH_USER", "")
     secret = os.getenv("TIGERGRAPH_SECRET", "")
-    token = os.getenv("TIGERGRAPH_TOKEN", "")
+    token = os.getenv("TIGERGRAPH_TOKEN", "") or os.getenv("TIGERGRAPH_API_TOKEN", "")
     graph = os.getenv("TIGERGRAPH_GRAPH", "FraudInvestigation")
 
     if not host:

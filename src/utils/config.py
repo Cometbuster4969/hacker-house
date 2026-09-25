@@ -12,7 +12,9 @@ CASES_DIR = Path(os.getenv("CASES_DIR", str(BASE_DIR / "cases")))
 
 # TigerGraph
 TG_HOST = os.getenv("TIGERGRAPH_HOST", "")
-TG_TOKEN = os.getenv("TIGERGRAPH_TOKEN", "")
+TG_TOKEN = os.getenv("TIGERGRAPH_TOKEN", "") or os.getenv("TIGERGRAPH_API_TOKEN", "")
+TG_USER = os.getenv("TIGERGRAPH_USER", "")
+TG_SECRET = os.getenv("TIGERGRAPH_SECRET", "")
 TG_GRAPH = os.getenv("TIGERGRAPH_GRAPH", "FraudInvestigation")
 TG_USE_SAVANNA = os.getenv("TIGERGRAPH_USE_SAVANNA", "true").lower() == "true"
 

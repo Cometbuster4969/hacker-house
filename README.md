@@ -114,6 +114,7 @@ pytest -q
 - Engine queries, all `as_of`-bounded: `tigergraph/queries/engine_queries.gsql`. They cover `txn_context`, `card_window`, `cardholder_baseline`, `device_neighbors`, `prior_cases`, `device_case_links`, `population_structuring_sweep`, `ring_candidates` and `agent_case_links`.
 - Set `TIGERGRAPH_HOST`/`TIGERGRAPH_TOKEN` and each finished case is upserted as an `InvestigationCase` vertex. `written_to_graph` is `true` **only** when TigerGraph acknowledges the write.
 - No TigerGraph instance was reachable in the environment that produced these answer files, so every file honestly says `written_to_graph: false`. Cases went to the agent-memory graph file `memory/agent_cases.json` instead, which later investigations read.
+- To go live, put the `TIGERGRAPH_*` settings in `.env` (git-ignored), then run `python scripts/tg_live_check.py --install --write`. It connects (API token, GSQL secret or user/password), installs the engine queries and re-runs the 20 cases with graph write-back. Results go to `evidence/tg_live_check.json`.
 - Evidence from the earlier live Savanna session (10/10 GSQL smoke run, official `tigergraph-mcp` 5/5 tool checks) is kept in `evidence/legacy_run/`.
 
 ### LLM use

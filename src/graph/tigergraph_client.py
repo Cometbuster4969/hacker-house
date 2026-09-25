@@ -30,31 +30,29 @@ class TigerGraphClient:
             logger.warning("No TigerGraph host configured")
             return False
 
-        try:
-            import pyTigerGraph as tg
-            if self.token:
-                # Savanna token-based auth
-                self.conn = tg.TigerGraphConnection(
-                    host=self.host,
-                    graphname=self.graph,
-                    apiToken=self.token,
-                )
-            else:
-                # Community Edition basic auth
-                self.conn = tg.TigerGraphConnection(
-                    host=self.host,
-                    graphname=self.graph,
-                    username=os.getenv("TG_USERNAME", "tigergraph"),
-                    password=os.getenv("TG_PASSWORD", "tigergraph"),
-                )
-            # Test connection
-            self.conn.echo()
-            self._connected = True
-            logger.info("Connected to TigerGraph at %s", self.host)
-            return True
-        except Exception as e:
-            logger.warning("TigerGraph connection failed: %s", e)
-            return False
+        import pyTigerGraph as tg
+        user = os.getenv("TIGERGRAPH_USER") or os.getenv("TG_USERNAME", "tigergraph")
+        password = os.getenv("TIGERGRAPH_SECRET") or os.getenv("TG_PASSWORD", "tigergraph")
+        attempts = []
+        cloud = "tgcloud.io" in self.host or os.getenv("TIGERGRAPH_USE_SAVANNA", "").lower() == "true"
+        if self.token:  # Savanna API token
+            attempts.append(("api token", dict(apiToken=self.token)))
+        if os.getenv("TIGERGRAPH_SECRET"):  # a GSQL secret is exchanged for a REST token
+            attempts.append(("gsql secret", dict(gsqlSecret=os.environ["TIGERGRAPH_SECRET"], username=user,
+                                                 password=password)))
+        attempts.append(("user/password", dict(username=user, password=password)))
+        for label, kw in attempts:
+            try:
+                self.conn = tg.TigerGraphConnection(host=self.host, graphname=self.graph, tgCloud=cloud, **kw)
+                if label == "gsql secret":
+                    self.conn.getToken(kw["gsqlSecret"])
+                self.conn.echo()
+                self._connected = True
+                logger.info("Connected to TigerGraph at %s (%s)", self.host, label)
+                return True
+            except Exception as e:  # noqa: BLE001
+                logger.warning("TigerGraph connection via %s failed: %s", label, str(e)[:200])
+        return False
 
     def is_connected(self) -> bool:
         return self._connected
@@ -299,7 +297,7 @@ class TigerGraphClient:
 def create_tigergraph_client() -> TigerGraphClient:
     """Create and connect a TigerGraph client from environment config."""
     host = os.getenv("TIGERGRAPH_HOST", "")
-    token = os.getenv("TIGERGRAPH_TOKEN", "")
+    token = os.getenv("TIGERGRAPH_TOKEN", "") or os.getenv("TIGERGRAPH_API_TOKEN", "")
     graph = os.getenv("TIGERGRAPH_GRAPH", "FraudInvestigation")
 
     client = TigerGraphClient(host=host, token=token, graph=graph)
